@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.recommendRecipe">
+
+	<select id="getList" resultType="com.dorecipe.main.recommendrecipe.vo.RecommendRecipeVO">
+	  select * from recipe r
+	  inner join recommendrecipe reco 
+      on r.recipe_num=reco.recipe_num
+      order by reco.reco_num desc
+	</select>
+
+</mapper>

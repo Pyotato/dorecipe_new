@@ -1,0 +1,25 @@
+.swiper {
+  width: 100%;
+}
+
+.swiper-slide {
+  font-size: 18px;
+  height: auto;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.slide1 {
+  height: 100%;
+  width: 100%;
+}
+.slide1 > img {
+  width: 100%;
+}
+.swiper-button-prev:after,
+.swiper-button-next {
+  color: #fffdf5;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #fffdf5;
+}

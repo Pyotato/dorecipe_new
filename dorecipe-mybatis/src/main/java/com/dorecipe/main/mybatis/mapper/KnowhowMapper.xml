@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.knowhow">
+	<select id="selectAllKnowhowList" resultType="com.dorecipe.main.knowhow.vo.KnowhowVO">
+		select * from knowhow order by know_num desc
+	</select>
+	
+	<select id="getDetail" resultType="com.dorecipe.main.knowhow.vo.KnowhowVO" parameterType="int">
+		select * from knowhow
+		where know_num = #{know_num}
+	</select>
+	
+	<insert id="insertKnowhow" parameterType="com.dorecipe.main.knowhow.dao.KnowhowDAO">
+		insert into knowhow(member_id,know_title,know_content,know_creDate,know_path)
+		values("admin",#{know_title},#{know_content},now(),#{know_path})
+	</insert>
+	
+	<update id="updateKnowhow" parameterType="com.dorecipe.main.knowhow.dao.KnowhowDAO">
+		update knowhow
+		set
+			know_title = #{know_title},
+			know_content = #{know_content},
+			know_creDate = now(),
+			know_path = #{know_path}
+		where know_num = #{know_num}
+	</update>
+	
+	<delete id="deleteKnowhow" parameterType="int">
+		delete from knowhow where know_num = #{know_num}
+	</delete>
+</mapper>

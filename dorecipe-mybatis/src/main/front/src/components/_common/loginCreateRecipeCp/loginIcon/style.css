@@ -1,0 +1,19 @@
+.userIcon {
+  font-size: 2em;
+  transform: translate(-40%, -20%);
+}
+.linkItems {
+  text-decoration: none;
+  color: #463635;
+  cursor: pointer;
+  display: block;
+  text-align: center;
+}
+.linkItems:nth-child(2) {
+  margin-top: 0.3em;
+}
+.linkItems:hover {
+  text-decoration: none;
+  color: #8d3232;
+  cursor: pointer;
+}

@@ -1,0 +1,16 @@
+.searchRecipeImg{
+    width: 17em;
+    height: 11em;
+    /* margin-left: 1em; */
+    margin-right: 2em;
+}
+
+.r_title{
+    width: 12em;
+}
+
+.width3{
+    display: inline-flex;
+    max-width: 20em;
+    text-align: justify;
+}

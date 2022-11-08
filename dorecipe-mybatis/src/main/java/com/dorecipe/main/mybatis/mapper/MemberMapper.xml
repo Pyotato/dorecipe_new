@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.member">
+	<select id="selectAllMemberList" resultType="com.dorecipe.main.member.vo.MemberVO">
+		select * from member2 
+		left outer join 
+		users on users.id
+		where member2.member_id = users.username ;
+	</select>
+	
+	<!-- 
+	<select id="checkDuplicateId" resultType="com.dorecipe.main.member.vo.MemberVO" parameterType="String">
+		select member_id from member where member_id=#{member_id}
+	</select> -->
+	
+	<!-- 회원 정보 상세 조회 -->
+	<select id="selectAllMemberDetail" resultType="com.dorecipe.main.member.vo.MemberVO" parameterType="String">
+		select member2.member_id,member_nickname,member_name,member_gender,
+		member_birth,member_phone,member_imagePath,email
+		from 
+		member2 
+		left outer join users on users.id
+		where member2.member_id = users.username
+		and member2.member_id=#{username};
+	</select>
+	
+	<update id="updateMember" parameterType="com.dorecipe.main.member.dao.MemberDAO" >
+		update member2
+		set 
+		member_nickname=#{member_nickname},
+		member_imagePath=#{member_imagePath}
+		where username = #{username};
+	</update>
+	
+	<insert id="joinMember" parameterType="com.dorecipe.main.member.dao.MemberDAO">
+		 insert into member2 values
+		 (null, #{username},#{member_nickname},#{member_name},#{member_gender},
+		 #{member_birth},#{member_phone},now(),default);
+	
+	</insert>
+		
+	<insert id="insertMember" parameterType="com.dorecipe.main.member.dao.MemberDAO">
+		 insert into member2 values
+		 (#{username},#{member_nickname},#{member_name},#{member_gender},
+		 #{member_birth},#{member_phone},now(),default);
+	</insert>
+	
+	<delete id="deleteMember" parameterType="string">
+		delete from member2 where username = #{username}
+	</delete>
+
+</mapper>

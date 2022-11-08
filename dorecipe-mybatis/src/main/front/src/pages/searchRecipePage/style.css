@@ -1,0 +1,14 @@
+.notFound {
+  font-size: 1.2em;
+  height: 30vh;
+  margin: 3em 0;
+  text-align: center;
+}
+.locateToSearch {
+  margin: 1em;
+}
+.locateToSearch:hover {
+  margin: 1em;
+  cursor: pointer;
+  color: #8d3232;
+}

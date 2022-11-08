@@ -1,0 +1,35 @@
+h2 {
+    text-align: center;
+    margin: 1em 0;
+}
+
+li {
+    list-style: none;
+}
+
+.noticeWrap {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.noticeBorder {
+    width: auto;
+    border-bottom: 1px solid #ad939156; 
+    padding: 0.5em 0;
+}
+
+.noticeDetailTitle {
+    padding: 2em 0 0.5em 0;
+    text-align: left;
+    font-weight: bolder;
+    font-size: large;
+}
+
+.noticeDetailDate {
+    color: gray;
+    font-size: 12px;
+    margin: 0.5em 0 2em 0;
+}
+.notcieDetailContent{
+	white-space : pre-wrap;
+}

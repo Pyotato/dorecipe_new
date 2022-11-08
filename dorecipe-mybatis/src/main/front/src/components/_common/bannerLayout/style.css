@@ -1,0 +1,15 @@
+.links {
+  text-decoration: none;
+}
+.recipe_name,
+.recipe_name::after {
+  color: #463635;
+  fsont-weight: 700;
+}
+.user_name,
+.user_name::after {
+  color: #463635;
+}
+.recipe_name:hover {
+  color: #8d3232;
+}

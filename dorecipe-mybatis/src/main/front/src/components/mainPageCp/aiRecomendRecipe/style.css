@@ -1,0 +1,23 @@
+.links {
+  text-decoration: none;
+}
+.recipe_name,
+.recipe_name::after {
+  color: #463635;
+  font-weight: 700;
+}
+.user_name,
+.user_name::after {
+  color: #463635;
+}
+.recipe_name:hover {
+  color: #8d3232;
+}
+.swiper-button-prev:after,
+.swiper-button-next {
+  color: #463635;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #463635;
+}

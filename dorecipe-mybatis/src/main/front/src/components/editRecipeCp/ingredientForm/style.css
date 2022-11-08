@@ -1,0 +1,63 @@
+* {
+  list-style: none;
+}
+/* 재료등록 */
+.recipeIngredientsWrap {
+  width: 85%;
+  /* flex-direction: column; */
+}
+.flexDownBundleWrap {
+  flex-direction: column;
+}
+.recipeBundleWrap {
+  /* display: inline-flex; */
+  width: 85%;
+  background-color: #fffdf5;
+  border: 1px solid #463635;
+  padding: 1em;
+  margin: 1em auto;
+  border-radius: 0.5em;
+}
+.ingredientBundle {
+  margin-top: 7px;
+  width: 8em;
+}
+.recipeFlexBundle {
+  display: inline-flex;
+  justify-content: space-around;
+  width: 100%;
+  justify-content: center;
+}
+/* 번들 재료&재료량 */
+.bundleIngredientWrap {
+  display: inline-flex;
+  flex-direction: column;
+}
+.bundleFlexDown {
+  margin-bottom: 1em;
+}
+
+.fa-circle-xmark {
+  margin: 0 0.5em;
+  cursor: pointer;
+}
+
+.instruction {
+  margin-top: 1em;
+}
+.bundleInput {
+  width: 15em;
+  height: 2em;
+  margin: 0 1em;
+}
+.addIngredientBtn {
+  /* clear: both; */
+  display: block;
+  width: 6em;
+  height: 2em;
+  margin: 1em auto;
+}
+.addIngreBtn {
+  display: block;
+  float: right;
+}

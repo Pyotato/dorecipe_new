@@ -1,0 +1,51 @@
+.hoverable {
+  display: inline-block;
+  font-size: 12px;
+  color: #8d3232;
+}
+.dropZoneWrap {
+  display: inline-block;
+}
+.dropzone {
+  display: inline-block;
+  background-color: aqua;
+  max-width: 12em;
+  min-height: 6em;
+}
+.fileBox {
+  width: 18em;
+  display: inline-block;
+  position: relative;
+  padding: 0.3rem;
+  /* width: 100%;
+  height: 100%; */
+}
+.fileBox :hover {
+  opacity: 0.5;
+}
+.removeFile {
+  font-size: 1rem;
+  color: #8d3232;
+  text-align: center;
+  width: 12em;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+}
+.stepName {
+  display: inline-block;
+  width: 6em;
+  text-align: center;
+}
+.draggableItem {
+  align-items: center;
+  display: inline-flex;
+  max-width: 100%;
+  min-width: 30em;
+}
+.textArea {
+  max-width: 30em;
+  height: 3em;
+  resize: none;
+}

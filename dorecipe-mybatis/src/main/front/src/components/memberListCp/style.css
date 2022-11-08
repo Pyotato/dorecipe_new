@@ -1,0 +1,38 @@
+.noticeNo {
+  width: 20%;
+  text-align: center;
+}
+.noticeTitle {
+  width: 35%;
+  text-align: center;
+}
+
+.noticeDate {
+  width: 40%;
+  text-align: center;
+}
+
+.updateOrDelete {
+  width: 20%;
+  text-align: center;
+}
+.updateList,
+.deleteList {
+  width: 15%;
+  height: 2em;
+  text-decoration: none;
+  border: 1px solid #ad939156;
+  padding: 0.1em 0.6em;
+  margin-left: 1em;
+  cursor: pointer;
+  text-decoration: none;
+  color: #463635;
+}
+
+.width2{
+  width: 74%;
+}
+
+.left4{
+  margin-left: 13%;
+}

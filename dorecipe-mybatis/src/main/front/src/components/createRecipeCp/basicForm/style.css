@@ -1,0 +1,116 @@
+.recipeTitleWrap,
+.recipeIntroWrap,
+.recipeVidWrap,
+.recipeCategoryWrap,
+.recipeInfoWrap,
+.recipeVidWrap {
+  display: flex;
+}
+.recipeCategoryWrap > select {
+  height: 2em;
+  border-radius: 0.5em;
+  margin-left: 1em;
+  margin-bottom: 1em;
+  width: 9em;
+}
+.recipeInfoWrap > select {
+  height: 2em;
+  border-radius: 0.5em;
+  margin-right: 1em;
+  margin-bottom: 1em;
+  width: 9em;
+}
+.recipeCategoryWrap > label:nth-child(1) {
+  display: inline-block;
+  margin-right: -1em;
+  width: 7em;
+}
+
+.recipeCategoryWrap > label,
+.recipeInfoWrap > label {
+  display: none;
+}
+
+/*레시피 이미지등록 */
+.recipeRightWrap {
+  height: 22em;
+  width: 27em;
+  display: inline-flex;
+  align-items: center;
+  flex-direction: column;
+}
+.recipeRightWrap > label {
+  margin-top: 1em;
+  height: 3em;
+}
+.imageUploadWrap {
+  height: fit-content;
+  width: 24em;
+}
+.imageUploadWrap > input {
+  width: 27em;
+}
+.image_container {
+  width: 21em;
+}
+/* 상세검색에서 보이는 이미지 */
+.imageUploadWrap > img {
+  max-width: 22em;
+  max-height: 24em;
+  margin: 0 1em;
+  display: block;
+}
+.fa-xmark {
+  font-size: 15px;
+  margin-left: 5px;
+  padding-right: 3px;
+}
+
+/* 태그 설정  */
+.recipeTagWrap {
+  display: flex;
+  justify-content: flex-start;
+  height: 2em;
+  border-radius: 1em;
+}
+.tagBox {
+  border: 1px solid #463635;
+  height: 9em;
+  width: 40em;
+  border-radius: 0.5em;
+}
+.tagBox ul {
+  display: inline-flex;
+  /* width: 30em; */
+  padding: 0;
+  flex-wrap: wrap;
+}
+.tagBox ul li {
+  text-align: center;
+  display: inline;
+  text-decoration: none;
+  list-style: none;
+  border: 1px solid #463635;
+  width: fit-content;
+  margin: 9px;
+  padding: 3px;
+  height: 2em;
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 0.5em;
+}
+.addTags {
+  /* display: block; */
+  width: 16em;
+  /* padding-top: 9px; */
+  margin: 9px;
+  height: 2em;
+  font-size: 15px;
+  cursor: pointer;
+  outline: none;
+  border: transparent;
+}
+.fa-image {
+  font-size: 15em;
+  margin: 0 0.3em;
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.comment">
+	
+	<select id="selectComment" resultType="com.dorecipe.main.comment.vo.CommentVO" parameterType="int">
+		select * from comment 
+		where recipe_num = #{recipe_num} order by comment_creDate desc
+	</select>
+	
+	<insert id="insertComment" parameterType="com.dorecipe.main.comment.dao.CommentDAO">
+		insert into comment(recipe_num,comment_num,comment_content,comment_path,member_id,comment_creDate)
+			values (
+				#{recipe_num},
+				(select IFNULL(max(comment_num),0)+1 from comment ALIAS_FOR_SUBQUERY where  recipe_num = #{recipe_num}),
+				#{comment_content},
+				#{comment_path},
+        		#{member_id},
+        		now()
+			);
+	</insert>
+	
+<!-- 
+	<insert id="insertComment" parameterType="com.dorecipe.main.comment.dao.CommentDAO">
+		insert into comment(recipe_num,comment_num,comment_content,comment_path,member_id,comment_creDate)
+			values (
+				#{recipe_num},
+				(select IFNULL(max(comment_num),0)+1 from comment ALIAS_FOR_SUBQUERY where  recipe_num = #{recipe_num}),
+				#{comment_content},
+				#{comment_path},
+        		'hirin012',
+        		now()
+			);
+	</insert>
+ -->
+  	<delete id="deleteComment" parameterType="map">
+		delete from comment where recipe_num = #{recipe_num} and comment_num = #{comment_num}
+	</delete>
+  	
+</mapper>

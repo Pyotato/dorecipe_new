@@ -1,0 +1,7 @@
+.createRecipeIcon {
+  font-size: 1em;
+  text-decoration: none;
+  color: #fffdf5;
+  text-align: center;
+  transform: translate(-25%, -20%);
+}

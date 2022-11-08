@@ -1,0 +1,35 @@
+.columnName {
+  min-width: 7em;
+
+  display: inline-block;
+  width: 5em;
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.imgWrap {
+  padding: 3em;
+}
+.imgWrap img {
+  max-width: 6em;
+  overflow: hidden;
+  /* padding: 3em; */
+  border-radius: 100%;
+}
+.infoWrap {
+  gap: 1em;
+  display: inline-flex;
+
+  width: 85%;
+  flex-direction: column;
+}
+
+.title {
+  width: 3rem;
+  display: inline-block;
+}
+.items {
+  display: inline-flex;
+  gap: 3em;
+  width: 100%;
+}

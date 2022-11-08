@@ -1,0 +1,37 @@
+.imgPreview{
+    display: inline-block;
+    margin-right: 22%;
+
+}
+
+.dpib{
+    display: inline-block;
+}
+
+.img_box{
+    background-size: contain;
+    overflow: hidden;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    background-repeat: no-repeat;
+    width: 400px;
+    height: 300px;
+}
+
+.img_box2{
+    background-size: contain;
+    overflow: hidden;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    background-repeat: no-repeat;
+    width: 500px;
+    height: 300px;
+}
+
+.floatRight{
+    float: right;
+}
+
+
