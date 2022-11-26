@@ -11,7 +11,23 @@ const StepRecipe = ({ detailState }) => {
                 {e.order_explain !== "" ? (
                   <>
                     <TotalWrap>
-                      {e.order_path.includes("/img/recipe/steps") ? (
+                      {e.order_path.includes("/undefined") ? (
+                        <div>
+                          <div
+                            // src={e.order_path}
+                            style={{ width: "16em", height: "16em" }}
+                            alt={e.order_path}
+                          />
+                        </div>
+                      ) : e.order_path.includes("https://recipe") ? (
+                        <Img src={e.order_path} alt={e.order_path} />
+                      ) : (
+                        <Img
+                          src={e.order_path.slice(29, e.order_path.length)}
+                          alt={e.order_path.slice(29, e.order_path.length)}
+                        />
+                      )}
+                      {/* {e.order_path.includes("/img/recipe/steps") ? (
                         <>
                           <Img
                             src={e.order_path.slice(29, e.order_path.length)}
@@ -26,7 +42,7 @@ const StepRecipe = ({ detailState }) => {
                           style={{ visibility: "hidden" }}
                           alt={e.order_path}
                         />
-                      )}
+                      )} */}
 
                       <div>
                         {" "}

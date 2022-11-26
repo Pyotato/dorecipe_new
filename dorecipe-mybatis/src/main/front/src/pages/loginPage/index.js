@@ -2,7 +2,7 @@ import "./style.css";
 import { useState, useCallback, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import MainLayout from "../../layout/mainLayOut";
-import { MainLogo } from "../../components/_common/mainLogo";
+import { LogoHeader } from "../../components/_common/logo";
 
 import { connect, useDispatch, useSelector } from "react-redux";
 import { login } from "../../reduxRefresh/actions/auth.js";
@@ -12,7 +12,6 @@ const LoginPage = () => {
   const [member_pwd, setMemberPwd] = useState();
   const [loadingState, setState] = useState(false);
 
-  //   console.log("auth", );
   const handleMemberId = (e) => {
     setMemberId(e.target.value);
   };
@@ -20,13 +19,8 @@ const LoginPage = () => {
     setMemberPwd(e.target.value);
   };
   const navigate = useNavigate();
-  // const { dispatch, history } = auth;
-  // const { isLoggedIn, message } = auth;
-
   const dispatch = useDispatch();
-  const auth = useSelector((state) => state);
 
-  // console.log("auth!!!!!!", auth);
   const memberLogin = (e) => {
     e.preventDefault();
     console.log("ID : ", member_id);
@@ -58,7 +52,7 @@ const LoginPage = () => {
         <div className="loginSection">
           <div className="loginWrap">
             <div>
-              <MainLogo />
+              <LogoHeader />
             </div>
 
             <div className="formWrap">

@@ -1,20 +1,22 @@
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
-import Button from "react-bootstrap/Button";
-import OverlayTrigger from "react-bootstrap/esm/OverlayTrigger";
-import Popover from "react-bootstrap/Popover";
 
-import "./style.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useCallback, useEffect } from "react";
-import { login, logout } from "../../../../reduxRefresh/actions/auth";
+import { useCallback, useEffect, useState } from "react";
+import { logout } from "../../../../reduxRefresh/actions/auth";
+import { colors } from "../../../../theme/theme";
 const AccountIcon = () => {
   //페이지 이동
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((auth) => auth);
+  const [userState, setUserState] = useState(user);
+  const onClickRecipe = () => {
+    navigate("/recipe/create");
+  };
+  const onClickAdmin = () => {
+    navigate("/admin");
+  };
 
   const onClickLogOut = useCallback(() => {
     //로그아웃 시키고 메인페이지로
@@ -22,68 +24,91 @@ const AccountIcon = () => {
     navigate("/");
   }, [dispatch]);
 
-  const popover = useCallback(
-    <Popover>
-      <Popover.Body>
-        {user.auth.isLoggedIn ? (
-          <>
-            <Link className="linkItems" to="/member/info/">
-              마이 페이지
-            </Link>
+  useEffect(() => {
+    if (userState.auth.isLoggedIn) {
+      if (userState.auth.user.roles.includes("ROLE_ADMIN")) {
+        setUserState(userState.auth.user);
+        console.log("ROLE_ADMIN");
+      }
+    }
+  }, []);
 
-            <div className="linkItems" onClick={onClickLogOut}>
-              로그아웃
-            </div>
-          </>
-        ) : (
-          <>
-            <Link className="linkItems" to="/join">
-              회원가입
-            </Link>
-            <Link className="linkItems" to="/login">
-              로그인
-            </Link>
-          </>
-        )}
-      </Popover.Body>
-    </Popover>,
-    [user]
-  );
-
-  const ToggleMsgBtn = () => (
-    <>
-      {/* 버튼 커스텀화 */}
-      <style type="text/css">
-        {`
-    .btn-success {
-      width: 2em;
-      height: 2em;
-      border-radius: 100%;
-      background-color: transparent;
-      margin-right:3em;
-      border:1px solid transparent;
-      // color: #463635;
-    }
-    .btn-success::after{
-      background-color: transparent;
-    }
-    .btn-success:hover{
-      background-color: transparent;
-    }
-    `}
-      </style>
-      <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
-        <Button variant="success">
-          <FontAwesomeIcon icon={faCircleUser} className="userIcon" />
-        </Button>
-      </OverlayTrigger>
-    </>
-  );
+  const onClickMyPage = useCallback(() => {
+    navigate("/member/info/");
+  }, [user]);
+  const onClickJoinMember = useCallback(() => {
+    navigate("/join");
+  }, [user]);
+  const onClickLogin = useCallback(() => {
+    navigate("/login");
+  }, [user]);
 
   return (
     <>
-      <ToggleMsgBtn />
+      {!user.auth.isLoggedIn ? (
+        <>
+          {" "}
+          <AuthTotalWrap>
+            {" "}
+            |{" "}
+            <span onClick={onClickJoinMember} className="onHoverItems">
+              회원가입
+            </span>{" "}
+            |{" "}
+            <span onClick={onClickLogin} className="onHoverItems">
+              로그인
+            </span>{" "}
+            |
+          </AuthTotalWrap>{" "}
+        </>
+      ) : user.auth.user.roles.includes("ROLE_ADMIN") ? (
+        <>
+          <AuthTotalWrap>
+            {" "}
+            |{" "}
+            <span className="onHoverItems" onClick={onClickAdmin}>
+              관리자 홈{" "}
+            </span>
+            |{" "}
+            <span onClick={onClickMyPage} className="onHoverItems">
+              마이 페이지
+            </span>{" "}
+            |
+            <span onClick={onClickLogOut} className="onHoverItems">
+              로그아웃
+            </span>{" "}
+            |
+          </AuthTotalWrap>
+        </>
+      ) : (
+        <>
+          <AuthTotalWrap>
+            {" "}
+            |{" "}
+            <span className="onHoverItems" onClick={onClickRecipe}>
+              레시피 작성{" "}
+            </span>
+            |{" "}
+            <span onClick={onClickMyPage} className="onHoverItems">
+              마이 페이지
+            </span>{" "}
+            |
+            <span onClick={onClickLogOut} className="onHoverItems">
+              로그아웃
+            </span>{" "}
+            |
+          </AuthTotalWrap>
+        </>
+      )}
     </>
   );
 };
 export default AccountIcon;
+const AuthTotalWrap = styled.div`
+  width: max-content;
+  padding-right: 1vw;
+  color: ${colors.color_milky_white};
+  & .onHoverItems:hover {
+    cursor: pointer;
+  }
+`;

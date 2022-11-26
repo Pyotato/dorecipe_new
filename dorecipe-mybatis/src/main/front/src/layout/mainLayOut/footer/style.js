@@ -1,22 +1,15 @@
 import styled from "styled-components";
-
-// export const Wrapper = styled.div`
-//   display: block;
-//   position: absolute;
-//   bottom: 0;
-//   left: 0;
-//   right: 0;
-// `;
+import { colors } from "../../../theme/theme";
 
 export const FooterWrapper = styled.footer`
   display: flex;
   width: 100%;
   height: 15em;
-  background-color: #8d3232;
+  background-color: ${colors.color_milktea_brown};
   align-items: center;
   justify-content: center;
   color: #fffdf5;
-  margin-top: 6em;
+  /* margin-top: 6em; */
 `;
 /** 로고이미지 자리 */
 export const FooterRight = styled.footer``;

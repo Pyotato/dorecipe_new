@@ -13,12 +13,6 @@ import { logout } from "../../reduxRefresh/actions/auth";
 const RegistPosts = () => {
   let [tap, setTap] = useState(0);
 
-  // useEffect(() => {
-  //   UserService.getAdminBoard().then((response) => {
-  //     console.log(response);
-  //   });
-  // });
-
   return (
     <>
       <div className="postMngWrap bottom2">

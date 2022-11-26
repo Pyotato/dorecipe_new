@@ -1,6 +1,5 @@
 import { React } from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals.js";
@@ -8,14 +7,15 @@ import reportWebVitals from "./reportWebVitals.js";
 import setupInterceptors from "./reduxRefresh/services/setupInterceptors";
 import { Provider } from "react-redux";
 import store from "./reduxRefresh/store";
-
-// const store = createStore();/
+import { ThemeProvider } from "./context/themeProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store()}>
     <BrowserRouter>
-      <App />
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
     </BrowserRouter>
   </Provider>
 );

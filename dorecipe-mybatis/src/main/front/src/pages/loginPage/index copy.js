@@ -2,7 +2,7 @@ import "./style.css";
 import { useState, useCallback, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import MainLayout from "../../layout/mainLayOut";
-import { MainLogo } from "../../components/_common/mainLogo";
+import { MainLogoHeader } from "../../components/_common/MainLogoHeader";
 
 import { connect, useDispatch } from "react-redux";
 import { login } from "../../reduxRefresh/actions/auth.js";
@@ -126,7 +126,7 @@ const LoginPage = (auth) => {
         <div className="loginSection">
           <div className="loginWrap">
             <div>
-              <MainLogo />
+              <MainLogoHeader />
             </div>
 
             <div className="formWrap">

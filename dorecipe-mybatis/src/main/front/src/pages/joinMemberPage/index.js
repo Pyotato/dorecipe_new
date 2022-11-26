@@ -1,12 +1,12 @@
 import MainLayout from "../../layout/mainLayOut";
-import SignUpTemplate from "../../components/JoinMemberCp";
-import { MainLogo } from "../../components/_common/mainLogo";
+import SignUpTemplate from "../../components/joinMemberCp";
+import { LogoHeader } from "../../components/_common/logo";
 
 const JoinMemberPage = () => {
   return (
     <>
       <MainLayout>
-        <MainLogo />
+        <LogoHeader />
         <SignUpTemplate />
       </MainLayout>
     </>

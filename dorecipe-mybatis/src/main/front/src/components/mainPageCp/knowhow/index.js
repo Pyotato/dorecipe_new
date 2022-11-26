@@ -1,15 +1,16 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import BannerLayout from "../../_common/bannerLayout";
 
 import { SwiperSlide } from "swiper/react";
+import { colors } from "../../../theme/theme";
 
 const KnowhowMain = () => {
   //axios로 노하우 받아와서 출력하기
-
+  const navigate = useNavigate();
   const [state, setState] = useState([
     {
       know_num: 0,
@@ -45,67 +46,81 @@ const KnowhowMain = () => {
 
   return (
     <>
-      <BestRecipeWrap>
-        <h3>생활 쏙! 노하우</h3>
-
-        <BannerLayout>
-          {state.map((e) => {
-            return (
-              <>
-                <SwiperSlide className="slide1" key={e.know_num}>
-                  <Link to={`knowhow/detail/${e.know_num}`} className="links">
-                    <RecipeWrap>
-                      {/* <RecipeRank>{e.recipe_rank}</RecipeRank>{" "} */}
-                      <RecipeImg>
+      <div>
+        <BestRecipeWrap>
+          <BannerLayout>
+            {state.map((e) => {
+              return (
+                <>
+                  <SwiperSlide key={e.know_num}>
+                    <KnowhowWrap
+                      onClick={() => {
+                        navigate(`knowhow/detail/${e.know_num}`);
+                      }}
+                    >
+                      <KnowhowImg>
+                        <KnowhowTitle>
+                          <div> {e.know_title}</div>
+                        </KnowhowTitle>
                         <img
                           className="bannerimg"
                           src={e.know_path}
                           alt="bannerimg"
                         ></img>
-                      </RecipeImg>
-                      <div className="recipe_name">{e.know_title}</div>
-                    </RecipeWrap>
-                  </Link>
-                </SwiperSlide>
-              </>
-            );
-          })}
-        </BannerLayout>
-      </BestRecipeWrap>
+                      </KnowhowImg>
+                    </KnowhowWrap>
+                    {/* </Link> */}
+                  </SwiperSlide>
+                </>
+              );
+            })}
+          </BannerLayout>
+        </BestRecipeWrap>
+      </div>
     </>
   );
 };
 export default KnowhowMain;
 const BestRecipeWrap = styled.div`
-  width: 80%;
-  height: 23em;
-  background-color: #fffdf5;
   padding: 1em;
-
-  margin: 3em auto;
-  & h3 {
-    color: #463635;
-    font-weight: 700;
-  }
+  /* width: 80%; */
+  /* margin: 0 3vw; */
 `;
 
-const RecipeWrap = styled.div`
+const KnowhowWrap = styled.div`
   display: inline-flex;
   flex-direction: column;
   flex-wrap: wrap;
-  margin: 3em 4em;
+  margin: 2em 4em;
+
+  font-family: "mainFont";
   text-align: center;
-  & > Link {
-    text-decoration: none;
+  margin: 0 3vw 6vh;
+  & :hover {
+    cursor: pointer;
   }
 `;
 
-const RecipeImg = styled.div`
+const KnowhowImg = styled.div`
   & > img {
-    // width: 15em;
-    width: 15em;
-    height: 9em;
+    border-radius: 1vw;
+    width: 24vw;
+    height: 45vh;
     padding-bottom: 0.5em;
-    object-fit: cover;
+    object-fit: fill;
+  }
+`;
+const KnowhowTitle = styled.div`
+  /* width: 24vw; */
+  background-color: ${colors.color_milky_white};
+  opacity: 90%;
+  width: 24vw;
+  text-align: center;
+  height: 18vh;
+  padding: 3vh 3vw;
+  transform: translateY(25vh);
+  & div {
+    opacity: 100%;
+    /* width: 20vw; */
   }
 `;

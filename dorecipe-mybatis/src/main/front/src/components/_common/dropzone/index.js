@@ -48,11 +48,7 @@ export const DropZone = ({
         //순서 이미지 설정일때
         if (stepDropState === "stepDrop") {
           setFiles([files.index, file.name]);
-          // const copy_recipe_imgs_steps = [...recipe_imgs_steps];
-          // copy_recipe_imgs_steps.concat(file.name);
-          // console.log("...files", ...files);
           setRecipe_imgs_steps([files.index, file.name]);
-          // console.log("...files", files);
           console.log("recipe_imgs_steps", recipe_imgs_steps);
         }
 
@@ -162,10 +158,17 @@ export const DropZone = ({
                 files.length < 5 ? (
                   <EditImgPreviewInner key={index}>
                     <div
+                      style={{
+                        // margin: "1em",
+                        // padding: "1em",
+                        translate: "0 -2.1em",
+
+                        // backgroundColor: "greenyellow",
+                      }}
                       className="fileBox"
                       onClick={() => onPreviewDelete(v.preview)}
                     >
-                      <img src={v.preview} />
+                      <img src={v.preview} style={{ maxHeight: "9em" }} />
                       <p>파일 삭제</p>
                     </div>
                   </EditImgPreviewInner>
@@ -198,7 +201,11 @@ export const DropZone = ({
           ) : completionDropState === "completionDropState" &&
             files.length < 4 ? (
             <>
-              <div className="inputBox" {...getRootProps()}>
+              <div
+                className="inputBox"
+                {...getRootProps()}
+                style={{ height: "32vh" }}
+              >
                 <input
                   {...getInputProps()}
                   id="file"

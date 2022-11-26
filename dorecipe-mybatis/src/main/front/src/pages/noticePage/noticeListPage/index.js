@@ -66,11 +66,11 @@ const NoticePage = () => {
         <div className="noticeWrap">
           <h2>| Notice |</h2>
 
-          {BtnState && (
+          {/* {BtnState && (
             <Link className="updateList" to={"/admin"}>
               등록
             </Link>
-          )}
+          )} */}
 
           <div className="noticeTableWrap">
             <ul>

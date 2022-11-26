@@ -25,7 +25,8 @@ const CommentCp = () => {
 
   let { recipeId } = useParams();
   let { commentNum } = useParams();
-  var Index = 0;
+  // var Index = 0;
+  const Index = 0;
 
   const navigate = useNavigate();
   const user = useSelector((auth) => auth);
@@ -112,6 +113,10 @@ const CommentCp = () => {
     },
   ]);
 
+  const navigateToLogin = () => {
+    navigate("/login");
+  };
+
   function commentAxios() {
     axios({
       url: "http://localhost:9000/comment/list/" + recipeId,
@@ -155,39 +160,47 @@ const CommentCp = () => {
             <span className="comh3">코멘트 </span>Comment
           </div>
           <hr />
-          <div className="cmtForm">
-            <textarea
-              className="cmtContent"
-              rows="3"
-              cols="65"
-              value={comment_content}
-              onChange={onChangeContent}
-              name="comment_content"
-              id="commentContent"
-              placeholder="레시피에 대한 코멘트를 작성할 수 있어요."
-            ></textarea>
-            <input
-              name="comment_path"
-              type="file"
-              className="commentImg"
-              accept="image/*"
-              ref={imageInput}
-              onChange={onLoadCommentFile}
-            />
-            <button className="cmtBtn" onClick={onClickImageUpload}>
-              코멘트사진
-            </button>
-            <div className="insertBtn">
-              <button
-                type="button"
-                className="insertCmt"
-                onClick={insertComment}
-                disabled={error}
-              >
-                등록
+          {user.auth.isLoggedIn ? (
+            <div className="cmtForm">
+              <textarea
+                className="cmtContent"
+                rows="3"
+                cols="65"
+                value={comment_content}
+                onChange={onChangeContent}
+                name="comment_content"
+                id="commentContent"
+                placeholder="레시피에 대한 코멘트를 작성할 수 있어요."
+              ></textarea>
+              <input
+                name="comment_path"
+                type="file"
+                className="commentImg"
+                accept="image/*"
+                ref={imageInput}
+                onChange={onLoadCommentFile}
+              />
+              <button className="cmtBtn" onClick={onClickImageUpload}>
+                코멘트사진
               </button>
+              <div className="insertBtn">
+                <button
+                  type="button"
+                  className="insertCmt"
+                  onClick={insertComment}
+                  disabled={error}
+                >
+                  등록
+                </button>
+              </div>
             </div>
-          </div>
+          ) : (
+            <>
+              <NavigateTologin onClick={() => navigateToLogin()}>
+                <div> 코멘트는 로그인 후 작성 가능합니다.</div>
+              </NavigateTologin>
+            </>
+          )}
         </div>
 
         <div className="commentDiv">
@@ -257,4 +270,9 @@ const CommentWrap = styled.div`
   }
 `;
 
+const NavigateTologin = styled.div`
+  & > div:hover {
+    cursor: pointer;
+  }
+`;
 export default CommentCp;

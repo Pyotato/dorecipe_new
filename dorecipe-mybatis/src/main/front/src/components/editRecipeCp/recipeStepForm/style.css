@@ -8,7 +8,7 @@
 }
 .dropzone {
   display: inline-block;
-  background-color: aqua;
+  /* background-color: aqua; */
   max-width: 12em;
   min-height: 6em;
 }

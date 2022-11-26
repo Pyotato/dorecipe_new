@@ -5,12 +5,31 @@ import {
   faLightbulb,
   faCircleMinus,
   faPlusCircle,
+  faFloppyDisk,
 } from "@fortawesome/free-solid-svg-icons";
-import { DefaultBtn, SmallBtn } from "../../_common/buttons";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { SmallBtn } from "../../_common/buttons";
+import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
-const IngredientForm = ({ recipeState }) => {
+// const IngredientForm = ({ recipeState, swiper }) => {
+const IngredientForm = () => {
+  const user = useSelector((auth) => auth);
+  const [recipeState, setRecipeState] = useState(0);
+
+  useEffect(() => {
+    axios({
+      method: "POST",
+      url: "http://localhost:9000/recipe/getRecipeNum",
+      // url: process.env.REACT_APP_HOST + "/recipe/getRecipeNum",
+      headers: { "Content-Type": "multipart/form-data" },
+      data: { member_id: user.auth.user.username, recipe_num: 0 },
+    }).then((response) => {
+      console.log("setRecipeState", response.data);
+      setRecipeState(response.data);
+    });
+  }, []);
+
   const [ingredients, setIngredients] = useState([
     {
       recipe_num: recipeState,
@@ -43,7 +62,10 @@ const IngredientForm = ({ recipeState }) => {
       alert("재료를 입력란을 채우고 추가해주세요.");
     }
   };
-
+  // useEffect(() => {
+  //   // swiper.disable();
+  //   alert(swiper);
+  // }, []);
   /**재료 제거 */
   const removeIngredient = (index, e) => {
     const ingreCopy = [...ingredients];
@@ -104,33 +126,17 @@ const IngredientForm = ({ recipeState }) => {
 
   return (
     <>
-      <BasicFormWrap>
-        {" "}
+      <BasicFormWrap style={{ backgroundColor: "pink" }}>
         <div>
           <FontAwesomeIcon icon={faLightbulb} /> 재료 이름과 재료량 순으로
-          입력해주세요{" "}
-          <SmallBtn
-            type="button"
-            className="addIngreBtn"
-            style={{ marginLeft: "1em" }}
-            onClick={onTemporarySave}
-          >
-            임시저장
-          </SmallBtn>
-          <SmallBtn
-            type="button"
-            className="addIngreBtn"
-            onClick={onAddIngredientHandler}
-          >
-            <FontAwesomeIcon icon={faPlusCircle} /> 재료 추가
-          </SmallBtn>
+          입력해주세요
           <SmallBtn
             type="button"
             className="addIngreBtn"
             style={{ marginRight: "1em" }}
-            onClick={removeIngredient}
+            onClick={onTemporarySave}
           >
-            <FontAwesomeIcon icon={faCircleMinus} /> 재료 삭제
+            <FontAwesomeIcon icon={faFloppyDisk} /> 임시저장
           </SmallBtn>
         </div>
         <BundleWrap>
@@ -196,6 +202,22 @@ const IngredientForm = ({ recipeState }) => {
                 );
               })}
             </div>
+            <SmallBtn
+              type="button"
+              className="addIngreBtn"
+              style={{ marginTop: "1em" }}
+              onClick={removeIngredient}
+            >
+              <FontAwesomeIcon icon={faCircleMinus} /> 재료 삭제
+            </SmallBtn>
+            <SmallBtn
+              type="button"
+              className="addIngreBtn"
+              style={{ marginTop: "1em", marginRight: "1em" }}
+              onClick={onAddIngredientHandler}
+            >
+              <FontAwesomeIcon icon={faPlusCircle} /> 재료 추가
+            </SmallBtn>
           </Scrollable>
         </BundleWrap>
       </BasicFormWrap>

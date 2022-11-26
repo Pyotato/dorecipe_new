@@ -3,86 +3,142 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../../_common/bannerLayout/style.css";
 import axios from "axios";
+import { useMemo } from "react";
+import { useCallback } from "react";
 const BestRecipe = () => {
   //axios로 레시피 받아와서 출력하기
 
   const [state, setState] = useState([
     {
       recipe_rank: 1,
-      recipeImg: "/img/example1.png",
+      recipe_num: "",
+      recipe_rpath: "/img/example1.png",
       recipe_name: "음식명",
-      user_name: "사용자명",
+      information_level: "",
+      information_time: "",
+      // user_name: "사용자명",
     },
     {
       recipe_rank: 2,
-      recipeImg: "/img/example2.png",
+      recipe_num: "",
+      recipe_rpath: "/img/example2.png",
       recipe_name: "음식명",
-      user_name: "사용자명",
+      information_level: "",
+      information_time: "",
+      // user_name: "사용자명",
     },
     {
       recipe_rank: 3,
-      recipeImg: "/img/example3.png",
+      recipe_num: "",
+      recipe_rpath: "/img/example3.png",
       recipe_name: "음식명",
-      user_name: "사용자명",
+      information_level: "",
+      information_time: "",
     },
     {
       recipe_rank: 4,
-      recipeImg: "/img/example4.png",
+      recipe_num: "",
+      recipe_rpath: "/img/example3.png",
       recipe_name: "음식명",
-      user_name: "사용자명",
+      information_level: "",
+      information_time: "",
     },
     {
       recipe_rank: 5,
-      recipeImg: "/img/example5.png",
+      recipe_num: "",
+      recipe_rpath: "/img/example5.png",
       recipe_name: "음식명",
-      user_name: "사용자명",
+      information_level: "",
+      information_time: "",
     },
     {
       recipe_rank: 6,
-      recipeImg: "/img/example1.png",
+      recipe_num: "",
+      recipe_rpath: "/img/example6.png",
       recipe_name: "음식명",
-      user_name: "사용자명",
+      information_level: "",
+      information_time: "",
     },
     {
       recipe_rank: 7,
-      recipeImg: "/img/example2.png",
+      recipe_num: "",
+      recipe_rpath: "/img/example7.png",
       recipe_name: "음식명",
-      user_name: "사용자명",
+      information_level: "",
+      information_time: "",
     },
     {
       recipe_rank: 8,
-      recipeImg: "/img/example3.png",
+      recipe_num: "",
+      recipe_rpath: "/img/example8.png",
       recipe_name: "음식명",
-      user_name: "사용자명",
+      information_level: "",
+      information_time: "",
     },
     {
       recipe_rank: 9,
-      recipeImg: "/img/example4.png",
+      recipe_num: "",
+      recipe_rpath: "/img/example9.png",
       recipe_name: "음식명",
-      user_name: "사용자명",
+      information_level: "",
+      information_time: "",
     },
     {
       recipe_rank: 10,
-      recipeImg: "/img/example5.png",
+      recipe_num: "",
+      recipe_rpath: "/img/example10.png",
       recipe_name: "음식명",
-      user_name: "사용자명",
+      information_level: "",
+      information_time: "",
     },
   ]);
-  for (let i = 0; i < state.length; i++) {
-    console.log(state[i].recipe_rank);
-  }
-  console.log(state);
 
-  // useState(() => {
-  //   axios
-  //     // .get(process.env.REACT_APP_HOST + "/recipe/search/details/")
-  //     .get("http://localhost:9000/recipe/search/details/")
-  //     .then((result) => {
-  //       console.log(result);
-  //       setState(result.data);
-  //     });
-  // }, []);
+  // const recipeArray = [];
+  const [bestRecipeState, setBestRecipeState] = useState([]);
+  const [recipeArrayState, setRecipeArrayState] = useState([]);
+  const bestRecipes = [];
 
+  useState(() => {
+    axios
+      // .get(process.env.REACT_APP_HOST + "/recipe/search/details/")
+      .get("http://localhost:9000/recipe/getBestRecipes")
+      .then((result) => {
+        for (let i = 0; i < result.data.length; i++) {
+          recipeArrayState.push(result.data[i].recipe_num);
+        }
+        setRecipeArrayState(recipeArrayState);
+      })
+      .then(() => {
+        console.log("recipeArray", recipeArrayState);
+        for (let i = 0; i < recipeArrayState.length; i++) {
+          axios
+            .get(
+              `http://localhost:9000/recipe/getBestLikedRecipes/${recipeArrayState[i]}`
+              // {
+              //   param: { recipe_num: parseInt(recipeArray[0]) },
+              // }
+            )
+            .then((result) => {
+              // console.log("result", result.data[0].recipe_num);
+              bestRecipes.push({
+                recipe_rank: i + 1,
+                recipe_num: result.data[0].recipe_num,
+                recipe_rpath: result.data[0].recipe_rpath,
+                recipe_name: result.data[0].recipe_name,
+                information_level: result.data[0].information_level,
+                information_time: result.data[0].information_time,
+              });
+              setState(bestRecipes);
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }
+      });
+  }, [recipeArrayState]);
+  console.log("bestRecipes", bestRecipes);
+  console.log("state", state);
+  console.log("bestRecipes", bestRecipes);
   return (
     <>
       <BestRecipeWrap>
@@ -94,7 +150,10 @@ const BestRecipe = () => {
                 <FlexWrap>
                   <div key={e}>
                     {/* {e.recipe_rank < 5 ? ( */}
-                    <Link to={`recipe/${e.recipe_rank}`} className="links">
+                    <Link
+                      to={`/recipe/search/details/${e.recipe_num}`}
+                      className="links"
+                    >
                       <RecipeWrap key={e}>
                         <RecipeRank key={e.recipe_rank}>
                           {e.recipe_rank}
@@ -102,34 +161,20 @@ const BestRecipe = () => {
                         <RecipeImg>
                           <img
                             className="bannerimg"
-                            src={e.recipeImg}
-                            key={e.recipeImg}
+                            src={e.recipe_rpath}
+                            key={e.recipe_rpath}
                             alt="bannerimg"
                           ></img>
                         </RecipeImg>
-                        <div className="recipe_name">{e.recipe_name}</div>
+                        <div
+                          style={{ height: "9em", zIndex: "900" }}
+                          className="recipe_name"
+                        >
+                          {e.recipe_name}
+                        </div>
                         <div className="user_name">{e.user_name}</div>
                       </RecipeWrap>
                     </Link>
-                    {/* ) : ( */}
-                    {/* <Link to={`recipe/${e.recipe_rank}`} className="links">
-                        <RecipeWrap key={e}>
-                          <RecipeRank key={e.recipe_rank}>
-                            {e.recipe_rank}
-                          </RecipeRank>{" "}
-                          <RecipeImg>
-                            <img
-                              className="bannerimg"
-                              src={e.recipeImg}
-                              key={e.recipeImg}
-                              alt="bannerimg"
-                            ></img>
-                          </RecipeImg>
-                          <div className="recipe_name">{e.recipe_name}</div>
-                          <div className="user_name">{e.user_name}</div>
-                        </RecipeWrap>
-                      </Link> */}
-                    {/* )} */}
                   </div>
                 </FlexWrap>
               </>
@@ -145,7 +190,7 @@ const BestRecipeWrap = styled.div`
   width: 80%;
   margin: 3em auto;
   padding: 1em;
-  background-color: #fffdf5;
+  /* background-color: #fffdf5; */
   & h3 {
     color: #463635;
     font-weight: 700;

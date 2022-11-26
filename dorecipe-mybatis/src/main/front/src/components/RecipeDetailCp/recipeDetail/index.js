@@ -3,11 +3,11 @@ import styled from "styled-components";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { SmallBtn } from "../../_common/buttons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faHeartCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import StepRecipe from "./recipeSteps";
 import RecipeIngredients from "./recipeIngredients";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { ReactComponent as EmptyHeart } from "../../../assets/EmptyHeart.svg";
+import { ReactComponent as FilledHeart } from "../../../assets/FilledHeart.svg";
 
 const RecipeDetailModal = () => {
   const search = "/";
@@ -24,7 +24,8 @@ const RecipeDetailModal = () => {
   console.log("user", user);
   // const [loginState, setLoginState] = useState("admin");
   const [loginState, setLoginState] = useState(user.auth.isLoggedIn);
-
+  const [userState, setUserState] = useState(user.auth);
+  const searchParam = params.recipeId;
   const [detailState, setDetailState] = useState([
     {
       // member_imagePath: "",
@@ -58,11 +59,10 @@ const RecipeDetailModal = () => {
     },
   ]);
   const [recipe_likes, setRecipeLikes] = useState(0);
-  const [heartState, setHeartState] = useState();
-  const searchParam = params.recipeId;
+  const [heartState, setHeartState] = useState(0);
+  const [heartClickState, setHeartClickState] = useState(null);
 
   useEffect(() => {
-    const searchParam = params.recipeId;
     if (searchParam !== undefined) {
       axios
         .get("http://localhost:9000/recipe/search/details/" + searchParam)
@@ -70,7 +70,7 @@ const RecipeDetailModal = () => {
         // .get("/recipe/detail/search/" + searchParam)
         .then(function (response) {
           setDetailState(response.data);
-          console.log("/search/details/", response.data);
+          // console.log("/search/details/", response.data);
         })
         .catch((e) => console.log(e));
       axios
@@ -79,64 +79,119 @@ const RecipeDetailModal = () => {
           setIngredientState(response.data);
         })
         .catch((e) => console.log(e));
-      // axios
-      //   .get("/recipe/getRecipeLikes/", {
-      //     params: { recipe_num: searchParam },
-      //   })
-      //   .then(function (response) {
-      //     console.log(response.data);
-      //     response.data ? setRecipeLikes(response.data) : setRecipeLikes(0);
-      //   })
-      //   .catch((e) => console.log(e));
-      // axios
-      //   .get("/getLikedMember/", {
-      //     params: { param1: detailState[0].member_id, param2: searchParam },
-      //   })
-      //   .then(function (response) {
-      //     console.log("heartstate", response.data);
-      //     response.data
-      //       ? setHeartState(faHeart)
-      //       : setHeartState(faHeartCirclePlus);
-      //   })
-      //   .catch((e) => console.log(e));
+      axios
+        .get("http://localhost:9000/recipe/getRecipeLikes/" + searchParam)
+        .then(function (response) {
+          // console.log("getRecipeLikes", response);
+          response.data ? setRecipeLikes(response.data) : setRecipeLikes(0);
+        })
+        .catch((e) => console.log(e));
+      if (loginState) {
+        axios
+          .get("http://localhost:9000/recipe/checkLikeType", {
+            params: {
+              recipe_num: parseInt(searchParam),
+              member_id: userState.user.username,
+            },
+          })
+          .then((response) => {
+            response.data === 1 ? setHeartState(1) : setHeartState(0);
+            console.log("checkLikeType", response.data);
+            response.data === ""
+              ? setHeartClickState(0)
+              : setHeartClickState(1);
+          })
+          .catch((e) => console.log(e));
+      } else {
+        setHeartState(0);
+      }
     }
   }, []);
 
-  // const getRecipeLikes = axios
-  //   .get("/recipe/getRecipeLikes/", {
-  //     params: { recipe_num: searchParam },
-  //   })
-  //   .then(function (response) {
-  //     console.log(response.data);
-  //     response.data ? setRecipeLikes(response.data) : setRecipeLikes(0);
-  //   })
-  //   .catch((e) => console.log(e));
+  useMemo(() => {
+    axios
+      .get("http://localhost:9000/recipe/getRecipeLikes/" + searchParam)
+      .then(function (response) {
+        // console.log("getRecipeLikes", response);
+        response.data ? setRecipeLikes(response.data) : setRecipeLikes(0);
+      })
+      .catch((e) => console.log(e));
+    if (loginState) {
+      axios
+        .get("http://localhost:9000/recipe/checkLikeType", {
+          params: {
+            recipe_num: parseInt(searchParam),
+            member_id: userState.user.username,
+          },
+        })
+        .then(function (response) {
+          console.log("checkLikeType", response);
+          response.data === 1 ? setHeartState(1) : setHeartState(0);
+          // response.data === ""
+          //   ? setHeartClickState(1)
+          //   : setHeartClickState(response.data);
+        })
+        .catch((e) => console.log(e));
+    } else {
+      setHeartState(0);
+    }
+  }, [heartState, recipe_likes, searchParam]);
 
   const onLikeHandler = () => {
     const searchParam = params.recipeId;
-    if (heartState === faHeart) {
-      //좋아요를 누른 상태
-      // axios
-      //   .get("/recipe/removeLikes", {
-      //     params: {
-      //       param1: loginState, //좋아요 누른 사람
-      //       param2: searchParam,
-      //     },
-      //   })
-      //   .then(setHeartState(faHeartCirclePlus))
-      //   .then(getRecipeLikes);
-    } else if (heartState === faHeartCirclePlus) {
-      axios
-        .get("/recipe/insertLikes", {
-          params: {
-            param1: loginState, //좋아요 누른 사람
-            param2: searchParam,
-            param3: 1,
-          },
-        })
-        .then(setHeartState(faHeart)); //좋아요를 누르지 않은 상태
+
+    if (loginState) {
+      if (heartState === 1) {
+        // 좋아요를 누른 상태 ==> 좋아요 취소하기
+        axios
+          .get("http://localhost:9000/recipe/removeLikes", {
+            params: {
+              member_id: userState.user.username, //좋아요 누른 사람
+              recipe_num: parseInt(searchParam),
+            },
+          })
+          .then(() => {
+            setHeartState(0);
+            setHeartClickState(1);
+          })
+          .catch((e) => console.log(e));
+      } else if (heartState === 0) {
+        // update으로
+
+        if (heartClickState === 0) {
+          //insert로 (한번도 좋아요를 하지 않았을 경우)
+          axios
+            .get("http://localhost:9000/recipe/insertRecipeLikes", {
+              params: {
+                member_id: userState.user.username, //좋아요 누른 사람
+                recipe_num: parseInt(searchParam),
+              },
+            })
+            .then(() => {
+              setHeartState(1);
+              setHeartClickState(1);
+            })
+            .catch((e) => console.log(e)); //좋아요를 누르지 않은 상태
+        } else if (heartClickState === 1) {
+          axios
+            .get("http://localhost:9000/recipe/giveLikes", {
+              params: {
+                member_id: userState.user.username, //좋아요 누른 사람
+                recipe_num: parseInt(searchParam),
+              },
+            })
+            .then(() => {
+              setHeartState(1);
+              setHeartClickState(1);
+            })
+            .catch((e) => console.log(e)); //좋아요를 누르지 않은 상태
+        }
+      } //좋아요 누르기
+    } else {
+      alert("로그인 후 이용가능합니다.");
     }
   };
+  console.log("heartClickState", heartClickState);
 
   return (
     <>
@@ -189,8 +244,14 @@ const RecipeDetailModal = () => {
                   <span className="accented">
                     {detailState[0].recipe_creDate.substring(0, 10)}
                   </span>
-                  <Likes className="accented clickable" onClick={onLikeHandler}>
-                    좋아요 <FontAwesomeIcon icon={heartState} /> {recipe_likes}
+                  {/* <Likes className="accented clickable" onClick={onLikeHandler}> */}
+                  <Likes className="accented clickable">
+                    좋아요 {recipe_likes}{" "}
+                    {heartState === 1 ? (
+                      <FilledHeart onClick={() => onLikeHandler()} />
+                    ) : (
+                      <EmptyHeart onClick={() => onLikeHandler()} />
+                    )}
                   </Likes>
                 </CreDateLikeWrap>
               </div>

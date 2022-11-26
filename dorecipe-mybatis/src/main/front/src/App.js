@@ -9,7 +9,8 @@ import KnowhowPage from "./pages/knowhowPage/knowhowListPage";
 import KnowhowDetailPage from "./pages/knowhowPage/knowhowDetailPage";
 import KnowhowUpdatePage from "./pages/knowhowPage/knowhowFormPage";
 
-import EventPage from "./pages/eventPage/eventListPage";
+// import EventPage from "./pages/eventPage/eventListPage";
+import EventPage from "./pages/eventPage";
 import EventDetailPage from "./pages/eventPage/eventDetailPage";
 import EventModify from "./pages/eventPage/eventMod";
 
@@ -31,13 +32,14 @@ import NotFoundPage from "./pages/errorPage";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "./reduxRefresh/actions/auth";
 import { clearMessage } from "./reduxRefresh/actions/message";
-import { history, historylocation } from "./reduxRefresh/helpers/history";
+import { history } from "./reduxRefresh/helpers/history";
 
 import EventBus from "./reduxRefresh/common";
 
 import { ThemeProvider } from "styled-components";
 import { theme } from "./style/theme";
-import EditRecipeForm from "./components/editRecipeCp";
+import "./App.css";
+
 import ModifyRecipePage from "./pages/modifyRecipePage";
 
 function App() {
@@ -48,7 +50,7 @@ function App() {
   console.log("user", user);
   console.log("userMsg", userMsg);
   const [userState, setCurrentUser] = useState(user);
-  const recipeID = useParams();
+  // const recipeID = useParams();
 
   useEffect(() => {
     user.state = {
@@ -96,7 +98,7 @@ function App() {
     console.log("logOut", user);
   };
 
-  const { currentUser, showModeratorBoard, showAdminBoard } = user;
+  const { currentUser } = user;
 
   return (
     <ThemeProvider theme={theme}>

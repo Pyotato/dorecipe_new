@@ -40,9 +40,16 @@ const EditRecipeForm = () => {
       axios
         .get(
           "http://localhost:9000/recipe/getIngredientList/" +
-            historylocation.pathname.substring(
-              historylocation.pathname.lastIndexOf("/") + 1, //현재위치
-              historylocation.pathname.length
+            //   historylocation.pathname.substring(
+            //     historylocation.pathname.lastIndexOf("/") + 1, //현재위치
+            //     historylocation.pathname.length
+            //   )
+
+            parseInt(
+              historylocation.pathname.substring(
+                historylocation.pathname.lastIndexOf("/") + 1, //현재위치
+                historylocation.pathname.length
+              )
             )
         )
         .then((response) => {

@@ -1,5 +1,5 @@
 import MainLayout from "../../layout/mainLayOut";
-import { MainLogo } from "../../components/_common/mainLogo";
+import { LogoHeader } from "../../components/_common/logo";
 import "./style.css";
 
 const NotFoundPage = () => {
@@ -7,7 +7,7 @@ const NotFoundPage = () => {
     <>
       <MainLayout>
         <h2>Page Not Found</h2>
-        <div className="bottom11"/>
+        <div className="bottom11" />
       </MainLayout>
     </>
   );

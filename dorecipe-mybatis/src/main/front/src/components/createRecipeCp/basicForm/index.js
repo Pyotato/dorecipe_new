@@ -1,9 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faExclamationCircle,
-  faImage,
-  faLaptopHouse,
-} from "@fortawesome/free-solid-svg-icons";
+import {} from "@fortawesome/free-solid-svg-icons";
 import { DefaultBtn } from "../../_common/buttons";
 import "./style.css";
 import styled from "styled-components";
@@ -12,8 +7,14 @@ import { useState, useCallback, useEffect } from "react";
 import EditDropZone from "../../_common/dropzone";
 import axios from "axios";
 import { useSelector } from "react-redux";
-
-const BasicForm = () => {
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
+const BasicForm = ({
+  recipeState,
+  setRecipeState,
+  saveState,
+  setSaveState,
+}) => {
   const [recipe_title, onChangeRecipeTitle, setRecipeTitle] = useInput("");
   const [recipe_introduce, onChangeRecipeIntro, setRecipeIntro] = useInput("");
   const [recipe_url, onChangeRecipeUrl, setRecipeUrl] = useInput("");
@@ -39,8 +40,10 @@ const BasicForm = () => {
   useEffect(() => {
     // if (user.auth.isLoggedIn) {
     setMemberId(user.auth.user.username);
+    setSaveState(0);
+
     console.log(user.auth.user.username);
-    console.log("현재 로그인 아이디!!!!! : " + member_id);
+    // console.log("setRecipeState: " + member_id);
     // }
   }, []);
   // ----------------------------------------------------
@@ -110,7 +113,11 @@ const BasicForm = () => {
         },
         data: formData,
       })
+        .then(() => {
+          setSaveState(1);
+        })
         .then((response) => {
+          // setRecipeState()
           for (let value of formData.values()) {
             console.log(value);
           }
@@ -138,7 +145,7 @@ const BasicForm = () => {
 
   return (
     <>
-      <div>
+      <TotalWrap>
         <BasicFormWrap>
           <div className="recipeLeftWrap">
             <div className="recipeTitleWrap">
@@ -321,7 +328,7 @@ const BasicForm = () => {
             </div>
             <div></div>
           </div>
-          <div className="recipeRightWrap">
+          <div className="recipeRightWrap" style={{ height: "fitContent" }}>
             <label>레시피 썸네일</label>
             <EditDropZone
               files={files}
@@ -334,13 +341,18 @@ const BasicForm = () => {
           </div>
         </BasicFormWrap>{" "}
         <DefaultBtn type="button" onClick={onTemporarySave}>
-          임시 저장하기
+          <FontAwesomeIcon icon={faFloppyDisk} /> 임시 저장하기
         </DefaultBtn>
-      </div>
+      </TotalWrap>
     </>
   );
 };
 export default BasicForm;
+
+const TotalWrap = styled.div`
+  margin-bottom: 9em;
+  height: 80vh;
+`;
 const BasicFormWrap = styled.div`
   display: inline-flex;
   color: #463635;

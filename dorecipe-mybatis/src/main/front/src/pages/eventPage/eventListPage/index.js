@@ -51,41 +51,41 @@ const EventPage = () => {
 
   return (
     <>
-      <MainLayout>
-        <div className="eventWrap">
-          <h2>| Event |</h2>
+      {/* <MainLayout> */}
+      <div className="eventWrap">
+        <h2>| Event |</h2>
 
-          {BtnState && (
-            <Link className="updateList" to={"/admin"}>
-              등록
-            </Link>
-          )}
-          <div className="eventTableWrap">
-            <ul>
-              <div className="tableHead">
-                <div className="noticeNo">No.</div>
-                <div className="noticeTitle">제목</div>
-                <div className="noticeDate">참여 기간</div>
-                {BtnState && <div className="updateOrDelete">수정 및 삭제</div>}
+        {BtnState && (
+          <Link className="updateList" to={"/admin"}>
+            등록
+          </Link>
+        )}
+        <div className="eventTableWrap">
+          <ul>
+            <div className="tableHead">
+              <div className="noticeNo">No.</div>
+              <div className="noticeTitle">제목</div>
+              <div className="noticeDate">참여 기간</div>
+              {BtnState && <div className="updateOrDelete">수정 및 삭제</div>}
+            </div>
+            <Scrollable>
+              <div>
+                {state.map((e) => (
+                  <EventList
+                    key={e.event_num}
+                    removePost={removePost}
+                    BtnState={BtnState}
+                    // updatePost={updatePost}
+                    state={e}
+                  />
+                ))}
               </div>
-              <Scrollable>
-                <div>
-                  {state.map((e) => (
-                    <EventList
-                      key={e.event_num}
-                      removePost={removePost}
-                      BtnState={BtnState}
-                      // updatePost={updatePost}
-                      state={e}
-                    />
-                  ))}
-                </div>
-              </Scrollable>
-            </ul>
-          </div>
+            </Scrollable>
+          </ul>
         </div>
-        <div className="bottom" />
-      </MainLayout>
+      </div>
+      <div className="bottom" />
+      {/* </MainLayout> */}
     </>
   );
 };

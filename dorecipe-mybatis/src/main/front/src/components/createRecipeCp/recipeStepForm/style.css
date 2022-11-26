@@ -8,7 +8,11 @@
 }
 .dropzone {
   display: inline-block;
-  background-color: aqua;
+  border: 1px solid #8d3232;
+  padding: 1em;
+  padding-top: 2em;
+  border-radius: 1em;
+  margin-left: 6em;
   max-width: 12em;
   min-height: 6em;
 }

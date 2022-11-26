@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import MainLayout from "../../layout/mainLayOut";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import SearchRecipe from "../../components/SearchRecipeCp";
+import SearchRecipe from "../../components/searchRecipeCp";
 import "./style.css";
 const SearchRecipePage = () => {
   const params = useParams();

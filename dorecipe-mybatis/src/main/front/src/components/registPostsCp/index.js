@@ -51,7 +51,7 @@ const RegistPosts = () => {
           </Nav.Item>
         </Nav>
 
-        <TabContent tap={tap} />
+        {/* <TabContent tap={tap} /> */}
       </div>
     </>
   );

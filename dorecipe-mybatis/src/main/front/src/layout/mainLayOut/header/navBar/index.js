@@ -1,69 +1,86 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import axios from "axios";
+import { colors } from "../../../../theme/theme";
 
-const NavBar = () => {
-  const [languageState, setLanguage] = useState("ko");
+const NavBar = ({ tabState, onToggleTab }) => {
+  const user = useSelector((auth) => auth);
+  const [userState, setUserState] = useState(user);
+  const [displayState, setDisplay] = useState("visible");
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    if (userState.auth.isLoggedIn) {
+      if (userState.auth.user.roles.includes("ROLE_ADMIN")) {
+        setUserState(userState.auth.user);
+        setDisplay("none");
+      }
+    }
+  }, []);
+
+  const checkAuthState = () => {
+    if (!userState.auth.isLoggedIn) {
+      navigate("/login");
+    } else if (userState.auth.user.roles.includes("ROLE_ADMIN")) {
+      navigate("/admin");
+    } else {
+      navigate("/recipe/create");
+    }
+  };
   return (
     <>
-      <NavWrapper>
-        <ul>
-          <li>
-            <Link className="navLinks" to={"/"}>
-              메인
-            </Link>
-          </li>
-          <li>
-            <Link className="navLinks" to={"/recipes/search"}>
-              레시피 상세 검색
-            </Link>
-          </li>
-          <li>
-            <Link className="navLinks" to={"/notice/list"}>
-              공지사항
-            </Link>
-          </li>
-          <li>
-            <Link className="navLinks" to={"/event/list"}>
-              이벤트
-            </Link>
-          </li>
-        </ul>
-      </NavWrapper>
+      {tabState === 1 ? (
+        <>
+          <NavWrapper onMouseLeave={onToggleTab}>
+            <ul>
+              <li
+                className="navLinks"
+                onClick={checkAuthState}
+                // 관리자만 보이지 않도록
+                style={{ display: displayState }}
+              >
+                레시피 등록하기
+              </li>
+              <li>
+                <Link className="navLinks" to={"/notice/list"}>
+                  공지사항
+                </Link>
+              </li>
+              <li>
+                <Link className="navLinks" to={"/event/list"}>
+                  이벤트
+                </Link>
+              </li>
+            </ul>
+          </NavWrapper>
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 };
 export default NavBar;
 
 const NavWrapper = styled.div`
-  display: block;
-  height: 3em;
+  position: fixed;
+  top: 8.5vh;
+  z-index: 700;
+  height: fit-content;
   width: 100%;
-  background-color: #fffdf5;
-  margin-bottom: 6em;
-  border-bottom: 1px solid ${(props) => props.theme.accentedColor};
-  text-decoration: none;
-  & ul {
-    display: inline-flex;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    text-align: center;
-    padding: 0;
-  }
+  background-color: ${colors.color_brown};
 
   & ul > li {
-    width: 100%;
+    padding: 1vh 0;
   }
-  & ul > li > .navLinks {
+  & .navLinks {
     text-decoration: none;
     width: 100%;
-    color: #463635;
+    color: ${colors.color_milky_white};
     font-weight: 700;
   }
-  ul > li > .navLinks:hover {
-    color: #8d3232;
+  & .navLinks:hover {
+    cursor: pointer;
   }
 `;

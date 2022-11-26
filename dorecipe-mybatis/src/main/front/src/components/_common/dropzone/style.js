@@ -12,7 +12,10 @@ export const EditImgPreview = styled.section`
   padding: 3rem;
   & > .inputBox {
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
+    /* height: max-content;
+
+    overflow-y: hidden; */
     display: flex;
     flex-direction: column;
     justify-content: center;

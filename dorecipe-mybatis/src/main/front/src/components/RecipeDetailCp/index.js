@@ -282,12 +282,12 @@ const DetailSearch = () => {
         .then(function (response) {
           console.log(response.data);
           setRecipeState(response.data);
+          console.log("recipeState", recipeState);
         })
         .catch((e) => console.log(e));
     },
     [optionState]
   );
-  console.log("recipeState", recipeState);
   return (
     <>
       <SelectTotalWrap>

@@ -4,7 +4,8 @@ import {
   faLightbulb,
   faCirclePlus,
   faCircleMinus,
-  faCircleQuestion,
+  faImage,
+  faFloppyDisk,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState, useCallback, useEffect } from "react";
 import { SmallBtn, DefaultBtn } from "../../_common/buttons";
@@ -45,25 +46,13 @@ const RecipeOrderDrag = ({ recipeState }) => {
   const [files28, setFiles28] = useState([]);
   const [files29, setFiles29] = useState([]);
   const [files30, setFiles30] = useState([]);
-  // const [fileName, file.name]
 
   // member_id 가져오기
   const user = useSelector((auth) => auth);
   const [member_id, setMemberId] = useState();
   useEffect(() => {
-    // console.log("현재 로그인 아이디 : ", user.auth.user.username);
-
     setMemberId(user.auth.user.username);
-  });
-  // ----------------------------------------------------
-  const userState = useSelector((state) => state.auth.isLoggedIn);
-  const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   if (userState) {
-  //     navigate("/login");
-  //   }
-  // }, []);
+  }, []);
 
   const [stepState, setStep] = useState([
     {
@@ -135,8 +124,9 @@ const RecipeOrderDrag = ({ recipeState }) => {
   };
 
   //handle added Inputboxes
-  const handleAddedSteps = () => {
+  const handleAddedSteps = (e) => {
     const steps = [...stepState];
+    e.preventDefault();
     if (steps.length < 30) {
       if (steps[steps.length - 1].stepDescription !== "") {
         let newSteps = {
@@ -150,14 +140,22 @@ const RecipeOrderDrag = ({ recipeState }) => {
       } else {
         alert("순서에 대한 설명을 적어주세요.");
       }
+      // let newSteps = {
+      //   recipe_num: steps[0].recipe_num,
+      //   stepId: steps.length,
+      //   stepDescription: "",
+      //   stepImg: "",
+      // };
+      // setStep([...stepState, newSteps]);
     } else if (steps.length === 30) {
       alert("요리 순서는 최대 30개까지 등록 가능합니다.");
     }
   };
 
   //순서 제거
-  const handleRemovedSteps = () => {
+  const handleRemovedSteps = (e) => {
     const steps = [...stepState];
+    e.preventDefault();
     //순서는 3개 이상 등록하도록
     if (steps.length > 3) {
       steps.splice(stepState.length - 1, 1);
@@ -269,11 +267,11 @@ const RecipeOrderDrag = ({ recipeState }) => {
             onClick={onTemporarySave}
             btnState={btnState}
           >
-            임시저장
+            <FontAwesomeIcon icon={faFloppyDisk} /> 임시저장
           </SmallBtn>
         </BtnWrap>
         <Scrollable>
-          <div>
+          <div style={{ backgroundColor: "red", height: "80vh" }}>
             <DraggableWrap>
               <DroppableDiv droppable="true">
                 {stepState.map((item, index) => {
@@ -324,17 +322,18 @@ const RecipeOrderDrag = ({ recipeState }) => {
                             {files1.length > 0 ? (
                               <>
                                 <div className="fileBox">
-                                  <p className="removeFile">파일 삭제</p>
+                                  <p className="removeFile">이미지 삭제</p>
                                   <img
                                     onClick={() => setFiles1("")}
                                     style={{
                                       maxWidth: "30em",
                                       height: "100px",
                                       margin: "0",
+                                      translate: "5em",
                                       display: "inline-block",
                                     }}
                                     src={stepState[0].stepImg.preview}
-                                    alt="HeroImage"
+                                    alt={stepState[0].stepImg.preview}
                                   />
                                 </div>
                               </>
@@ -371,9 +370,17 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                         className: "dropzone",
                                       })}
                                     >
+                                      <div
+                                        style={{
+                                          fontSize: "2px",
+                                          textAlign: "center",
+                                        }}
+                                      >
+                                        <FontAwesomeIcon icon={faImage} />
+                                      </div>
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        파일 등록
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -385,17 +392,26 @@ const RecipeOrderDrag = ({ recipeState }) => {
                         {index === 1 && (
                           <>
                             {files2.length > 0 ? (
-                              <img
-                                onClick={() => setFiles2("")}
-                                style={{
-                                  maxWidth: "30em",
-                                  height: "100px",
-                                  margin: "0",
-                                  display: "inline-block",
-                                }}
-                                src={stepState[1].stepImg.preview}
-                                alt="HeroImage"
-                              />
+                              <div className="fileBox">
+                                <p
+                                  className="removeFile"
+                                  style={{ zIndex: "700" }}
+                                >
+                                  이미지 삭제
+                                </p>
+                                <img
+                                  onClick={() => setFiles2("")}
+                                  style={{
+                                    maxWidth: "30em",
+                                    height: "100px",
+                                    margin: "0",
+                                    translate: "5em",
+                                    display: "inline-block",
+                                  }}
+                                  src={stepState[1].stepImg.preview}
+                                  alt={stepState[1].stepImg.preview}
+                                />
+                              </div>
                             ) : (
                               <>
                                 <Dropzone
@@ -427,10 +443,18 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                         className: "dropzone",
                                       })}
                                     >
+                                      {" "}
+                                      <div
+                                        style={{
+                                          fontSize: "2px",
+                                          textAlign: "center",
+                                        }}
+                                      >
+                                        <FontAwesomeIcon icon={faImage} />
+                                      </div>
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -442,17 +466,26 @@ const RecipeOrderDrag = ({ recipeState }) => {
                         {index === 2 && (
                           <>
                             {files3.length > 0 ? (
-                              <img
-                                onClick={() => setFiles3("")}
-                                style={{
-                                  maxWidth: "30em",
-                                  height: "100px",
-                                  margin: "0",
-                                  display: "inline-block",
-                                }}
-                                src={stepState[2].stepImg.preview}
-                                alt="HeroImage"
-                              />
+                              <div className="fileBox">
+                                <p
+                                  className="removeFile"
+                                  style={{ zIndex: "700" }}
+                                >
+                                  이미지 삭제
+                                </p>
+                                <img
+                                  onClick={() => setFiles3("")}
+                                  style={{
+                                    maxWidth: "30em",
+                                    height: "100px",
+                                    margin: "0",
+                                    translate: "5em",
+                                    display: "inline-block",
+                                  }}
+                                  src={stepState[2].stepImg.preview}
+                                  alt="HeroImage"
+                                />
+                              </div>
                             ) : (
                               <>
                                 <Dropzone
@@ -486,8 +519,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -543,8 +575,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -600,8 +631,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -657,8 +687,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -714,8 +743,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -771,8 +799,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -828,8 +855,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -885,8 +911,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -942,8 +967,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1000,8 +1024,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1057,8 +1080,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1114,8 +1136,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1171,8 +1192,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1228,8 +1248,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1285,8 +1304,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1342,8 +1360,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1399,8 +1416,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1456,8 +1472,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1513,8 +1528,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1570,8 +1584,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1627,8 +1640,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1684,8 +1696,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1741,8 +1752,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1798,8 +1808,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1855,8 +1864,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1912,8 +1920,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -1969,8 +1976,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -2026,8 +2032,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <span style={{ fontSize: ".8rem" }}>
-                                        Drop hero image here, or click to select
-                                        file
+                                        이미지 등록
                                       </span>
                                     </div>
                                   )}
@@ -2036,12 +2041,12 @@ const RecipeOrderDrag = ({ recipeState }) => {
                             )}
                           </>
                         )}
-                        {index !== 0 && (
+                        {/* {index !== 0 && (
                           <div className="hoverable">
                             <FontAwesomeIcon icon={faCircleQuestion} /> 입력란을
                             잡고 순서를 움직여 보세요!
                           </div>
-                        )}
+                        )} */}
                       </div>
                     </>
                   );
@@ -2059,7 +2064,9 @@ export default RecipeOrderDrag;
 const TotalWrap = styled.div`
   width: fit-content;
   margin: 0 auto;
-  height: 30em;
+  background-color: orange;
+  height: 100vh;
+  width: 90vw;
   font-size: 14px;
   padding: 2em;
 `;
@@ -2072,6 +2079,7 @@ const DraggableWrap = styled.div`
 `;
 const Scrollable = styled.section`
   width: 100%;
+  height: 80vh;
   margin: 1em auto;
 
   & > div {
@@ -2110,6 +2118,8 @@ const DroppableDiv = styled.div`
   & .textArea {
     border-radius: 0.5em;
     margin-right: 1em;
+    width: 30em;
+    height: 6em;
     padding: 0.4em;
     ::-webkit-scrollbar {
       display: none;
