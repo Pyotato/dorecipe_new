@@ -1,7 +1,7 @@
 // export default CommentCp;
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./style.css";
-import "../../style/bootstrap.min.css";
+// import "../../style/bootstrap.min.css";
 import axios from "axios";
 import { useInput } from "../../hooks/useInput";
 import { Link, useNavigate, useParams } from "react-router-dom";

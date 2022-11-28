@@ -47,7 +47,7 @@ const KnowhowMain = () => {
   return (
     <>
       <div>
-        <BestRecipeWrap>
+        <TotalWrap>
           <BannerLayout>
             {state.map((e) => {
               return (
@@ -75,16 +75,14 @@ const KnowhowMain = () => {
               );
             })}
           </BannerLayout>
-        </BestRecipeWrap>
+        </TotalWrap>
       </div>
     </>
   );
 };
 export default KnowhowMain;
-const BestRecipeWrap = styled.div`
+const TotalWrap = styled.div`
   padding: 1em;
-  /* width: 80%; */
-  /* margin: 0 3vw; */
 `;
 
 const KnowhowWrap = styled.div`

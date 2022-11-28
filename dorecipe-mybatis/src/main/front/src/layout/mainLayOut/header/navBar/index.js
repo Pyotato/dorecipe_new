@@ -65,13 +65,14 @@ export default NavBar;
 
 const NavWrapper = styled.div`
   position: fixed;
-  top: 8.5vh;
+  top: 6.7vh;
   z-index: 700;
   height: fit-content;
   width: 100%;
   background-color: ${colors.color_brown};
-
   & ul > li {
+    margin: 1vh;
+    margin-left: 3vw;
     padding: 1vh 0;
   }
   & .navLinks {
@@ -82,5 +83,6 @@ const NavWrapper = styled.div`
   }
   & .navLinks:hover {
     cursor: pointer;
+    color: ${colors.color_beige_white};
   }
 `;

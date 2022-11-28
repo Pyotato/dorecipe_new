@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./style.css";
-import "../../style/bootstrap.min.css";
+// import "../../style/bootstrap.min.css";
 import { Nav } from "react-bootstrap";
 import axios from "axios";
 import { useInput } from "../../hooks/useInput";

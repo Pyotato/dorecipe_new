@@ -6,12 +6,13 @@ import KnowhowMain from "../../components/mainPageCp/knowhow";
 import EditorsChoiceSection from "../../components/mainPageCp/editorsChoice";
 
 import { ReactComponent as MusicNote } from "../../assets/MusicNote.svg";
-import { ReactComponent as LandingImg3 } from "../../assets/LandingImg3.svg";
 import { ReactComponent as ForkSpoonKnife } from "../../assets/ForkSpoonKnife.svg";
 import { ReactComponent as LandingImg4 } from "../../assets/LandingImg4.svg";
 import { ReactComponent as ArrowRight } from "../../assets/ArrowRight.svg";
 import { ReactComponent as LandingShape1 } from "../../assets/LandingShape1.svg";
 import { ReactComponent as LandingShape2 } from "../../assets/LandingShape2.svg";
+import { ReactComponent as LandingShape3 } from "../../assets/LandingShape3.svg";
+import { ReactComponent as LandingShape4 } from "../../assets/LandingShape4.svg";
 
 import { LogoOnLandingPage } from "../../components/_common/logo";
 import HeaderSearch from "../../layout/mainLayOut/header/search";
@@ -157,28 +158,40 @@ const MainPage = () => {
             <div
               style={{
                 margin: "5vh 0",
-                fontSize: "2vh",
+                fontSize: "1vw",
                 display: "inline-flex",
-                width: "22vw",
+                // minWidth: "16vw",
+                // maxWidth: "24vw",
+                gap: "1vw",
                 justifyContent: "space-around",
+                flexWrap: "wrap",
               }}
               className="fonts"
             >
               |{" "}
-              <span
-                onClick={() => navigate("/recipes/search")}
-                className="fonts"
-              >
-                레시피 상세 검색
-              </span>{" "}
+              <div style={{ minWidth: "5vw", textAlign: "center" }}>
+                <span
+                  onClick={() => navigate("/recipes/search")}
+                  className="fonts"
+                >
+                  레시피 상세 검색
+                </span>{" "}
+              </div>
               |{" "}
-              <span onClick={() => navigate("/notice/list")} className="fonts">
-                공지사항
-              </span>{" "}
+              <div style={{ minWidth: "5vw", textAlign: "center" }}>
+                <span
+                  onClick={() => navigate("/notice/list")}
+                  className="fonts"
+                >
+                  공지사항
+                </span>{" "}
+              </div>
               |{" "}
-              <span onClick={() => navigate("/event/list")} className="fonts">
-                이벤트
-              </span>{" "}
+              <div style={{ minWidth: "5vw", textAlign: "center" }}>
+                <span onClick={() => navigate("/event/list")} className="fonts">
+                  이벤트
+                </span>{" "}
+              </div>
               |{" "}
             </div>
             <div>
@@ -388,7 +401,7 @@ const MainPage = () => {
             style={{ display: "inline-flex", width: "100%", height: "50vh" }}
           >
             <img
-              style={{ width: "60vw", height: "50vh" }}
+              style={{ width: "50vw" }}
               src="/img/landingImg5.png"
               alt="밀키트 광고 이미지2"
             />
@@ -419,7 +432,7 @@ const MainPage = () => {
                 }}
                 className="fonts"
               >
-                더 많은 밀키트 보러가기<ArrowRight></ArrowRight>
+                더 많은 밀키트 보러가기 <ArrowRight></ArrowRight>
               </div>
             </div>
           </div>
@@ -429,21 +442,51 @@ const MainPage = () => {
           style={{
             backgroundColor: "#C2B196",
             width: "100%",
-            height: "100vh",
+            height: "140vh",
+            // height: "max-content",
           }}
         >
           <div
             style={{
               fontSize: "2em",
               width: "100%",
+              height: "6vh",
               fontWeight: "900",
               color: "#F5F5F5",
+              zIndex: "700",
               // marginTop: "6vh",
             }}
             className="fonts"
           >
-            M BEST RECIPE! 우리들이 눈여겨본 레시피!
-          </div>
+            {" "}
+            <LandingShape3
+              style={{
+                zIndex: "0",
+                width: "60vh",
+                height: "40vh",
+                viewBox: "100vh",
+              }}
+            ></LandingShape3>
+            <div
+              style={{
+                zIndex: "700",
+                viewBox: "100vh",
+                paddingLeft: "4vw",
+                transform: "translateY(-34vh)",
+              }}
+            >
+              BEST RECIPE! 우리들이 눈여겨본 레시피!
+            </div>{" "}
+            <LandingShape4
+              style={{
+                zIndex: "0",
+                width: "30vw",
+                height: "60vh",
+                right: "0",
+                transform: "translateY(34vh) translateX(68.9vw) translateZ(0)",
+              }}
+            ></LandingShape4>
+          </div>{" "}
           <BestRecipe />
         </div>
         {/* section4 끝*/}

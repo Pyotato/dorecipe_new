@@ -1,106 +1,21 @@
 import styled from "styled-components";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../_common/bannerLayout/style.css";
 import axios from "axios";
-import { useMemo } from "react";
-import { useCallback } from "react";
+import { colors } from "../../../theme/theme";
+import { ReactComponent as ArrowRight } from "../../../assets/ArrowRight.svg";
+import BasicSpinner from "../../_common/loading";
+
 const BestRecipe = () => {
-  //axios로 레시피 받아와서 출력하기
-
-  const [state, setState] = useState([
-    {
-      recipe_rank: 1,
-      recipe_num: "",
-      recipe_rpath: "/img/example1.png",
-      recipe_name: "음식명",
-      information_level: "",
-      information_time: "",
-      // user_name: "사용자명",
-    },
-    {
-      recipe_rank: 2,
-      recipe_num: "",
-      recipe_rpath: "/img/example2.png",
-      recipe_name: "음식명",
-      information_level: "",
-      information_time: "",
-      // user_name: "사용자명",
-    },
-    {
-      recipe_rank: 3,
-      recipe_num: "",
-      recipe_rpath: "/img/example3.png",
-      recipe_name: "음식명",
-      information_level: "",
-      information_time: "",
-    },
-    {
-      recipe_rank: 4,
-      recipe_num: "",
-      recipe_rpath: "/img/example3.png",
-      recipe_name: "음식명",
-      information_level: "",
-      information_time: "",
-    },
-    {
-      recipe_rank: 5,
-      recipe_num: "",
-      recipe_rpath: "/img/example5.png",
-      recipe_name: "음식명",
-      information_level: "",
-      information_time: "",
-    },
-    {
-      recipe_rank: 6,
-      recipe_num: "",
-      recipe_rpath: "/img/example6.png",
-      recipe_name: "음식명",
-      information_level: "",
-      information_time: "",
-    },
-    {
-      recipe_rank: 7,
-      recipe_num: "",
-      recipe_rpath: "/img/example7.png",
-      recipe_name: "음식명",
-      information_level: "",
-      information_time: "",
-    },
-    {
-      recipe_rank: 8,
-      recipe_num: "",
-      recipe_rpath: "/img/example8.png",
-      recipe_name: "음식명",
-      information_level: "",
-      information_time: "",
-    },
-    {
-      recipe_rank: 9,
-      recipe_num: "",
-      recipe_rpath: "/img/example9.png",
-      recipe_name: "음식명",
-      information_level: "",
-      information_time: "",
-    },
-    {
-      recipe_rank: 10,
-      recipe_num: "",
-      recipe_rpath: "/img/example10.png",
-      recipe_name: "음식명",
-      information_level: "",
-      information_time: "",
-    },
-  ]);
-
-  // const recipeArray = [];
-  const [bestRecipeState, setBestRecipeState] = useState([]);
+  const [state, setState] = useState([]);
+  const navigate = useNavigate();
   const [recipeArrayState, setRecipeArrayState] = useState([]);
-  const bestRecipes = [];
+  const bestRecipes = [{}];
+  const [loadingState, setLoadingState] = useState(1);
 
-  useState(() => {
+  useEffect(() => {
     axios
-      // .get(process.env.REACT_APP_HOST + "/recipe/search/details/")
       .get("http://localhost:9000/recipe/getBestRecipes")
       .then((result) => {
         for (let i = 0; i < result.data.length; i++) {
@@ -114,50 +29,114 @@ const BestRecipe = () => {
           axios
             .get(
               `http://localhost:9000/recipe/getBestLikedRecipes/${recipeArrayState[i]}`
-              // {
-              //   param: { recipe_num: parseInt(recipeArray[0]) },
-              // }
             )
             .then((result) => {
-              // console.log("result", result.data[0].recipe_num);
               bestRecipes.push({
                 recipe_rank: i + 1,
                 recipe_num: result.data[0].recipe_num,
                 recipe_rpath: result.data[0].recipe_rpath,
-                recipe_name: result.data[0].recipe_name,
+                recipe_title: result.data[0].recipe_title,
                 information_level: result.data[0].information_level,
                 information_time: result.data[0].information_time,
               });
+              // setState(bestRecipes);
+              // setLoadingState(0);
+            })
+            .then(() => {
               setState(bestRecipes);
+            })
+            .then(() => {
+              setLoadingState(0);
+              // alert(loadingState);
             })
             .catch((e) => {
               console.log(e);
             });
         }
+      })
+      .catch((e) => {
+        console.log(e);
       });
-  }, [recipeArrayState]);
-  console.log("bestRecipes", bestRecipes);
-  console.log("state", state);
-  console.log("bestRecipes", bestRecipes);
+  }, []);
+  // }, [/]);
+
   return (
     <>
       <BestRecipeWrap>
-        <h3>BEST 레시피</h3>
-        <div>
+        <TotalWrap className="top">
           {state.map((e) => {
             return (
               <>
-                <FlexWrap>
-                  <div key={e}>
-                    {/* {e.recipe_rank < 5 ? ( */}
-                    <Link
-                      to={`/recipe/search/details/${e.recipe_num}`}
-                      className="links"
-                    >
-                      <RecipeWrap key={e}>
+                {
+                  //  loadingState === 1 ? (
+                  //   <BasicSpinner />
+                  // ) : (
+                  e.recipe_rank < 6 && (
+                    <>
+                      <div className="itemWrap" key={e}>
+                        {loadingState === 1 ? (
+                          <BasicSpinner />
+                        ) : (
+                          <>
+                            <div
+                              className="flexItem"
+                              onClick={() => {
+                                navigate(
+                                  `/recipe/search/details/${e.recipe_num}`
+                                );
+                              }}
+                            >
+                              {" "}
+                              <RecipeRank key={e.recipe_rank}>
+                                {e.recipe_rank}
+                              </RecipeRank>
+                              <RecipeImg>
+                                <img
+                                  className="bannerimg"
+                                  src={e.recipe_rpath}
+                                  key={e.recipe_rpath}
+                                  alt="bannerimg"
+                                ></img>
+                              </RecipeImg>
+                              <div className="recipeName">{e.recipe_title}</div>
+                              <div>
+                                <span className="floatLeft">
+                                  {e.information_level}
+                                </span>
+                                <span className="floatRight">
+                                  {e.information_time}
+                                </span>
+                              </div>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </>
+                  )
+                  // )
+                }
+              </>
+            );
+          })}
+        </TotalWrap>
+
+        <TotalWrap>
+          {state.map((e) => {
+            return (
+              <>
+                {e.recipe_rank > 5 && e.recipe_rank < 11 && (
+                  <>
+                    <div className="itemWrap" key={e}>
+                      <div
+                        className="flexItem"
+                        onClick={() => {
+                          navigate(`/recipe/search/details/${e.recipe_num}`);
+                        }}
+                      >
+                        {" "}
                         <RecipeRank key={e.recipe_rank}>
                           {e.recipe_rank}
-                        </RecipeRank>{" "}
+                        </RecipeRank>
                         <RecipeImg>
                           <img
                             className="bannerimg"
@@ -166,68 +145,126 @@ const BestRecipe = () => {
                             alt="bannerimg"
                           ></img>
                         </RecipeImg>
-                        <div
-                          style={{ height: "9em", zIndex: "900" }}
-                          className="recipe_name"
-                        >
-                          {e.recipe_name}
+                        <div className="recipeName">
+                          {e.recipe_title.length > 40 ? (
+                            <>
+                              {e.recipe_title.substring(0, 26) + "  ..."}
+                              <div
+                                className="hoverForMoreInfo"
+                                style={{ marginTop: "1vh" }}
+                              >
+                                더보기 &gt;
+                              </div>
+                            </>
+                          ) : (
+                            e.recipe_title
+                          )}
                         </div>
-                        <div className="user_name">{e.user_name}</div>
-                      </RecipeWrap>
-                    </Link>
-                  </div>
-                </FlexWrap>
+                        {/* <div className="recipeName">{e.recipe_title}</div> */}
+                        <div>
+                          <span className="floatLeft">
+                            {e.information_level}
+                          </span>
+                          <span className="floatRight">
+                            {e.information_time}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </>
             );
           })}
-        </div>
+        </TotalWrap>
       </BestRecipeWrap>
     </>
   );
 };
 export default BestRecipe;
+
 const BestRecipeWrap = styled.div`
-  width: 80%;
-  margin: 3em auto;
-  padding: 1em;
-  /* background-color: #fffdf5; */
-  & h3 {
-    color: #463635;
-    font-weight: 700;
-  }
+  margin-top: 3em;
 `;
 
-const RecipeWrap = styled.div`
+const TotalWrap = styled.div`
   display: inline-flex;
-  flex-direction: column;
-  margin: 0 1em;
-  & > Link {
-    text-decoration: none;
-  }
-`;
-
-const FlexWrap = styled.div`
-  width: fit-content;
-  display: inline-flex;
-  flex-wrap: no-wrap;
+  width: 100%;
+  font-size: 1vw;
+  font-family: "mainFont";
   justify-content: space-evenly;
+  margin-top: 3em;
+  & > .itemWrap {
+    width: 13vw;
+    height: 50vh;
+    background-color: ${colors.color_greyish_white};
+    border-radius: 1vw;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    z-index: 100;
+  }
+  & .flexItem {
+    display: inline-flex;
+    flex-direction: column;
+    width: 13vw;
+    /* height: 100%; */
+  }
+  & .flexItem:hover {
+    cursor: pointer;
+  }
+
+  & .recipeName {
+    height: 7em;
+    padding: 1em;
+    font-weight: 700;
+    text-align: justify;
+    transform: translateY(-7vh);
+  }
+
+  & .recipeName:hover {
+    color: ${colors.color_carrot_orange};
+  }
+
+  & .hoverForMoreInfo {
+    color: ${colors.color_carrot_orange};
+  }
+
+  & .floatLeft {
+    float: left;
+    padding-left: 1em;
+  }
+  & .floatRight {
+    float: right;
+    padding-right: 1em;
+  }
 `;
+
 const RecipeImg = styled.div`
+  width: 18vw;
+  /* height: 24vh; */
+  overflow-x: hidden;
+  overflow-y: hidden;
+  transform: translateY(-7vh);
+
   & > img {
-    width: 12em;
+    width: 13vw;
+    height: 21vh;
+    margin-top: 7vh;
+    z-index: 600;
+    border-color: transparent;
     padding-bottom: 0.5em;
   }
 `;
 const RecipeRank = styled.div`
-  border: 1px solid ${(props) => props.theme.accentedColor};
-  display: inline-block;
-  padding-top: 0.5em;
-  font-size: 1em;
+  position: absolute;
+  z-index: 700;
+  /* float: right; */
+  color: ${colors.color_carrot_orange};
   width: 3em;
   height: 3em;
-  color: #fffdf5;
+  font-weight: 700;
+  background-color: ${colors.color_beige_white};
+  padding-top: 1vw;
   text-align: center;
-  border-radius: 0.6em;
-  background-color: #463635;
-  transform: translate(-30%, 70%);
+  border-radius: 1vw 0 0 0;
 `;

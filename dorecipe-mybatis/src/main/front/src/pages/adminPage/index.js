@@ -1,4 +1,4 @@
-import "../../style/bootstrap.min.css";
+// import "../../style/bootstrap.min.css";
 import MainLayout from "../../layout/mainLayOut";
 import List from "../../components/memberListCp";
 import RegistPosts from "../../components/registPostsCp";

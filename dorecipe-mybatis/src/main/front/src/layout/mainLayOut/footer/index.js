@@ -1,19 +1,23 @@
 import { Link } from "react-router-dom";
-// import { Wrapper, FooterWrapper, FooterRight, FooterLeft } from "./style";
 import { LogoFooter } from "../../../components/_common/logo";
 import styled from "styled-components";
 import { colors } from "../../../theme/theme";
+import { ReactComponent as Facebook } from "../../../assets/Facebook.svg";
+import { ReactComponent as Youtube } from "../../../assets/Youtube.svg";
 
 const LayOutFooter = () => {
   return (
     <>
       <FooterWrapper>
-        <FooterRight>
-          <LogoFooter />
-        </FooterRight>
+        <LogoFooter />
         <FooterLeft>
           <div>
-            <Link to="/">개인정보처리방침</Link> | <Link to="/">이용약관</Link>
+            {" "}
+            <div style={{ float: "right" }}>
+              <Facebook className="icons" />
+              <Youtube className="icons" />
+            </div>
+            <Link to="/">개인정보처리방침</Link> | <Link to="/">이용약관</Link>{" "}
           </div>
           <div>
             대표: 표혜민 / Email : hyemin@dorecipe.com / Fax: 02)123-9874
@@ -24,36 +28,50 @@ const LayOutFooter = () => {
             (주) 잡솨봐 / 사업자등록번호: 865-75-92614 / 통신 판매 신고
             8392-15-1234/ 도레시피 기업확인 / 사업자정보확인
           </div>
-          <div>Copyright © 잡솨봐 Inc. All Rights Reserved.</div>
+          <div>Copyright © 잡솨봐 Inc. All Rights Reserved. </div>
         </FooterLeft>
       </FooterWrapper>
     </>
   );
 };
 export default LayOutFooter;
-const FooterWrapper = styled.footer`
-  display: inline-flex;
+
+export const FooterWrapper = styled.footer`
   width: 100%;
-  height: fit-content;
-  gap: 3vw;
-  /* padding: 2vw 0; */
-  padding: 2vw;
-  background-color: ${colors.color_milktea_brown};
+  height: 40vh;
+
+  padding: 3vw;
+  display: flex;
   align-items: center;
   justify-content: center;
-  color: #fffdf5;
-  font-family: "mainfont";
-  /* margin-top: 6em; */
+
+  font-family: "mainFont";
+  font-size: 1vw;
+
+  background-color: ${colors.color_milktea_brown};
+  color: ${colors.color_beige_white};
 `;
-/** 로고이미지 자리 */
-const FooterRight = styled.footer``;
+
 const FooterLeft = styled.footer`
   & div {
-    margin-bottom: 0.5em;
+    margin-left: 6vh;
+    margin-bottom: 1vw;
   }
 
   & div > a {
     text-decoration: none;
-    color: #fffdf5;
+    color: ${colors.color_beige_white};
+  }
+
+  & .icons {
+    fill: ${colors.color_beige_white};
+    height: 12vh;
+    width: 12vh;
+    /* padding-top: 1vh; */
+  }
+
+  & .icons:hover {
+    fill: ${colors.color_milky_white};
+    cursor: pointer;
   }
 `;

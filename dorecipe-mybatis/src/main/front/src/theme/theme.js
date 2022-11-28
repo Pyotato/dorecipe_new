@@ -15,8 +15,12 @@ export const colors = {
   color_invisible: "#00000000",
   color_black: "#000000",
   color_white: "#FFFFFF",
+  color_greyish_white: "#F5F5F5",
   color_beige_tinted_white: "#FEFDF8",
   color_milky_white: "#FAF3E7",
+  color_beige_white: "#ECE5D3",
+  color_carrot_orange: "#CF702C",
+
   color_gray_1: "#111111",
   color_gray_2: "#151515",
   color_gray_3: "#525252",

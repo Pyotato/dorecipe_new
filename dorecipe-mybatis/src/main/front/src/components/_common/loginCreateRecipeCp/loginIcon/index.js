@@ -73,11 +73,11 @@ const AccountIcon = () => {
             <span onClick={onClickMyPage} className="onHoverItems">
               마이 페이지
             </span>{" "}
-            |
+            |{" "}
             <span onClick={onClickLogOut} className="onHoverItems">
-              로그아웃
+              로그아웃{" "}
             </span>{" "}
-            |
+            |{" "}
           </AuthTotalWrap>
         </>
       ) : (
@@ -92,7 +92,7 @@ const AccountIcon = () => {
             <span onClick={onClickMyPage} className="onHoverItems">
               마이 페이지
             </span>{" "}
-            |
+            |{" "}
             <span onClick={onClickLogOut} className="onHoverItems">
               로그아웃
             </span>{" "}
