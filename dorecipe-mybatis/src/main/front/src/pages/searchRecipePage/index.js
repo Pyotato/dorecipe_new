@@ -34,7 +34,7 @@ const SearchRecipePage = () => {
   console.log("searchState", state.length);
   useEffect(() => {
     testAxios();
-  }, []);
+  }, [search]); //검색내용이 달라질때 리랜더링
 
   return (
     <>

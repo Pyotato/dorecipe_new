@@ -101,18 +101,6 @@ const CompleteRecipe = ({ recipeState }) => {
       }
       console.log("성공?");
     });
-
-    // console.log({ value });
-    // if (value === "submit") {
-    //   if (buttonState === 0) {
-    //   }
-
-    //   alert(" 등록하셨습니다.");
-    //   setBtnState(buttonState + 1);
-    // } else if (value === "saveAsDraft") {
-    //   alert(" 임시저장 하셨습니다.");
-    //   setBtnState(buttonState + 1);
-    // }
   });
 
   const onFinalSubmit = useCallback((e) => {

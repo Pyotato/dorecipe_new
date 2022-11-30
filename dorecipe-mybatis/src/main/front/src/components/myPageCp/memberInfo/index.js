@@ -30,7 +30,7 @@ const MemberInfoForm = () => {
       if (user.auth.user.roles.includes("ROLE_ADMIN")) {
         setRole("admin");
       }
-      console.log("currentUserName", user.auth.user.username);
+      // console.log("currentUserName", user.auth.user.username);
       axios({
         url: "/member/getMember/" + user.auth.user.username,
         method: "get",
@@ -39,7 +39,7 @@ const MemberInfoForm = () => {
         baseURL: "http://localhost:9000",
       })
         .then(function (response) {
-          console.log("response", response);
+          // console.log("response", response);
           setMemberPhone(response.data.member_phone);
           setMemberBday(response.data.member_birth.substring(0, 10)); //1999-12-10형식으로
           setMemberGender(response.data.member_gender);
@@ -48,7 +48,7 @@ const MemberInfoForm = () => {
           setMemberProfile(response.data.member_imagePath);
         })
         .catch((e) => {
-          console.log(e);
+          // console.log(e);
         });
     } else {
       alert("로그인 페이지로 이동합니다");

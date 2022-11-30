@@ -1,20 +1,13 @@
 import axios from "axios";
 import { useCallback, useState, useEffect } from "react";
-import {
-  SelectTotalWrap,
-  SelectedBtn,
-  SubmitBtnWrap,
-  SearchResults,
-  SearchResultFlex,
-  DefaultBtn,
-  StyledLink,
-} from "./style.js";
 import { MediumBtn } from "../_common/buttons";
 import RecipeList from "./recipeList";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
+import { colors } from "../../theme/theme";
 
 const DetailSearch = () => {
   const [optionState, setOptionState] = useState([
@@ -290,183 +283,349 @@ const DetailSearch = () => {
   );
   return (
     <>
-      <SelectTotalWrap>
-        <div className="totalWrap">
-          <div className="totalSearch">
-            <span>종류별</span>
-            <div className="selectWrap">
-              {categoryStates.map((v) =>
-                v === selectedCategoryState[0] ? (
-                  <>
-                    <SelectedBtn
-                      onClick={onClickOption}
-                      value={v}
-                      selected={"종류별"}
-                      key={v.recipe_num}
-                      // style={{ backgroundColor: "green" }}
-                    >
-                      {v}
-                    </SelectedBtn>
-                  </>
-                ) : (
-                  <>
-                    <DefaultBtn
-                      key={v.recipe_num}
-                      onClick={onClickOption}
-                      value={v}
-                      selected={"종류별"}
-                    >
-                      {v}
-                    </DefaultBtn>
-                  </>
-                )
-              )}
-            </div>
-          </div>
-          <div className="totalSearch">
-            <span>상황•테마별</span>
-            <div className="selectWrap">
-              {occasionStates.map((v) =>
-                v === selectedOccasionState[0] ? (
-                  <>
-                    <SelectedBtn
-                      onClick={onClickOption}
-                      value={v}
-                      selected={"상황•테마별"}
-                      key={v.recipe_num}
-                    >
-                      {v}
-                    </SelectedBtn>
-                  </>
-                ) : (
-                  <>
-                    <DefaultBtn
-                      onClick={onClickOption}
-                      value={v}
-                      selected={"상황•테마별"}
-                      key={v.recipe_num}
-                    >
-                      {v}
-                    </DefaultBtn>
-                  </>
-                )
-              )}
-            </div>
-          </div>
-          <div className="totalSearch">
-            <span>재료별</span>
-            <div className="selectWrap">
-              {ingredientStates.map((v) =>
-                v === selectedIngredientsState[0] ? (
-                  <>
-                    <SelectedBtn
-                      key={v.recipe_num}
-                      onClick={onClickOption}
-                      value={v}
-                      selected={"재료별"}
-                    >
-                      {v}
-                    </SelectedBtn>
-                  </>
-                ) : (
-                  <>
-                    <DefaultBtn
-                      key={v.recipe_num}
-                      onClick={onClickOption}
-                      value={v}
-                      selected={"재료별"}
-                    >
-                      {v}
-                    </DefaultBtn>
-                  </>
-                )
-              )}
-            </div>
-          </div>
-          <div className="totalSearch">
-            <span>방법별</span>
-            <div className="selectWrap">
-              {cookingMethodStates.map((v) =>
-                v === selectedCookingMethodState[0] ? (
-                  <>
-                    <SelectedBtn
-                      onClick={onClickOption}
-                      value={v}
-                      key={v.recipe_num}
-                      selected={"방법별"}
-                    >
-                      {v}
-                    </SelectedBtn>
-                  </>
-                ) : (
-                  <>
-                    <DefaultBtn
-                      onClick={onClickOption}
-                      value={v}
-                      key={v.recipe_num}
-                      selected={"방법별"}
-                    >
-                      {v}
-                    </DefaultBtn>
-                  </>
-                )
-              )}
-            </div>
-          </div>
+      <TotalWrap>
+        <div>
+          <h1>| F I L T E R |</h1>
         </div>
-        <SubmitBtnWrap>
-          <MediumBtn onClick={searchRecipe}>검색</MediumBtn>
-        </SubmitBtnWrap>
-        <SearchResults>
-          <SearchResultFlex>
-            {recipeState.length > 0 ? (
-              recipeState.map((e) => (
+        <div>
+          <div
+            style={{
+              backgroundColor: "white",
+              display: "inline-flex",
+              border: "1px solid black",
+              width: "80%",
+              marginLeft: "10vw",
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "#C2B196",
+                borderRight: "1px solid black",
+                display: "inline-flex",
+                flexDirection: "column",
+                alignItems: "center",
+                width: "18vw",
+
+                justifyContent: "space-evenly",
+              }}
+            >
+              <div style={{ height: "10%" }}>종류별</div>
+              <div style={{ height: "10%" }}>상황 • 테마별</div>
+              <div style={{ height: "10%" }}>재료별</div>
+              <div style={{ height: "10%" }}>방법별</div>
+            </div>
+            <div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "inline-flex",
+                  flexDirection: "column",
+                  gap: "1.5vw",
+                  padding: "1vh 1vw",
+                  paddingTop: "4vh",
+                  justifyContent: "space-around",
+                }}
+              >
+                <div
+                  style={{
+                    width: "68vw",
+
+                    display: "inline-flex",
+
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {categoryStates.map((v) =>
+                    v === selectedCategoryState[0] ? (
+                      <>
+                        <SelectedBtn
+                          onClick={onClickOption}
+                          value={v}
+                          selected={"종류별"}
+                          key={v.recipe_num}
+                          style={{ fontFamily: "mainFont", fontSize: "1vw" }}
+                        >
+                          {v}
+                        </SelectedBtn>
+                      </>
+                    ) : (
+                      <>
+                        <DefaultBtn
+                          key={v.recipe_num}
+                          onClick={onClickOption}
+                          value={v}
+                          style={{ fontFamily: "mainFont", fontSize: "1vw" }}
+                          selected={"종류별"}
+                        >
+                          {v}
+                        </DefaultBtn>
+                      </>
+                    )
+                  )}
+                  {/* </div> */}
+                </div>
+                <div className="totalSearch">
+                  <div className="selectWrap">
+                    {occasionStates.map((v) =>
+                      v === selectedOccasionState[0] ? (
+                        <>
+                          <SelectedBtn
+                            onClick={onClickOption}
+                            value={v}
+                            style={{ fontFamily: "mainFont", fontSize: "1vw" }}
+                            selected={"상황•테마별"}
+                            key={v.recipe_num}
+                          >
+                            {v}
+                          </SelectedBtn>
+                        </>
+                      ) : (
+                        <>
+                          <DefaultBtn
+                            onClick={onClickOption}
+                            value={v}
+                            style={{ fontFamily: "mainFont", fontSize: "1vw" }}
+                            selected={"상황•테마별"}
+                            key={v.recipe_num}
+                          >
+                            {v}
+                          </DefaultBtn>
+                        </>
+                      )
+                    )}
+                  </div>
+                </div>
+                <div className="totalSearch" style={{ paddingTop: "1vw" }}>
+                  <div className="selectWrap">
+                    {ingredientStates.map((v) =>
+                      v === selectedIngredientsState[0] ? (
+                        <>
+                          <SelectedBtn
+                            key={v.recipe_num}
+                            style={{
+                              fontFamily: "mainFont",
+                              fontSize: "1vw",
+                            }}
+                            onClick={onClickOption}
+                            value={v}
+                            selected={"재료별"}
+                          >
+                            {v}
+                          </SelectedBtn>
+                        </>
+                      ) : (
+                        <>
+                          <DefaultBtn
+                            style={{ fontFamily: "mainFont", fontSize: "1vw" }}
+                            key={v.recipe_num}
+                            onClick={onClickOption}
+                            value={v}
+                            selected={"재료별"}
+                          >
+                            {v}
+                          </DefaultBtn>
+                        </>
+                      )
+                    )}
+                  </div>
+                </div>
+                <div className="totalSearch" style={{ paddingTop: "1vw" }}>
+                  <div className="selectWrap">
+                    {cookingMethodStates.map((v) =>
+                      v === selectedCookingMethodState[0] ? (
+                        <>
+                          <SelectedBtn
+                            onClick={onClickOption}
+                            style={{
+                              fontFamily: "mainFont",
+                              fontSize: "1vw",
+                            }}
+                            value={v}
+                            key={v.recipe_num}
+                            selected={"방법별"}
+                          >
+                            {v}
+                          </SelectedBtn>
+                        </>
+                      ) : (
+                        <>
+                          <DefaultBtn
+                            onClick={onClickOption}
+                            value={v}
+                            style={{ fontFamily: "mainFont", fontSize: "1vw" }}
+                            key={v.recipe_num}
+                            selected={"방법별"}
+                          >
+                            {v}
+                          </DefaultBtn>
+                        </>
+                      )
+                    )}
+                  </div>
+                </div>
+                <SubmitBtnWrap>
+                  <MediumBtn
+                    onClick={searchRecipe}
+                    style={{ fontFamily: "mainFont", fontSize: "1vw" }}
+                  >
+                    검색
+                  </MediumBtn>
+                </SubmitBtnWrap>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h1>| R E C I P E S |</h1>
+          </div>
+          <SearchResults>
+            <SearchResultFlex>
+              {recipeState.length > 0 ? (
+                recipeState.map((e) => (
+                  <>
+                    <RecipeList key={e.recipe_num} recipeState={e} />
+                  </>
+                ))
+              ) : user ? (
                 <>
-                  <RecipeList key={e.recipe_num} recipeState={e} />
-                </>
-              ))
-            ) : user ? (
-              <>
-                <div className="createRecipeLinkWrap">
-                  <div>
-                    <StyledLink>
-                      <div className="icon pointerCursor">
-                        <FontAwesomeIcon
-                          icon={faUtensils}
-                          className="userIcon"
-                        />
-                      </div>
-                      해당 검색어로 만들어진 레시피가 아직 없습니다.
-                      {authState.roles.includes("ROLE_USER") && (
-                        <div onClick={createRecipeLink}>
-                          [ 레시피 등록하러 가기 ]{" "}
+                  <div className="createRecipeLinkWrap">
+                    <div>
+                      <StyledLink>
+                        <div className="icon pointerCursor">
+                          <FontAwesomeIcon
+                            icon={faUtensils}
+                            className="userIcon"
+                          />
                         </div>
-                      )}
-                    </StyledLink>
+                        해당 검색어로 만들어진 레시피가 아직 없습니다.
+                        {authState.roles.includes("ROLE_USER") && (
+                          <div onClick={createRecipeLink}>
+                            [ 레시피 등록하러 가기 ]{" "}
+                          </div>
+                        )}
+                      </StyledLink>
+                    </div>
                   </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="createRecipeLinkWrap">
-                  <div>
-                    <StyledLink>
-                      <div className="icon">
-                        <FontAwesomeIcon
-                          icon={faUtensils}
-                          className="userIcon"
-                        />
-                      </div>
-                      해당 검색어로 만들어진 레시피가 아직 없습니다.
-                    </StyledLink>
+                </>
+              ) : (
+                <>
+                  <div className="createRecipeLinkWrap">
+                    <div>
+                      <StyledLink>
+                        <div className="icon">
+                          <FontAwesomeIcon
+                            icon={faUtensils}
+                            className="userIcon"
+                          />
+                        </div>
+                        해당 검색어로 만들어진 레시피가 아직 없습니다.
+                      </StyledLink>
+                    </div>
                   </div>
-                </div>
-              </>
-            )}
-          </SearchResultFlex>
-        </SearchResults>
-      </SelectTotalWrap>
+                </>
+              )}
+            </SearchResultFlex>
+          </SearchResults>
+        </div>
+      </TotalWrap>
     </>
   );
 };
+
 export default DetailSearch;
+
+const TotalWrap = styled.div`
+  width: 100%;
+  font-family: "mainFont";
+  background-color: ${colors.color_beige_white};
+  font-size: 1vw;
+  padding-bottom: 9vh;
+
+  & h1 {
+    padding-top: 13vh;
+    padding-bottom: 4vh;
+    text-align: center;
+    color: ${colors.color_brown};
+  }
+
+  & .categoryWrap {
+    font-size: 1vw;
+    background-color: ${colors.color_bg_white};
+  }
+`;
+
+const SelectedBtn = styled.button`
+  color: ${colors.color_white};
+  background-color: ${colors.color_brown};
+  width: fit-content;
+  padding: 0.5vw;
+  border: transparent;
+  border-radius: 0.7vw;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+const DefaultBtn = styled.button`
+  background-color: transparent;
+  color: ${colors.color_brown};
+  min-width: 3em;
+  max-width: fit-content;
+  padding: 0.5em;
+  border: none;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+const SubmitBtnWrap = styled.div`
+  & button {
+    float: right;
+  }
+`;
+
+const SearchResults = styled.div`
+  width: 80vw;
+  margin: 0 auto;
+`;
+const SearchResultFlex = styled.div`
+  width: 95%;
+  height: 40em;
+  margin: 0 auto;
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+  ::-webkit-scrollbar-thumb {
+    height: 30%;
+    background-color: ${colors.color_milktea_brown};
+  }
+  ::-webkit-scrollbar-track {
+    background-color: ${colors.color_greyish_white};
+    border: 1px solid ${colors.color_milktea_brown};
+  }
+  & .createRecipeLinkWrap {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    height: 20em;
+  }
+`;
+
+const StyledLink = styled.div`
+  /* cursor: pointer; */
+  padding-top: 1em;
+  color: ${(props) => props.theme.accentedColor};
+  overflow: hidden;
+  & :hover {
+    color: #8d3232;
+  }
+  & .icon:hover {
+    transition: all ease 1s;
+    transform: rotate(360deg);
+    padding: 2em;
+  }
+  & .pointerCursor:hover {
+    cursor: pointer;
+  }
+`;
