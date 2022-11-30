@@ -289,11 +289,6 @@ const MainPage = () => {
               height: "100vh",
               position: "absolute",
               left: "0",
-              // zIndex: "300",
-              // top: "50vh",
-              // bottom: "50",
-              // transform: " translateY(30%)",
-              // transform: "translateY(-140%)",
             }}
           />
           <div
@@ -315,19 +310,14 @@ const MainPage = () => {
               style={{
                 backgroundColor: "#ECE5D3",
                 width: "60%",
-                // width: "100%",
+
                 height: "40vh",
-                // transform: " translateY(-33vh)",
               }}
             >
               <div
                 style={{
                   zIndex: "720",
-                  // width: "55vw",
                   padding: "6vh 6vw",
-
-                  // transform: " translateY(8vh)",
-                  // overflowX: "hidden",
                 }}
               >
                 <div className="fonts" style={{ fontSize: "1.5vw" }}>
@@ -373,7 +363,7 @@ const MainPage = () => {
               display: "inline-flex",
               alignItems: "center",
               width: "100%",
-              height: "50vh",
+              height: "50%",
               justifyContent: "space-between",
             }}
           >
@@ -397,9 +387,7 @@ const MainPage = () => {
               style={{ width: "30vw", height: "100%" }}
             />
           </div>
-          <div
-            style={{ display: "inline-flex", width: "100%", height: "50vh" }}
-          >
+          <div style={{ display: "inline-flex", width: "100%", height: "50%" }}>
             <img
               style={{ width: "50vw" }}
               src="/img/landingImg5.png"

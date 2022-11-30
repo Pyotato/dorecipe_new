@@ -39,9 +39,9 @@ const MemberInfoForm = () => {
         baseURL: "http://localhost:9000",
       })
         .then(function (response) {
-          // console.log("response.data", response);
+          console.log("response", response);
           setMemberPhone(response.data.member_phone);
-          setMemberBday(response.data.member_birth.substring(0, 10));
+          setMemberBday(response.data.member_birth.substring(0, 10)); //1999-12-10형식으로
           setMemberGender(response.data.member_gender);
           setMemberName(response.data.member_name);
           setMemberNickName(response.data.member_nickname);
@@ -92,10 +92,10 @@ const MemberInfoForm = () => {
           정보
         </SectionTitle>
         <div className="imgWrap">
-          {member_imagePath == null ? (
-            <img src={member_imagePath} />
+          {member_imagePath.includes("/img/member/") ? (
+            <img src={member_imagePath} alt="회원 프로필 이미지" />
           ) : (
-            <img src="/img/profileImage.png" />
+            <img src="/img/profileImage.png" alt="" />
           )}
         </div>
         <div className="infoWrap">

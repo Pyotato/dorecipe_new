@@ -69,6 +69,7 @@ const NavWrapper = styled.div`
   z-index: 700;
   height: fit-content;
   width: 100%;
+  font-family: "mainFont";
   background-color: ${colors.color_brown};
   & ul > li {
     margin: 1vh;

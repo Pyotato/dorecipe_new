@@ -159,11 +159,7 @@ export const DropZone = ({
                   <EditImgPreviewInner key={index}>
                     <div
                       style={{
-                        // margin: "1em",
-                        // padding: "1em",
                         translate: "0 -2.1em",
-
-                        // backgroundColor: "greenyellow",
                       }}
                       className="fileBox"
                       onClick={() => onPreviewDelete(v.preview)}

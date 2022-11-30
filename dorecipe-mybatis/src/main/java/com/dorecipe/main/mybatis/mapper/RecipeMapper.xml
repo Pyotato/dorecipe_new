@@ -10,6 +10,15 @@
 		select * from recipe where recipe_savetype=0 order by recipe_num desc
 	</select>
 	
+		<!-- 메인 페이지 탑 10 레시피 정보 가져오기  -->
+	<select id="getBestLikedRecipes" resultType="com.dorecipe.main.recipe.vo.RecipeVO"  parameterType="com.dorecipe.main.recipe.dao.RecipeDAO">
+	  select recipe_num, recipe_title, recipe_rpath, 
+	  information_level, information_time 
+	  from 
+	  recipe  
+	  where recipe_num =#{recipe_num};
+	</select>
+	
 	<select id="getDetail" resultType="com.dorecipe.main.recipe.vo.RecipeVO"   parameterType="int">
       SELECT * from recipe
       where recipe_num = #{recipe_num}		
@@ -266,25 +275,59 @@
   	</update>
   	
   	
- <!--레시피 좋아요-->
-  	<select id="getRecipeLikes" resultType="Integer"   parameterType="Integer">
-	  select sum(likes) as r_like from r_like where recipe_num=#{recipe_num};
+ 	<!--레시피 좋아요를 누른 회원의 수 (메인페이지에서 보여질 top10) -->
+  	<select id="getBestRecipes" resultType="com.dorecipe.main.recipe.vo.RecipeVO"   parameterType="int">
+	select recipe_num 
+	from recipe_likes where like_type=1 
+	group by recipe_num
+	order by count(like_type) desc
+	limit 10;
   	</select>
+  	
+ 	<!--레시피 좋아요를 누른 회원의 수 -->
+  	<select id="getRecipeLikes" resultType="Integer" parameterType="Integer">
+	select count(like_type) 
+	from recipe_likes where recipe_num=#{recipe_num} and like_type=1 
+  	</select>
+  	
+  	
+  	<!--로그인한 회원이 레시피 좋아요를 눌렀는지 여부-->
+  	<select id="checkLikeType" resultType="Integer" parameterType="com.dorecipe.main.recipe.dao.RecipeDAO">
+	select like_type from recipe_likes where recipe_num=#{recipe_num} and member_id=#{member_id}
+  	</select>
+  	
   	
 	<!--레시피 좋아요 한 적 있는 지 -->
   	<select id="getLikedMember" resultType="String"  parameterType="com.dorecipe.main.recipe.dao.RecipeDAO" >
-	   select member_id from r_like 
-	   where member_id = #{param1} and recipe_num =#{param2};
+	   select member_id from recipe_likes 
+	   where 
+	   member_id = #{param1}, like_type=1 
+	   and recipe_num =#{param2}
   	</select>  	
   	
-  	<insert id="insertLikes" parameterType="com.dorecipe.main.recipe.dao.RecipeDAO">		
-		insert into r_like values(#{param1},#{param2},#{param3});
+  	<insert id="insertRecipeLikes" parameterType="com.dorecipe.main.recipe.dao.RecipeDAO">		
+		insert into recipe_likes values (#{member_id},#{recipe_num},1)
   	</insert>
   	
-  	<delete id="removeLikes" parameterType="com.dorecipe.main.recipe.dao.RecipeDAO" >
-  		delete from r_like 
-  		where member_id=#{param1} and recipe_num=#{param2};	
-  	</delete>
+  	
+  	<!--다시 싫어요 누를 떄-->
+  	<update id="removeLikes"  parameterType="com.dorecipe.main.recipe.dao.RecipeDAO" >
+   		update recipe_likes 
+  		set 
+  		like_type = 0 
+  		where  member_id=#{member_id}
+  		and recipe_num=#{recipe_num};	
+  	</update>
+  	
+  	<!--다시 좋아요 누를 떄-->
+  	<update id="giveLikes" parameterType="com.dorecipe.main.recipe.dao.RecipeDAO" >
+   		update recipe_likes 
+  		set 
+  		like_type = 1 
+  		where  member_id=#{member_id}
+  		and recipe_num=#{recipe_num};	
+  	</update>
+  	
 
 
 <!-- 크롤링 *********************************************************************** -->
