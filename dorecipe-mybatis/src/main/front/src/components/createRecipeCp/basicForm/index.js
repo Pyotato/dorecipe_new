@@ -179,7 +179,7 @@ const BasicForm = ({
                 value={recipe_url}
                 onChange={onChangeRecipeUrl}
                 name="recipeVid"
-                placeholder="레시피에 등록할 동영상이 있으면 URL 주소를 입력해주세요. (예: http://you_tube/myvideo). 대표이미지를 설정하지 않으면 영상의 썸네일이 대표이미지로 설정됩니다."
+                placeholder="레시피에 등록할 동영상이 있으면 URL 주소를 입력해주세요. (예: https://www.youtube.com/embed/내 영상). 유튜브 embedded영상이 아닐 시 등록되지 않을 수 있습니다."
               ></ContentTextarea>
             </div>
             <div className="recipeCategoryWrap">

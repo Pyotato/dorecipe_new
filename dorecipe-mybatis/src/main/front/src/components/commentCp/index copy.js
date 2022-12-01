@@ -229,6 +229,7 @@ const CommentCp = () => {
                 <>
                   <div className="cmtDiv">
                     <div key={index}>
+                      <div className="divLine">{/* <hr /> */}</div>
                       <div className="idDateCon">
                         <span name="member_id" className="memberName">
                           {cmt.member_id}

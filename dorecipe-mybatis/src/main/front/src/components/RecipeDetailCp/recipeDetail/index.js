@@ -8,6 +8,10 @@ import RecipeIngredients from "./recipeIngredients";
 import { useSelector } from "react-redux";
 import { ReactComponent as EmptyHeart } from "../../../assets/EmptyHeart.svg";
 import { ReactComponent as FilledHeart } from "../../../assets/FilledHeart.svg";
+import { ReactComponent as DefaultProfile } from "../../../assets/DefaultProfile.svg";
+import { ReactComponent as Ranking } from "../../../assets/Ranking.svg";
+import { ReactComponent as Timer } from "../../../assets/Timer.svg";
+import CommentCp from "../../commentCp";
 
 const RecipeDetailModal = () => {
   const search = "/";
@@ -46,6 +50,7 @@ const RecipeDetailModal = () => {
       order_path: "",
       recipe_creDate: "",
       member_id: "",
+      member_imagePath: "",
       recipe_saveType: 0,
     },
   ]);
@@ -60,6 +65,15 @@ const RecipeDetailModal = () => {
   ]);
   const [recipe_likes, setRecipeLikes] = useState(0);
   const [heartState, setHeartState] = useState(0);
+  const [recipeWriterState, setRecipeWriterState] = useState([
+    {
+      member_id: "",
+
+      member_imagePath: "",
+
+      member_nickname: "",
+    },
+  ]);
   const [heartClickState, setHeartClickState] = useState(null);
 
   useEffect(() => {
@@ -70,7 +84,18 @@ const RecipeDetailModal = () => {
         // .get("/recipe/detail/search/" + searchParam)
         .then(function (response) {
           setDetailState(response.data);
-          // console.log("/search/details/", response.data);
+          console.log("/search/details/", response.data);
+
+          axios
+            .get("http://localhost:9000/member/getProfileImgNickName", {
+              params: { member_id: response.data[0].member_id },
+            })
+            .then(function (response) {
+              setRecipeWriterState(response.data);
+              console.log("getProfileImgNickName", response);
+              // console.log("recipeWriterState", recipeWriterState);
+            })
+            .catch((e) => console.log(e));
         })
         .catch((e) => console.log(e));
       axios
@@ -86,6 +111,7 @@ const RecipeDetailModal = () => {
           response.data ? setRecipeLikes(response.data) : setRecipeLikes(0);
         })
         .catch((e) => console.log(e));
+
       if (loginState) {
         axios
           .get("http://localhost:9000/recipe/checkLikeType", {
@@ -107,7 +133,7 @@ const RecipeDetailModal = () => {
       }
     }
   }, []);
-
+  console.log("detailState", detailState);
   useMemo(() => {
     axios
       .get("http://localhost:9000/recipe/getRecipeLikes/" + searchParam)
@@ -195,248 +221,465 @@ const RecipeDetailModal = () => {
 
   return (
     <>
-      <>
-        <BackGround>
-          <SmallBtn className="backBtn" onClick={onClickBack}>
-            {" "}
-            돌아가기
-          </SmallBtn>
-          <RecipeWrap>
-            <div>
-              <div className="profileWrap">
-                <img
-                  src={detailState[0].member_imagePath}
-                  alt={detailState[0].member_imagePath}
-                />
-                <span className="accented"> {detailState[0].member_id}</span>
+      <div
+        style={{
+          height: "fit-content",
+          width: "100%",
+          paddingTop: "21vh",
+          paddingBottom: "9vh",
+
+          fontFamily: "mainFont",
+          fontSize: "1vw",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            // , display: "inline-flex"
+          }}
+        >
+          <div>
+            <h1>{detailState[0].recipe_title}</h1>
+          </div>
+          <div style={{ marginTop: "6vh" }}>
+            <img
+              style={{
+                width: "50vw",
+                height: "50vh",
+                borderRadius: "2vw 2vw 0 0",
+              }}
+              src={detailState[0].recipe_rpath}
+              alt={detailState[0].recipe_rpath}
+            />
+
+            <div
+              style={{
+                width: "50vw",
+                margin: "0 auto",
+                transform: "translateY(-1vw)",
+                backgroundColor: "#C2B196",
+                display: "inline-flex",
+                justifyContent: "space-between",
+                padding: "0.5vw",
+                // alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  // width: "50vw",
+                  // margin: "0 auto",
+                  // transform: "translateY(-1vw)",
+                  // backgroundColor: "#C2B196",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.5vw",
+                }}
+              >
+                {recipeWriterState.member_imagePath ===
+                "데이터베이스에 업로드한 프로필 이미지경로.png" ? (
+                  <>
+                    <DefaultProfile
+                      style={{
+                        width: "3vw",
+                        height: "3vw",
+                        // margin: "0 1vw",
+                        borderRadius: "100%",
+                        // float: "left",
+                      }}
+                    />
+                  </>
+                ) : (
+                  <img
+                    style={{
+                      width: "3vw",
+                      height: "3vw",
+                      borderRadius: "100%",
+                      // float: "left",
+                    }}
+                    src={recipeWriterState.member_imagePath}
+                    alt={recipeWriterState.member_imagePath}
+                  />
+                )}
+
+                <div style={{ float: "left" }}>
+                  {" "}
+                  {recipeWriterState.member_nickname}
+                </div>
               </div>
-              <RecipeThumbnail>
-                <img
-                  src={detailState[0].recipe_rpath}
-                  alt={detailState[0].recipe_rpath}
-                />
-              </RecipeThumbnail>
-              <RecipeBasicInfo>
-                <h2>{detailState[0].recipe_title}</h2>
-                <div>
-                  <span className="lvl">
+              <div
+                style={{
+                  // width: "50vw",
+                  gap: "1vw",
+                  marginRight: "1vw",
+                  // transform: "translateY(-1vw)",
+                  // backgroundColor: "#C2B196",
+                  display: "inline-flex",
+                  alignItems: "center",
+                }}
+              >
+                <div>좋아요 {recipe_likes}</div>
+                {heartState === 1 ? (
+                  <FilledHeart
+                    style={{ width: "1.5vw", fill: "#CF702C" }}
+                    onClick={() => onLikeHandler()}
+                  />
+                ) : (
+                  <EmptyHeart
+                    style={{ width: "1vw" }}
+                    onClick={() => onLikeHandler()}
+                  />
+                )}
+              </div>
+            </div>
+            <div
+              style={{
+                width: "50vw",
+                margin: "0 auto",
+                padding: "3vh 1vw",
+                lineHeight: "1.6",
+              }}
+            >
+              {detailState[0].recipe_introduce}
+            </div>
+            <div
+              style={{
+                backgroundColor: "#FAF3E7",
+                width: "50vw",
+                borderRadius: "0 0 1vw 1vw",
+                margin: "0 auto",
+                // padding: "0 1vw",
+              }}
+            >
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  width: "70%",
+                  gap: "2vw",
+
+                  justifyContent: "center",
+                  backgroundColor: "white",
+                  // border: "1px solid black",
+                  borderRadius: "0.5vw",
+                  padding: "1vh 1vw",
+                  margin: "3vh 0",
+                }}
+              >
+                <div style={{ width: "33%" }}>
+                  <Ranking style={{ width: "2vw", fontSize: "1vw" }} />{" "}
+                  <div style={{ fontSize: "0.2vw" }}>
                     {detailState[0].information_level}
-                  </span>
-                  <span className="time">
+                  </div>
+                </div>
+                <div style={{ width: "33%" }}>
+                  <Timer style={{ width: "2vw" }} />{" "}
+                  <div style={{ fontSize: "0.2vw" }}>
+                    {" "}
                     {detailState[0].information_time}
-                  </span>
+                  </div>
                 </div>
-                <div className="recipeIntro">
-                  {detailState[0].recipe_introduce}
+                <div style={{ width: "33%", fontSize: "0.2vw" }}>
+                  <div
+                    style={{
+                      fontSize: "0.4vw",
+                      paddingBottom: "1vh",
+                    }}
+                  >
+                    작성일
+                  </div>
+                  <div>{detailState[0].recipe_creDate.substring(0, 10)}</div>
                 </div>
-              </RecipeBasicInfo>
-              <IngredientsWrap>
+              </div>
+              <div
+                style={{
+                  width: "70%",
+
+                  backgroundColor: "white",
+                  borderRadius: "0.5vw",
+
+                  margin: "0 auto",
+                  padding: "3vh 0",
+                  marginBottom: "3vh",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "orange",
+                    padding: "1vh 1vw",
+                    width: "6vw",
+                    fontWeight: "700",
+                    // marginTop: "3vh",
+                  }}
+                >
+                  재료
+                </div>
                 <div>
-                  <span className="accented">재료</span>{" "}
-                  <span>Ingredients</span>
+                  <RecipeIngredients ingredientState={ingredientState} />
                 </div>
-                <hr />
-                <RecipeIngredients ingredientState={ingredientState} />
-              </IngredientsWrap>
-              <div>
-                <CreDateLikeWrap>
-                  <span className="accented"> 레시피 작성일</span>
-                  <span className="accented">
-                    {detailState[0].recipe_creDate.substring(0, 10)}
-                  </span>
-                  {/* <Likes className="accented clickable" onClick={onLikeHandler}> */}
-                  <Likes className="accented clickable">
-                    좋아요 {recipe_likes}{" "}
-                    {heartState === 1 ? (
-                      <FilledHeart onClick={() => onLikeHandler()} />
-                    ) : (
-                      <EmptyHeart onClick={() => onLikeHandler()} />
-                    )}
-                  </Likes>
-                </CreDateLikeWrap>
               </div>
-            </div>
-            <div className="instructionWrap">
-              <div>
-                <span className="accented"> 조리 순서 </span>Steps
-              </div>
-              <hr />
-              <StepRecipe detailState={detailState} />
-            </div>
-            <div style={{ marginTop: "1em" }}>
-              <div>
-                <span className="accented"> 완성 사진 </span>Completed Recipe
-                Images
-              </div>
-              <hr />
-              {detailState[0].completion_path1 == null ? (
-                <div style={{ textAlign: "center" }}>
-                  등록된 완성 사진이 없습니다.
+              <div
+                style={{
+                  width: "70%",
+
+                  backgroundColor: "white",
+                  borderRadius: "0.5vw",
+
+                  margin: "0 auto",
+                  padding: "3vh 0",
+                  marginBottom: "3vh",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "orange",
+                    padding: "1vh 1vw",
+                    width: "6vw",
+                    fontWeight: "700",
+                    marginBottom: "3vh",
+                  }}
+                >
+                  조리순서
                 </div>
-              ) : (
-                <CompletedRecipeImages>
+                <div>
+                  <StepRecipe detailState={detailState} />
+                </div>
+              </div>
+              <div
+                style={{
+                  width: "70%",
+
+                  backgroundColor: "white",
+                  borderRadius: "0.5vw",
+
+                  margin: "0 auto",
+                  padding: "3vh 0",
+                  marginBottom: "3vh",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "orange",
+                    padding: "1vh 1vw",
+                    width: "6vw",
+                    fontWeight: "700",
+                    marginBottom: "3vh",
+                  }}
+                >
+                  완성사진
+                </div>
+                <div>
                   {detailState[0].completion_path1 == null ? (
-                    <></>
-                  ) : detailState[0].completion_path1 === "null" ? (
                     <div style={{ textAlign: "center" }}>
                       등록된 완성 사진이 없습니다.
                     </div>
                   ) : (
-                    <Img
-                      src={detailState[0].completion_path1}
-                      alt={detailState[0].completion_path1}
-                    />
+                    <CompletedRecipeImages>
+                      {detailState[0].completion_path1 == null ? (
+                        <></>
+                      ) : detailState[0].completion_path1 === "null" ? (
+                        <div style={{ textAlign: "center" }}>
+                          등록된 완성 사진이 없습니다.
+                        </div>
+                      ) : (
+                        <Img
+                          src={detailState[0].completion_path1}
+                          alt={detailState[0].completion_path1}
+                        />
+                      )}
+                      {detailState[0].completion_path2 == null ? (
+                        <></>
+                      ) : detailState[0].completion_path2 === "null" ? (
+                        <></>
+                      ) : (
+                        <Img
+                          src={detailState[0].completion_path2}
+                          alt={detailState[0].completion_path2}
+                        />
+                      )}
+                    </CompletedRecipeImages>
                   )}
-                  {detailState[0].completion_path2 == null ? (
-                    <></>
-                  ) : detailState[0].completion_path2 === "null" ? (
+
+                  {detailState[0].completion_path1 == null ? (
                     <></>
                   ) : (
-                    <Img
-                      src={detailState[0].completion_path2}
-                      alt={detailState[0].completion_path2}
-                    />
+                    <CompletedRecipeImages>
+                      {detailState[0].completion_path3 == null ? (
+                        <></>
+                      ) : detailState[0].completion_path3 === "null" ? (
+                        <></>
+                      ) : (
+                        <Img
+                          src={detailState[0].completion_path3}
+                          alt={detailState[0].completion_path3}
+                        />
+                      )}
+                      {detailState[0].completion_path4 == null ? (
+                        <></>
+                      ) : detailState[0].completion_path4 === "null" ? (
+                        <></>
+                      ) : (
+                        <Img
+                          src={detailState[0].completion_path4}
+                          alt={detailState[0].completion_path4}
+                        />
+                      )}
+                    </CompletedRecipeImages>
                   )}
-                  {detailState[0].completion_path3 == null ? (
-                    <></>
-                  ) : detailState[0].completion_path3 === "null" ? (
-                    <></>
-                  ) : (
-                    <Img
-                      src={detailState[0].completion_path3}
-                      alt={detailState[0].completion_path3}
-                    />
-                  )}
-                  {detailState[0].completion_path4 == null ? (
-                    <></>
-                  ) : detailState[0].completion_path4 === "null" ? (
-                    <></>
-                  ) : (
-                    <Img
-                      src={detailState[0].completion_path4}
-                      alt={detailState[0].completion_path4}
-                    />
-                  )}
-                </CompletedRecipeImages>
-              )}
-            </div>
-            <div style={{ marginTop: "1em" }}>
-              <div>
-                <span className="accented"> 레시피 꿀팁 </span>Recipe Tips
-              </div>
-              <hr />
-              {detailState[0].completion_tip ? (
-                detailState[0].completion_tip
-              ) : (
-                <div style={{ textAlign: "center" }}>
-                  등록된 레시피 꿀팁이 없습니다.
                 </div>
+              </div>
+              <div
+                style={{
+                  width: "70%",
+
+                  backgroundColor: "white",
+                  borderRadius: "0.5vw",
+
+                  margin: "0 auto",
+                  padding: "3vh 0",
+                  marginBottom: "3vh",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "orange",
+                    padding: "1vh 1vw",
+                    width: "6vw",
+                    fontWeight: "700",
+                    marginBottom: "3vh",
+                  }}
+                >
+                  요리TIP
+                </div>
+                <div>
+                  {detailState[0].completion_tip ? (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        padding: "2vw",
+                        lineHeight: "",
+                      }}
+                    >
+                      {detailState[0].completion_tip}
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: "center" }}>
+                      등록된 레시피 꿀팁이 없습니다.
+                    </div>
+                  )}
+                </div>
+              </div>
+              {detailState[0].recipe_url &&
+              detailState[0].recipe_url.includes("/embed/") ? (
+                <div
+                  style={{
+                    width: "70%",
+
+                    backgroundColor: "white",
+                    borderRadius: "0.5vw",
+
+                    margin: "0 auto",
+                    padding: "3vh 0",
+                    marginBottom: "3vh",
+                  }}
+                >
+                  <div
+                    style={{
+                      backgroundColor: "orange",
+                      padding: "1vh 1vw",
+                      width: "6vw",
+                      fontWeight: "700",
+                      marginBottom: "3vh",
+                    }}
+                  >
+                    요리영상
+                  </div>
+                  <div>
+                    <iframe
+                      style={{ width: "30vw", height: "33vh" }}
+                      allowfullscreen="true"
+                      src="https://www.youtube.com/embed/2FsHfvXrx4g"
+                      // src="https://www.youtube.com/embed/2FsHfvXrx4g"
+                      // src={detailState[0].recipe_url}
+                      title={detailState[0].recipe_url}
+                    ></iframe>
+                    {/* <iframe
+                      width="560"
+                      height="315"
+                      src="https://www.youtube.com/embed/2FsHfvXrx4g"
+                      title="YouTube video player"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen
+                    ></iframe> */}
+                  </div>
+                </div>
+              ) : (
+                <></>
               )}
+              <div style={{ paddingBottom: "6vh" }}>
+                <CommentCp />
+              </div>
+              {/* <div
+                style={{
+                  width: "70%",
+
+                  backgroundColor: "white",
+                  borderRadius: "0.5vw",
+
+                  margin: "0 auto",
+                  padding: "3vh 0",
+                  marginBottom: "3vh",
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: "orange",
+                    padding: "1vh 1vw",
+                    width: "6vw",
+                    fontWeight: "700",
+                    marginBottom: "3vh",
+                  }}
+                >
+                  요리영상
+                </div>
+                <div>
+                  {detailState[0].recipe_url ? (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        padding: "2vw",
+                        lineHeight: "",
+                      }}
+                    >
+                      {detailState[0].recipe_url}
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: "center" }}>
+                      등록된 레시피 꿀팁이 없습니다.
+                    </div>
+                  )}
+                </div>
+              </div> */}
             </div>
-          </RecipeWrap>
-        </BackGround>
-      </>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
-const BackGround = styled.div`
-  /* background-color: cadetblue; */
-  margin: -6em auto;
-  color: #463635;
-  height: fit-content;
-  padding: 3em;
-  font-size: 14px;
-  & .backBtn {
-    float: right;
-  }
-  & .recipeIntro {
-    margin: 1em 0;
-  }
-`;
-const RecipeWrap = styled.div`
-  margin: 0 auto;
-  max-width: 40em;
-  & .instructionWrap {
-    & hr {
-      margin: 0.5em 0;
-      margin-bottom: 1em;
-    }
-    & .accented {
-      font-size: 1.1em;
-      font-weight: 700;
-    }
-  }
-  & div .accented {
-    font-size: 1.1em;
-    font-weight: 700;
-  }
-  & div .clickable {
-    cursor: pointer;
-  }
-`;
+
 const CompletedRecipeImages = styled.div`
   display: inline-flex;
   justify-content: center;
   gap: 2em;
   width: 100%;
 `;
-const IngredientsWrap = styled.div`
-  margin-bottom: 1em;
-  & hr {
-    margin: 0.5em 0;
-  }
-  & div .accented {
-    font-size: 1.1em;
-    font-weight: 700;
-  }
-`;
-const RecipeThumbnail = styled.div`
-  flex-wrap: wrap;
-  display: flex;
-  margin: 2em 0;
-  justify-content: center;
-  width: 100%;
-  & img {
-    /* max-width: 50em; */
-    min-width: 15em;
-    max-height: 24em;
-  }
-`;
-const RecipeBasicInfo = styled.div`
-  max-width: 60em;
-  margin: 0 auto;
-  & h2 {
-    font-weight: 700;
-  }
-  & div {
-    margin: 0 auto;
-    min-width: 30em;
-  }
-  & div .lvl {
-    margin-right: 1em;
-    float: left;
-    float: both;
-  }
-  & div .time {
-    clear: left;
-    float: both;
-  }
-`;
-const Likes = styled.span`
-  float: right;
-`;
-const CreDateLikeWrap = styled.div`
-  margin: 1em 0;
-  & .accented {
-    font-size: 1.1em;
-    font-weight: 700;
-    margin-right: 0.2em;
-  }
-`;
+
 const Img = styled.img`
-  width: 8em;
-  max-height: 8em;
-  /* min-width: 8em;
-  min-height: 8em; */
+  /* border-radius: 1vw; */
+  overflow-x: hidden;
+  padding: 1vw;
+  /* width: 8em; */
+  /* max-height: 8em; */
 `;
 export default RecipeDetailModal;

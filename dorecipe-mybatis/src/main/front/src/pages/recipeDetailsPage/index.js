@@ -8,7 +8,7 @@ const DetailRecipePage = () => {
     <>
       <MainLayout>
         <RecipeDetailModal />
-        <CommentCp/>
+        {/* <CommentCp/> */}
       </MainLayout>
     </>
   );

@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import { colors } from "../../../../theme/theme";
+import { ReactComponent as WarningFilled } from "../../../../assets/WarningFilled.svg";
+
 const StepRecipe = ({ detailState }) => {
   return (
     <>
@@ -10,45 +13,74 @@ const StepRecipe = ({ detailState }) => {
               <>
                 {e.order_explain !== "" ? (
                   <>
-                    <TotalWrap>
+                    <TotalWrap style={{ padding: "2vh 1vw" }}>
                       {e.order_path.includes("/undefined") ? (
                         <div>
+                          <div className="number">{index + 1}</div>
+                          {/* <div
+                            style={{
+                              width: "16em",
+                              height: "30vh",
+                              background: "#FAF3E7",
+                              borderRadius: "0.5vw",
+                            }}
+                          />
                           <div
-                            // src={e.order_path}
-                            style={{ width: "16em", height: "16em" }}
-                            alt={e.order_path}
+                            style={{
+                              transform: " translateY(-9vh) ",
+                              textAlign: "center",
+                              fontSize: "0.5vw",
+                            }}
+                          > */}
+                          <WarningFilled
+                            style={{
+                              width: "16vw",
+                            }}
                           />
+                          <div
+                            style={{
+                              transform: "translateX(-1vw) translateY(-6vh) ",
+                              // textAlign: "center",
+                              width: "6vw",
+                              margin: "0 auto",
+                              fontSize: "0.5vw",
+                            }}
+                          >
+                            이미지가 없습니다
+                          </div>
                         </div>
-                      ) : e.order_path.includes("https://recipe") ? (
-                        <Img src={e.order_path} alt={e.order_path} />
-                      ) : (
-                        <Img
-                          src={e.order_path.slice(29, e.order_path.length)}
-                          alt={e.order_path.slice(29, e.order_path.length)}
-                        />
-                      )}
-                      {/* {e.order_path.includes("/img/recipe/steps") ? (
+                      ) : // </div>
+                      // <div>
+                      //   <span className="number">{index + 1}</span>
+                      //   <div
+                      //     style={{ width: "16em", height: "16em" }}
+                      //     alt={e.order_path}
+                      //   />
+                      //   <WarningFilled />
+                      // </div>
+                      e.order_path.includes("https://recipe") ? (
                         <>
-                          <Img
-                            src={e.order_path.slice(29, e.order_path.length)}
-                            alt={e.order_path.slice(29, e.order_path.length)}
-                          />
+                          <div>
+                            <div className="number">{index + 1}</div>
+                            <Img src={e.order_path} alt={e.order_path} />
+                          </div>
                         </>
-                      ) : e.order_path.includes("https://recipe") ? (
-                        <Img src={e.order_path} alt={e.order_path} />
                       ) : (
-                        <Img
-                          src={e.order_path}
-                          style={{ visibility: "hidden" }}
-                          alt={e.order_path}
-                        />
-                      )} */}
-
-                      <div>
-                        {" "}
-                        <div className="number">{index + 1}</div>
-                      </div>
-                      <ExplanationWrap>{e.order_explain}</ExplanationWrap>
+                        <>
+                          <div>
+                            <div className="number">{index + 1}</div>
+                            <Img
+                              src={e.order_path.slice(29, e.order_path.length)}
+                              alt={e.order_path.slice(29, e.order_path.length)}
+                            />
+                          </div>
+                        </>
+                      )}
+                      <ExplanationWrap
+                        style={{ height: "100%", width: "100%" }}
+                      >
+                        {e.order_explain}
+                      </ExplanationWrap>
                     </TotalWrap>{" "}
                   </>
                 ) : (
@@ -66,45 +98,53 @@ export default StepRecipe;
 
 const Img = styled.img`
   width: 16em;
-  max-height: 16em;
-  /* min-width: 8em;
-  min-height: 8em; */
+  height: fit-content;
+  border-radius: 0.5vw;
 `;
 const RecipeStepWrap = styled.div`
   & > div {
-    width: 100%;
+    width: 99%;
     height: 36em;
     overflow-y: auto;
     margin: 0 auto;
-
     ::-webkit-scrollbar {
       width: 0.5rem;
     }
     ::-webkit-scrollbar-thumb {
       height: 30%;
-      background-color: #463635;
+      background-color: ${colors.color_beige_brown};
     }
     ::-webkit-scrollbar-track {
-      border: 1px solid #463635;
-      background-color: #fffdf5;
+      background-color: ${colors.color_beige_brown};
+      border: 1px solid ${colors.color_beige_brown};
+      background-color: ${colors.color_milktea_brown};
     }
   }
 `;
 const TotalWrap = styled.div`
   display: inline-flex;
-  gap: 1em;
+  /* gap: 1em; */
+  width: 100%;
+  gap: 1vw;
   margin-bottom: 1em;
   padding: 0 1em;
   overflow-y: auto;
   margin: 0 auto;
   min-height: 3em;
+  align-items: center;
+  line-height: 2;
+  text-align: justify;
+
   & .number {
-    background-color: #463635;
-    width: 2em;
+    background-color: ${colors.color_beige_white};
+    color: ${colors.color_brown};
+    width: 3em;
+    height: 3em;
     padding: 0.3em;
-    border-radius: 0.6em;
+    border-radius: 0.5vw 0 0 0;
     text-align: center;
-    color: #fffdf5;
+    transform: translateY(100%);
+    /* transform: translateX(100%) translateY(25%); */
   }
 `;
 const ExplanationWrap = styled.div`
