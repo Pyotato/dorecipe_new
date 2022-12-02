@@ -36,7 +36,18 @@ const CommentCp = () => {
   const [previewstate, setPreviewState] = useState("");
   const [currentUser, setCurrentUser] = useState("");
   const [currentUserRole, setCurrentUserRole] = useState("");
+  // 코멘트 리스트 ///////////////////
+  const [commentState, setCommentState] = useState([]);
 
+  const [commenterState, setCommenterState] = useState([
+    {
+      member_imagePath: "",
+      member_nickname: "",
+    },
+  ]);
+  const navigateToLogin = () => {
+    navigate("/login");
+  };
   useEffect(() => {
     // console.log("user", user);
     if (user.auth.isLoggedIn) {
@@ -120,7 +131,7 @@ const CommentCp = () => {
       const removeState = commentState.filter(
         (item) => item.comment_num !== parseInt(comment_num)
       );
-      // setState(removeState);
+
       setCommentState(removeState);
       console.log("removeState", removeState);
 
@@ -138,7 +149,7 @@ const CommentCp = () => {
           console.log("error", error);
         });
     },
-    [currentUser, currentUserRole, recipeId]
+    [currentUser, currentUserRole, recipeId, commentState]
   );
 
   const insertComment = useCallback(
@@ -197,21 +208,8 @@ const CommentCp = () => {
         navigate("/login");
       }
     },
-    [comment_content, comment_path, submitState]
+    [comment_content, comment_path, submitState, commentState]
   );
-
-  // 코멘트 리스트 ///////////////////
-  const [commentState, setCommentState] = useState([]);
-
-  const [commenterState, setCommenterState] = useState([
-    {
-      member_imagePath: "",
-      member_nickname: "",
-    },
-  ]);
-  const navigateToLogin = () => {
-    navigate("/login");
-  };
 
   // function commentAxios() {
   //   axios({
