@@ -21,9 +21,6 @@ const RecipeDetailModal = () => {
   const user = useSelector((auth) => auth);
   const params = useParams();
   const navigate = useNavigate();
-  const onClickBack = () => {
-    navigate(-1);
-  };
 
   console.log("user", user);
   // const [loginState, setLoginState] = useState("admin");
@@ -80,8 +77,6 @@ const RecipeDetailModal = () => {
     if (searchParam !== undefined) {
       axios
         .get("http://localhost:9000/recipe/search/details/" + searchParam)
-        // .get("/recipe/search/details/" + 1)
-        // .get("/recipe/detail/search/" + searchParam)
         .then(function (response) {
           setDetailState(response.data);
           console.log("/search/details/", response.data);
@@ -597,8 +592,20 @@ const RecipeDetailModal = () => {
                     <iframe
                       style={{ width: "30vw", height: "33vh" }}
                       allowfullscreen="true"
-                      src="https://www.youtube.com/embed/2FsHfvXrx4g"
                       // src="https://www.youtube.com/embed/2FsHfvXrx4g"
+                      src={
+                        detailState[0].recipe_url.includes("naver")
+                          ? detailState[0].recipe_url.slice(
+                              detailState[0].recipe_url.indexOf("https"),
+                              detailState[0].recipe_url.indexOf(" 'frameborder")
+                            )
+                          : detailState[0].recipe_url.includes("youtube")
+                          ? detailState[0].recipe_url.slice(
+                              detailState[0].recipe_url.indexOf("https"),
+                              detailState[0].recipe_url.indexOf('" title')
+                            )
+                          : "null"
+                      }
                       // src={detailState[0].recipe_url}
                       title={detailState[0].recipe_url}
                     ></iframe>

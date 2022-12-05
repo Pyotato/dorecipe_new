@@ -19,6 +19,8 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { isDisabled } from "@testing-library/user-event/dist/utils";
+import { colors } from "../../theme/theme";
+import { Toast } from "react-bootstrap";
 
 const CreateRecipeForm = () => {
   const user = useSelector((auth) => auth);
@@ -54,85 +56,90 @@ const CreateRecipeForm = () => {
     console.log("CreateRecipeForm", user);
   }, [saveState]);
 
-  // const swiper = useSwiper();
   return (
     <>
-      <form encType="multipart/form-data">
-        {saveState === 0 ? (
-          // <BasicFormSection style={{ marginBottom: "9em" }}>
-          <BasicFormSection>
-            <SectionTitle recipeId={params}>레시피 등록</SectionTitle>
-            <BasicForm
-              setRecipeState={setRecipeState}
-              recipeState={recipeState}
-              saveState={saveState}
-              setSaveState={setSaveState}
-            />
-          </BasicFormSection>
-        ) : (
-          <>
-            <Swiper
-              style={{
-                backgroundColor: "yellow",
-                height: "100vh",
-                // marginBottom: "-6em",
-              }}
-              modules={[Navigation, Pagination, A11y]}
-              slidesPerView={1}
-              loop={false}
-              // scrollbar={{ draggable: true }}
-              navigation
-              spaceBetween={120}
-              pagination={{ clickable: true }}
-              // onSlideChange={(swiper) => {
-              //   swiper.allowSlidePrev(false);
-              // }}
-            >
-              <SwiperSlide className="slide">
-                <SectionTitle recipeId={params}>재료 등록</SectionTitle>
-                <IngredientForm
-                  setRecipeState={setRecipeState}
-                  recipeState={recipeState}
-                />
-                {/* <IngredientForm recipeState={recipeState} swiper={swiper} /> */}
-              </SwiperSlide>
-              <SwiperSlide className="slide">
-                <SectionTitle recipeId={params}>요리 순서</SectionTitle>
-                <div>
-                  <RecipeOrderDrag
-                    recipeId={params}
+      <TotalWrap>
+        <form encType="multipart/form-data">
+          {saveState === 0 ? (
+            // <BasicFormSection style={{ marginBottom: "9em" }}>
+            <BasicFormSection>
+              <div
+                style={{
+                  backgroundColor: "#CF702C",
+                  float: "left",
+                  marginTop: "6vh",
+                  marginBottom: "6vh",
+                  padding: "1vw 1vh",
+                  fontWeight: "700",
+                  fontFamily: "mainFont",
+                }}
+                recipeId={params}
+              >
+                레시피 등록
+              </div>
+              <BasicForm
+                setRecipeState={setRecipeState}
+                recipeState={recipeState}
+                saveState={saveState}
+                setSaveState={setSaveState}
+              />
+            </BasicFormSection>
+          ) : (
+            <>
+              <Swiper
+                style={{
+                  backgroundColor: "yellow",
+                  height: "100vh",
+                }}
+                modules={[Navigation, Pagination, A11y]}
+                slidesPerView={1}
+                loop={false}
+                navigation
+                spaceBetween={120}
+                pagination={{ clickable: true }}
+              >
+                <SwiperSlide className="slide">
+                  <div recipeId={params}>재료 등록</div>
+                  <IngredientForm
+                    setRecipeState={setRecipeState}
                     recipeState={recipeState}
                   />
-                </div>
-              </SwiperSlide>
-              <SwiperSlide className="slide">
-                <SectionTitle>요리 완성</SectionTitle>
-                <CompleteRecipe recipeState={recipeState} />
-              </SwiperSlide>
-            </Swiper>
-          </>
-        )}
-      </form>
+                  {/* <IngredientForm recipeState={recipeState} swiper={swiper} /> */}
+                </SwiperSlide>
+                <SwiperSlide className="slide">
+                  <div recipeId={params}>요리 순서</div>
+                  <div>
+                    <RecipeOrderDrag
+                      recipeId={params}
+                      recipeState={recipeState}
+                    />
+                  </div>
+                </SwiperSlide>
+                <SwiperSlide className="slide">
+                  <div>요리 완성</div>
+                  <CompleteRecipe recipeState={recipeState} />
+                </SwiperSlide>
+              </Swiper>
+            </>
+          )}
+        </form>
+      </TotalWrap>
     </>
   );
 };
 export default CreateRecipeForm;
-const BasicFormSection = styled.div`
-  width: 100%;
-  height: 100vh;
-  /* background-color: pink; */
-  z-index: saveState==0 && 700;
-`;
 
-const SectionTitle = styled.div`
-  background-color: #8d3232;
-  display: inline-block;
-  width: 90%;
-  margin: 1em 3em;
-  color: #fffdf5;
-  height: 2.4em;
-  font-size: 21px;
-  font-weight: 700;
-  padding: 0.5em 0;
-  padding-left: 0.5em;
+const TotalWrap = styled.div`
+  font-style: "mainFont";
+  margin-top: 12vh;
+`;
+const BasicFormSection = styled.div`
+  width: 85%;
+  height: 100vh;
+  margin: 0 auto;
+  border-radius: 2vw;
+  padding-bottom: 6vh;
+  height: fit-content;
+  z-index: saveState==0 && 700;
+  background-color: ${colors.color_beige_brown};
 `;

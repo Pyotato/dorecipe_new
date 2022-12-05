@@ -106,11 +106,16 @@ export const verticalInterval = {
 };
 
 export const deviceSizes = {
-  deviceSize_mobileS: "320px",
-  deviceSize_mobileM: "375px",
-  deviceSize_mobileL: "450px",
-  deviceSize_tablet: "768px",
-  deviceSizes: "1024px",
+  deviceSize_mobileS: 320,
+  deviceSize_mobileM: 375,
+  deviceSize_mobileL: 450,
+  deviceSize_tablet: 768,
+  deviceSizes: 1024,
+  // deviceSize_mobileS: "320px",
+  // deviceSize_mobileM: "375px",
+  // deviceSize_mobileL: "450px",
+  // deviceSize_tablet: "768px",
+  // deviceSizes: "1024px",
 };
 
 export const device = {

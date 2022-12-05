@@ -1,6 +1,6 @@
 // export default CommentCp;
-import { useCallback, useEffect, useRef, useState } from "react";
-import "./style.css";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
 import axios from "axios";
 import { useInput } from "../../hooks/useInput";
 import { useNavigate, useParams } from "react-router-dom";
@@ -8,35 +8,39 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as Close } from "../../assets/Close.svg";
 import { ReactComponent as Camera } from "../../assets/Camera.svg";
+import { ReactComponent as Delete } from "../../assets/Delete.svg";
 
 import { useSelector } from "react-redux";
 import Dropzone from "react-dropzone";
+import { colors, theme } from "../../theme/theme";
 
 const CommentCp = () => {
-  const [comment_num, onChangeNum, setNum] = useInput("");
   const [comment_content, onChangeContent, setContent] = useInput("");
   const [comment_path, onChangeCommentPath, setPath] = useInput("");
 
   const [submitState, setSubmitState] = useState(0);
-  // const [member_id, setMemberId] = useState("");
-  // const [emptyError, setEmptyError] = useState(null);
+
   const [error, setError] = useState(null);
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   let { recipeId } = useParams();
 
-  // var Index = 0;
   const Index = 0;
 
   const navigate = useNavigate();
   const user = useSelector((auth) => auth);
 
+  useMemo(() => {
+    setWindowWidth(windowWidth);
+  }, [windowWidth]);
+
   const [member_imagePath, onChangeMemberImagePath, setMemberImagePath] =
-    useInput(""); //프로필
+    useInput("");
   const [filestate, setFiles] = useState("");
   const [previewstate, setPreviewState] = useState("");
   const [currentUser, setCurrentUser] = useState("");
   const [currentUserRole, setCurrentUserRole] = useState("");
-  // 코멘트 리스트 ///////////////////
   const [commentState, setCommentState] = useState([]);
 
   const [commenterState, setCommenterState] = useState([
@@ -45,9 +49,11 @@ const CommentCp = () => {
       member_nickname: "",
     },
   ]);
+
   const navigateToLogin = () => {
     navigate("/login");
   };
+
   useEffect(() => {
     // console.log("user", user);
     if (user.auth.isLoggedIn) {
@@ -63,6 +69,7 @@ const CommentCp = () => {
     getCommentList();
   }, []);
 
+  /** 모든 코멘트를 가져오는 axios함수 */
   const getCommentList = () => {
     axios({
       url: "http://localhost:9000/comment/list/" + recipeId,
@@ -77,13 +84,14 @@ const CommentCp = () => {
         comment_creDate: "",
       },
     }).then(function (response) {
-      console.log("comment", response.data); //db데이터 찍찍
-      console.log("comment", response.data[0].member_id); //db데이터 찍찍
+      console.log("comment", response.data);
+      console.log("comment", response.data[0].member_id);
       setCommentState(response.data);
       getMemberProfile(response.data[0].member_id);
     });
   };
 
+  /** 코멘트 input 파일을 해당영역에 드롭했을때 */
   const onDropHandler = useCallback(
     (files) => {
       files.forEach((file) => {
@@ -109,21 +117,22 @@ const CommentCp = () => {
     [filestate]
   );
 
+  /** useInput */
   const onLoadImgFile = (e) => {
     onChangeMemberImagePath(e);
   };
 
-  // preview delete
-  const onPreviewDelete = useCallback(
-    (preview) => {
-      setFiles("");
-      setPath("");
-      setPreviewState("");
-      setMemberImagePath("");
-    },
-    [filestate]
-  );
+  /** preview(미리보기)이미지 삭제 */
+  const onPreviewDelete = useCallback(() => {
+    setFiles("");
+    setPath("");
+    setPreviewState("");
+    setMemberImagePath("");
+  }, [filestate]);
 
+  /** 코멘트 삭제 함수 :
+   * admin 권한 + 글 작성자만 삭제 가능
+   */
   const deleteComment = useCallback(
     (comment_num) => {
       console.log(recipeId);
@@ -152,6 +161,9 @@ const CommentCp = () => {
     [currentUser, currentUserRole, recipeId, commentState]
   );
 
+  /** 코멘트 등록함수
+   * 로그인한 회원만 작성가능
+   */
   const insertComment = useCallback(
     (e) => {
       e.preventDefault();
@@ -211,50 +223,19 @@ const CommentCp = () => {
     [comment_content, comment_path, submitState, commentState]
   );
 
-  // function commentAxios() {
-  //   axios({
-  //     url: "http://localhost:9000/comment/list/" + recipeId,
-  //     // url: process.env.REACT_APP_HOST + "/comment/list/" + recipeId,
-  //     method: "get",
-  //     data: {
-  //       recipe_num: "",
-  //       comment_num: "",
-  //       comment_content: "",
-  //       comment_path: "",
-  //       member_id: "",
-  //       comment_creDate: "",
-  //     },
-  //   }).then(function (response) {
-  //     console.log("comment", response.data); //db데이터 찍찍
-  //     console.log("comment", response.data[0].member_id); //db데이터 찍찍
-  //     setCommentState(response.data);
-  //     getMemberProfile(response.data[0].member_id);
-  //   });
-  // }
-
+  /** 코멘트 작성자 프로필 사진 + 닉네임가져오기 */
   const getMemberProfile = useCallback((id) => {
     axios
       .get("http://localhost:9000/member/getProfileImgNickName", {
         params: { member_id: id },
       })
       .then(function (response) {
-        console.log("getProfileImgNickName", response);
+        // console.log("getProfileImgNickName", response);
         setCommenterState(response.data);
-        console.log("commenterState", commenterState);
+        // console.log("commenterState", commenterState);
       })
       .catch((e) => console.log(e));
   }, []);
-
-  useEffect(() => {
-    // commentAxios();
-    // getCommentList();
-    console.log("comment+user", user);
-  }, []);
-  // 코멘트 리스트 끝 ///////////////
-
-  const handleImgError = (e) => {
-    e.target.scr = "/img/default_img.jpg";
-  };
 
   return (
     <>
@@ -281,6 +262,7 @@ const CommentCp = () => {
         >
           코멘트
         </div>
+
         <CommentWrap>
           <div className="commentDiv">
             {user.auth.isLoggedIn ? (
@@ -290,6 +272,7 @@ const CommentCp = () => {
                   style={{
                     display: "inline-flex",
                     gap: "1vw",
+                    margin: " 0 auto",
                   }}
                 >
                   <textarea
@@ -312,16 +295,8 @@ const CommentCp = () => {
                             <div>
                               <Close
                                 className="removeFile"
-                                // style={{
-                                //   transform: "translateX(-50%) translateY(100%) ",
-                                //   position: "absolute",
-                                //   top: "34vh",
-                                // }}
-                                onClick={
-                                  () =>
-                                    // onPreviewDelete(filestate[0].preview)
-                                    onPreviewDelete(previewstate[0].preview)
-                                  // previewstate, setPreviewState
+                                onClick={() =>
+                                  onPreviewDelete(previewstate[0].preview)
                                 }
                               ></Close>
                               <img
@@ -330,10 +305,7 @@ const CommentCp = () => {
                                 }
                                 src={previewstate[0].preview}
                                 style={{
-                                  // width: "9%",
                                   height: "10vh",
-                                  // width: "6vw",
-                                  // height: "6vh",
                                   borderRadius: "1vw",
                                   margin: "2vh 45.5%",
                                 }}
@@ -378,7 +350,7 @@ const CommentCp = () => {
                     className="insertCmt"
                     onClick={insertComment}
                     disabled={error}
-                    style={{ width: "3vw" }}
+                    style={{ width: "3vw", margin: "0" }}
                   >
                     등록
                   </button>
@@ -387,49 +359,63 @@ const CommentCp = () => {
             ) : (
               <>
                 <NavigateTologin onClick={() => navigateToLogin()}>
-                  <div> 코멘트는 로그인 후 작성 가능합니다.</div>
+                  <div>코멘트는 로그인 후 작성 가능합니다.</div>
+                  <div>[ 로그인하러 가기 ]</div>
                 </NavigateTologin>
               </>
             )}
           </div>
 
-          {commentState.length !== 0 ? (
-            <div className="commentDiv">
+          {commentState.length !== 0 ? ( //코멘트리스트가 비었으면 없다고 표시
+            <div className="scrollable">
               {commentState.map((cmt, index) => {
                 return (
                   <>
+                    {(currentUser === cmt.member_id || //작성자거나 관리자만 삭제가능
+                      currentUserRole === "ROLE_ADMIN") && (
+                      <div
+                        type="button"
+                        className="deleteCommentBtn"
+                        style={{
+                          transform: "translateY(6vh) translateX(100%)",
+                          fontSize: "0.5vw",
+                          float: "left",
+                          width: "fit-content",
+                          textAlign: "right",
+                          fontFamily: "mainFont",
+                        }}
+                        onClick={() => deleteComment(cmt.comment_num)}
+                      >
+                        {windowWidth >= theme.deviceSizes.deviceSizes ? (
+                          <>| 삭제 |</>
+                        ) : (
+                          <>:(</>
+                        )}
+                      </div>
+                    )}
                     <div
                       style={{
-                        width: "34vw",
+                        width: "92%",
+                        // width: "30vw",
                         fontSize: "1vw",
                         display: "inline-flex",
                         gap: "1vw",
                         textAlign: "initial",
                         lineHeight: "1.5",
+                        clear: "left",
                         alignItems: "center",
                         justifyContent: "flex-start",
-                        // justifyContent: "center",
                         backgroundColor: "#C2B196",
-                        padding: "1vw",
+                        padding: "2vw 2vw 2vw 1vw",
                         borderRadius: "1vw",
-                        marginBottom: "1vw",
+
+                        margin: "1vw 4%",
+                        // margin: "1vw 1.5vw",
                       }}
                     >
-                      {(currentUser === cmt.member_id ||
-                        currentUserRole === "ROLE_ADMIN") && (
-                        <button
-                          type="button"
-                          className="deleteCmt"
-                          onClick={() => deleteComment(cmt.comment_num)}
-                        >
-                          삭제{cmt.comment_num}
-                        </button>
-                      )}
-                      {cmt.comment_path !== "" ? (
+                      {cmt.comment_path !== "" ? ( //이미지가 있으면 80%만 차지하도록
                         <div key={index} style={{ width: "80%" }}>
-                          {/* <div className="idDateCon"> */}
                           <div>
-                            {/* <span name="member_id" className="memberName"> */}
                             <span
                               name="member_id"
                               style={{ paddingRight: "1vw" }}
@@ -437,14 +423,10 @@ const CommentCp = () => {
                               {cmt.member_id}
                             </span>
                             <span name="comment_creDate">
-                              {/* <span name="comment_creDate" className="comDate"> */}
                               {cmt.comment_creDate}
                             </span>
                           </div>
-                          {/*<button type="button" className="deleteCmt" onClick={deleteComment}>삭제</button>*/}
-
                           <span>
-                            {/* <div name="comment_content" className="comCont"> */}
                             <div name="comment_content">
                               {cmt.comment_content}
                             </div>
@@ -452,9 +434,7 @@ const CommentCp = () => {
                         </div>
                       ) : (
                         <div key={index} style={{ width: "100%" }}>
-                          {/* <div className="idDateCon"> */}
                           <div>
-                            {/* <span name="member_id" className="memberName"> */}
                             <span
                               name="member_id"
                               style={{ paddingRight: "1vw" }}
@@ -462,29 +442,22 @@ const CommentCp = () => {
                               {cmt.member_id}
                             </span>
                             <span name="comment_creDate">
-                              {/* <span name="comment_creDate" className="comDate"> */}
                               {cmt.comment_creDate}
                             </span>
                           </div>
-                          {}
-                          {/* <button type="button" className="deleteCmt" onClick={deleteComment}>삭제</button> */}
-
                           <span>
-                            {/* <div name="comment_content" className="comCont"> */}
                             <div name="comment_content">
                               {cmt.comment_content}
                             </div>
                           </span>
                         </div>
                       )}
-
                       {cmt.comment_path !== "" ? (
                         <img
-                          // className="comImg"
+                          className="hoverZoom"
                           style={{ width: "4vw", borderRadius: "0.5vw" }}
                           src={cmt.comment_path}
                           alt={cmt.comment_path}
-                          onError={handleImgError}
                         ></img>
                       ) : null}
                     </div>
@@ -493,10 +466,7 @@ const CommentCp = () => {
               })}
             </div>
           ) : (
-            <>
-              {" "}
-              <div>아직 코멘트가 없습니다. 코멘트를 달아보세요 :)</div>
-            </>
+            <div>아직 코멘트가 없습니다. 코멘트를 달아보세요 :)</div>
           )}
         </CommentWrap>
       </div>
@@ -508,34 +478,41 @@ const CommentWrap = styled.div`
   font-family: "mainFont";
   margin: 0 auto;
   max-width: 40em;
-  & .instructionWrap {
-    & hr {
-      margin: 0.5em 0;
-      margin-bottom: 1em;
-    }
-    & .accented {
-      font-size: 1.1em;
-      font-weight: 700;
-    }
-  }
-  & div .accented {
-    font-size: 1.1em;
-    font-weight: 700;
-  }
-  & div .clickable {
-    cursor: pointer;
-  }
 
   & textarea {
     width: 30vw;
     font-size: 1vw;
     font-family: "mainFont";
     padding: 1vw;
+    resize: none;
+    border-radius: 1vw;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  //삭제버튼
+  & .deleteCommentBtn {
+    width: 3vw;
+    z-index: 700;
+    color: ${colors.color_beige_white};
+  }
+  & .deleteCommentBtn:hover {
+    color: ${colors.color_brown};
+    cursor: pointer;
+  }
+
+  & .hoverZoom:hover {
+    transform: scaleX(1.5) scaleY(1.5);
   }
 `;
 
 const NavigateTologin = styled.div`
-  & > div:hover {
+  line-height: 2;
+  font-size: 1vw;
+
+  & div:hover {
     cursor: pointer;
   }
 `;
