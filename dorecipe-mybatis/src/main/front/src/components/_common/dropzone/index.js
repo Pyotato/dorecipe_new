@@ -1,5 +1,7 @@
 import { useCallback } from "react";
 import Dropzone, { useDropzone } from "react-dropzone";
+import { ReactComponent as Camera } from "../../../assets/Camera.svg";
+
 import styled from "styled-components";
 import {
   EditImgPreview,
@@ -151,20 +153,24 @@ export const DropZone = ({
   return (
     <Dropzone onDrop={onDropHandler} index={index}>
       {({ getRootProps, getInputProps }) => (
-        <EditImgPreview>
+        <EditImgPreview style={{ height: "100%" }}>
           {files.length > 0 ? (
             <EditImgPreviewForm>
               {files.map((v, index) =>
                 files.length < 5 ? (
                   <EditImgPreviewInner key={index}>
                     <div
-                      style={{
-                        translate: "0 -2.1em",
-                      }}
                       className="fileBox"
                       onClick={() => onPreviewDelete(v.preview)}
                     >
-                      <img src={v.preview} style={{ maxHeight: "9em" }} />
+                      <img
+                        src={v.preview}
+                        style={{
+                          maxHeight: "9em",
+                          transform: "translateY(-10%)",
+                        }}
+                        alt={v.preview}
+                      />
                       <p>파일 삭제</p>
                     </div>
                   </EditImgPreviewInner>
@@ -172,10 +178,7 @@ export const DropZone = ({
                   <>
                     <EditImgPreviewInner key={index}>
                       {v === files[files.length - 2] ? (
-                        <FlexibleBox
-                          fontColor="#00c7ae"
-                          style={{ width: "16rem" }}
-                        >
+                        <FlexibleBox>
                           <span>...</span>
                         </FlexibleBox>
                       ) : (
@@ -184,7 +187,7 @@ export const DropZone = ({
                             className="fileBox"
                             onClick={() => onPreviewDelete(v.preview)}
                           >
-                            <img src={v.preview} />
+                            <img src={v.preview} alt={v.preview} />
                             <p>파일 삭제</p>
                           </div>
                         )
@@ -200,7 +203,7 @@ export const DropZone = ({
               <div
                 className="inputBox"
                 {...getRootProps()}
-                style={{ height: "32vh" }}
+                style={{ height: "60vh" }}
               >
                 <input
                   {...getInputProps()}
@@ -213,15 +216,23 @@ export const DropZone = ({
               </div>
             </>
           ) : (
-            <div className="inputBox" {...getRootProps()}>
+            <div
+              className="inputBox"
+              {...getRootProps()}
+              style={{ height: "100%" }}
+            >
               <input
                 {...getInputProps()}
                 id="file"
                 type="file"
                 accept="image/*"
                 onChange={onLoadImgFile}
-              />{" "}
-              + <p>파일을 등록해주세요</p>
+                style={{ display: "none" }}
+              />
+              <Camera style={{ height: "30%" }} />
+              <p style={{ fontFamily: "mainFont", fontSize: "1.5vw" }}>
+                썸네일 등록
+              </p>
             </div>
           )}
         </EditImgPreview>

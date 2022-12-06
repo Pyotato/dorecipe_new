@@ -8,6 +8,7 @@ import {
 import { useRef, useState, useCallback, useEffect } from "react";
 import { ReactComponent as Camera } from "../../../assets/Camera.svg";
 import { SmallBtn } from "../../_common/buttons";
+// import "./style.css";
 import axios from "axios";
 import Dropzone from "react-dropzone";
 import { useSelector } from "react-redux";
@@ -234,9 +235,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
     [recipeState, stepState, btnState]
   );
 
-  //순서 파일 드롭존
-  const fileDropHandler = (index, files, setFiles) => {
-    console.log(`${index}, ${files}, ${setFiles}`);
+  const fileDropHandler = (index, files) => {
     return (
       <>
         {files.length > 0 ? (
@@ -250,20 +249,206 @@ const RecipeOrderDrag = ({ recipeState }) => {
                 margin: "0",
               }}
             >
-              <p onClick={() => setFiles("")} className="removeFile">
-                이미지 삭제
-              </p>
-              <img
-                onClick={() => setFiles("")}
-                style={{
-                  width: "90px",
-                  transform: "translateX(100%)",
-                  padding: "0.6vw",
-                  display: "inline-block",
-                }}
-                src={stepState[index].stepImg.preview}
-                alt={stepState[index].stepImg.preview}
-              />
+              {index === 0 ? (
+                <>
+                  <p onClick={() => setFiles1("")} className="removeFile">
+                    이미지 삭제
+                  </p>
+                  <img
+                    onClick={() => setFiles1("")}
+                    style={{
+                      width: "90px",
+                      // height: "180px",
+                      transform: "translateX(100%)",
+                      padding: "0.6vw",
+                      display: "inline-block",
+                    }}
+                    src={stepState[index].stepImg.preview}
+                    alt={stepState[index].stepImg.preview}
+                  />
+                </>
+              ) : index === 1 ? (
+                <>
+                  <p onClick={() => setFiles2("")} className="removeFile">
+                    이미지 삭제
+                  </p>
+                  <img
+                    onClick={() => setFiles2("")}
+                    style={{
+                      width: "90px",
+                      // height: "180px",
+                      transform: "translateX(100%)",
+                      padding: "0.6vw",
+                      display: "inline-block",
+                    }}
+                    src={stepState[index].stepImg.preview}
+                    alt={stepState[index].stepImg.preview}
+                  />
+                </>
+              ) : index === 2 ? (
+                <>
+                  <p onClick={() => setFiles3("")} className="removeFile">
+                    이미지 삭제
+                  </p>
+                  <img
+                    onClick={() => setFiles3("")}
+                    style={{
+                      width: "90px",
+                      // height: "180px",
+                      transform: "translateX(100%)",
+                      padding: "0.6vw",
+                      display: "inline-block",
+                    }}
+                    src={stepState[index].stepImg.preview}
+                    alt={stepState[index].stepImg.preview}
+                  />
+                </>
+              ) : index === 3 ? (
+                <>
+                  <p onClick={() => setFiles4("")} className="removeFile">
+                    이미지 삭제
+                  </p>
+                  <img
+                    onClick={() => setFiles4("")}
+                    style={{
+                      width: "90px",
+                      // height: "180px",
+                      transform: "translateX(100%)",
+                      padding: "0.6vw",
+                      display: "inline-block",
+                    }}
+                    src={stepState[index].stepImg.preview}
+                    alt={stepState[index].stepImg.preview}
+                  />
+                </>
+              ) : index === 4 ? (
+                <>
+                  <p onClick={() => setFiles5("")} className="removeFile">
+                    이미지 삭제
+                  </p>
+                  <img
+                    onClick={() => setFiles5("")}
+                    style={{
+                      width: "90px",
+                      // height: "180px",
+                      transform: "translateX(100%)",
+                      padding: "0.6vw",
+                      display: "inline-block",
+                    }}
+                    src={stepState[index].stepImg.preview}
+                    alt={stepState[index].stepImg.preview}
+                  />
+                </>
+              ) : index === 5 ? (
+                <>
+                  <p onClick={() => setFiles6("")} className="removeFile">
+                    이미지 삭제
+                  </p>
+                  <img
+                    onClick={() => setFiles6("")}
+                    style={{
+                      width: "90px",
+                      // height: "180px",
+                      transform: "translateX(100%)",
+                      padding: "0.6vw",
+                      display: "inline-block",
+                    }}
+                    src={stepState[index].stepImg.preview}
+                    alt={stepState[index].stepImg.preview}
+                  />
+                </>
+              ) : index === 6 ? (
+                <>
+                  <p onClick={() => setFiles7("")} className="removeFile">
+                    이미지 삭제
+                  </p>
+                  <img
+                    onClick={() => setFiles7("")}
+                    style={{
+                      width: "90px",
+                      // height: "180px",
+                      transform: "translateX(100%)",
+                      padding: "0.6vw",
+                      display: "inline-block",
+                    }}
+                    src={stepState[index].stepImg.preview}
+                    alt={stepState[index].stepImg.preview}
+                  />
+                </>
+              ) : index === 7 ? (
+                <>
+                  <p onClick={() => setFiles8("")} className="removeFile">
+                    이미지 삭제
+                  </p>
+                  <img
+                    onClick={() => setFiles8("")}
+                    style={{
+                      width: "90px",
+                      transform: "translateX(100%)",
+                      padding: "0.6vw",
+                      display: "inline-block",
+                    }}
+                    src={stepState[index].stepImg.preview}
+                    alt={stepState[index].stepImg.preview}
+                  />
+                </>
+              ) : index === 8 ? (
+                <>
+                  <p onClick={() => setFiles9("")} className="removeFile">
+                    이미지 삭제
+                  </p>
+                  <img
+                    onClick={() => setFiles9("")}
+                    style={{
+                      width: "90px",
+                      // height: "180px",
+                      transform: "translateX(100%)",
+                      padding: "0.6vw",
+                      display: "inline-block",
+                    }}
+                    src={stepState[index].stepImg.preview}
+                    alt={stepState[index].stepImg.preview}
+                  />
+                </>
+              ) : index === 9 ? (
+                <>
+                  <p onClick={() => setFiles10("")} className="removeFile">
+                    이미지 삭제
+                  </p>
+                  <img
+                    onClick={() => setFiles10("")}
+                    style={{
+                      width: "90px",
+                      // height: "180px",
+                      transform: "translateX(100%)",
+                      padding: "0.6vw",
+                      display: "inline-block",
+                    }}
+                    src={stepState[index].stepImg.preview}
+                    alt={stepState[index].stepImg.preview}
+                  />
+                </>
+              ) : index === 10 ? (
+                <>
+                  <p onClick={() => setFiles11("")} className="removeFile">
+                    이미지 삭제
+                  </p>
+                  <img
+                    onClick={() => setFiles11("")}
+                    style={{
+                      width: "90px",
+                      // height: "180px",
+                      transform: "translateX(100%)",
+                      padding: "0.6vw",
+                      display: "inline-block",
+                    }}
+                    src={stepState[index].stepImg.preview}
+                    alt={stepState[index].stepImg.preview}
+                  />
+                </>
+              ) : (
+                <></>
+              )}
             </div>
           </>
         ) : (
@@ -271,14 +456,51 @@ const RecipeOrderDrag = ({ recipeState }) => {
             <Dropzone
               className="dropZoneWrap"
               onDrop={(acceptedFiles) => {
-                setFiles(
-                  acceptedFiles.map((file) =>
-                    Object.assign(file, {
-                      preview: URL.createObjectURL(file),
-                    })
-                  )
-                );
-
+                if (index === 0) {
+                  setFiles1(
+                    acceptedFiles.map((file) =>
+                      Object.assign(file, {
+                        preview: URL.createObjectURL(file),
+                      })
+                    )
+                  );
+                }
+                if (index === 1) {
+                  setFiles2(
+                    acceptedFiles.map((file) =>
+                      Object.assign(file, {
+                        preview: URL.createObjectURL(file),
+                      })
+                    )
+                  );
+                }
+                if (index === 2) {
+                  setFiles3(
+                    acceptedFiles.map((file) =>
+                      Object.assign(file, {
+                        preview: URL.createObjectURL(file),
+                      })
+                    )
+                  );
+                }
+                if (index === 3) {
+                  setFiles4(
+                    acceptedFiles.map((file) =>
+                      Object.assign(file, {
+                        preview: URL.createObjectURL(file),
+                      })
+                    )
+                  );
+                }
+                if (index === 4) {
+                  setFiles5(
+                    acceptedFiles.map((file) =>
+                      Object.assign(file, {
+                        preview: URL.createObjectURL(file),
+                      })
+                    )
+                  );
+                }
                 acceptedFiles.forEach((file) => {
                   const reader = new FileReader();
                   reader.readAsDataURL(file);
@@ -432,58 +654,37 @@ const RecipeOrderDrag = ({ recipeState }) => {
                         name="stepDescription"
                         ref={inputFocus}
                         value={item.stepDescription}
-                      ></textarea>
-                      {index === 0 && fileDropHandler(index, files1, setFiles1)}
-                      {index === 1 && fileDropHandler(index, files2, setFiles2)}
-                      {index === 2 && fileDropHandler(index, files3, setFiles3)}
-                      {index === 3 && fileDropHandler(index, files4, setFiles4)}
-                      {index === 4 && fileDropHandler(index, files5, setFiles5)}
-                      {index === 5 && fileDropHandler(index, files6, setFiles6)}
-                      {index === 6 && fileDropHandler(index, files7, setFiles7)}
-                      {index === 7 && fileDropHandler(index, files8, setFiles8)}
-                      {index === 8 && fileDropHandler(index, files9, setFiles9)}
-                      {index === 9 &&
-                        fileDropHandler(index, files10, setFiles10)}
-                      {index === 10 &&
-                        fileDropHandler(index, files11, setFiles11)}
-                      {index === 11 &&
-                        fileDropHandler(index, files12, setFiles12)}
-                      {index === 12 &&
-                        fileDropHandler(index, files13, setFiles13)}
-                      {index === 13 &&
-                        fileDropHandler(index, files14, setFiles14)}
-                      {index === 14 &&
-                        fileDropHandler(index, files15, setFiles15)}
-                      {index === 15 &&
-                        fileDropHandler(index, files16, setFiles16)}
-                      {index === 16 &&
-                        fileDropHandler(index, files17, setFiles17)}
-                      {index === 17 &&
-                        fileDropHandler(index, files18, setFiles18)}
-                      {index === 18 &&
-                        fileDropHandler(index, files19, setFiles19)}
-                      {index === 19 &&
-                        fileDropHandler(index, files20, setFiles20)}
-                      {index === 20 &&
-                        fileDropHandler(index, files21, setFiles21)}
-                      {index === 21 &&
-                        fileDropHandler(index, files22, setFiles22)}
-                      {index === 22 &&
-                        fileDropHandler(index, files23, setFiles23)}
-                      {index === 23 &&
-                        fileDropHandler(index, files24, setFiles24)}
-                      {index === 24 &&
-                        fileDropHandler(index, files25, setFiles25)}
-                      {index === 25 &&
-                        fileDropHandler(index, files26, setFiles26)}
-                      {index === 26 &&
-                        fileDropHandler(index, files27, setFiles27)}
-                      {index === 27 &&
-                        fileDropHandler(index, files28, setFiles28)}
-                      {index === 28 &&
-                        fileDropHandler(index, files29, setFiles29)}
-                      {index === 29 &&
-                        fileDropHandler(index, files30, setFiles30)}
+                      ></textarea>{" "}
+                      {index === 0 && fileDropHandler(index, files1)}
+                      {index === 1 && fileDropHandler(index, files2)}
+                      {index === 2 && fileDropHandler(index, files3)}
+                      {index === 3 && fileDropHandler(index, files4)}
+                      {index === 4 && fileDropHandler(index, files5)}
+                      {index === 5 && fileDropHandler(index, files6)}
+                      {index === 6 && fileDropHandler(index, files7)}
+                      {index === 7 && fileDropHandler(index, files8)}
+                      {index === 8 && fileDropHandler(index, files9)}
+                      {index === 9 && fileDropHandler(index, files10)}
+                      {index === 10 && fileDropHandler(index, files11)}
+                      {index === 11 && fileDropHandler(index, files12)}
+                      {index === 12 && fileDropHandler(index, files13)}
+                      {index === 13 && fileDropHandler(index, files14)}
+                      {index === 14 && fileDropHandler(index, files15)}
+                      {index === 15 && fileDropHandler(index, files16)}
+                      {index === 16 && fileDropHandler(index, files17)}
+                      {index === 17 && fileDropHandler(index, files18)}
+                      {index === 18 && fileDropHandler(index, files19)}
+                      {index === 19 && fileDropHandler(index, files20)}
+                      {index === 20 && fileDropHandler(index, files21)}
+                      {index === 21 && fileDropHandler(index, files22)}
+                      {index === 22 && fileDropHandler(index, files23)}
+                      {index === 23 && fileDropHandler(index, files24)}
+                      {index === 24 && fileDropHandler(index, files25)}
+                      {index === 25 && fileDropHandler(index, files26)}
+                      {index === 26 && fileDropHandler(index, files27)}
+                      {index === 27 && fileDropHandler(index, files28)}
+                      {index === 28 && fileDropHandler(index, files29)}
+                      {index === 29 && fileDropHandler(index, files30)}
                     </div>
                   </>
                 );
@@ -491,6 +692,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
             </DroppableDiv>
           </DraggableWrap>
         </div>
+        {/* </Scrollable> */}
       </TotalWrap>
     </>
   );
@@ -498,15 +700,19 @@ const RecipeOrderDrag = ({ recipeState }) => {
 export default RecipeOrderDrag;
 
 const TotalWrap = styled.div`
+  /* width: fit-content; */
   margin: 0 auto;
+  /* width: 100%; */
   font-family: "mainFont";
 `;
 
 const DraggableWrap = styled.div`
+  /* display: inline-flex; */
   font-family: "mainFont";
 `;
 
 const DroppableDiv = styled.div`
+  /* width: 70em; */
   height: 100%;
   width: 100%;
   cursor: pointer;
@@ -514,6 +720,7 @@ const DroppableDiv = styled.div`
     width: 100%;
     margin: 2vh auto;
     align-items: center;
+    /* width: 60vw; */
     border: 1px solid #463635;
     padding: 1vh 1vw;
     border-radius: 0.5vw;
@@ -522,6 +729,9 @@ const DroppableDiv = styled.div`
   & .textArea {
     font-family: "mainFont";
     border-radius: 0.5vw;
+
+    /* width: 50vw; */
+    /* width: 9vw; */
     height: 18vh;
     padding: 0.5vw;
     ::-webkit-scrollbar {

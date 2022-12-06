@@ -1,18 +1,16 @@
 import styled from "styled-components";
-import "./style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faLightbulb,
   faCircleMinus,
   faPlusCircle,
   faFloppyDisk,
 } from "@fortawesome/free-solid-svg-icons";
-import { SmallBtn } from "../../_common/buttons";
 import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { ReactComponent as Pin } from "../../../assets/Pin.svg";
+import { colors } from "../../../theme/theme";
 
-// const IngredientForm = ({ recipeState, swiper }) => {
 const IngredientForm = () => {
   const user = useSelector((auth) => auth);
   const [recipeState, setRecipeState] = useState(0);
@@ -25,7 +23,7 @@ const IngredientForm = () => {
       headers: { "Content-Type": "multipart/form-data" },
       data: { member_id: user.auth.user.username, recipe_num: 0 },
     }).then((response) => {
-      console.log("setRecipeState", response.data);
+      // console.log("setRecipeState", response.data);
       setRecipeState(response.data);
     });
   }, []);
@@ -34,12 +32,12 @@ const IngredientForm = () => {
     {
       recipe_num: recipeState,
       ingredient_num: 1,
-      ingredient_name: "",
-      ingredient_amount: "",
+      ingredient_name: "재료명",
+      ingredient_amount: "재료량",
     },
   ]);
 
-  console.log("recipeState", recipeState);
+  // console.log("recipeState", recipeState);
 
   const IngreAmountRef = useRef();
   const inputFocus = useRef();
@@ -51,30 +49,36 @@ const IngredientForm = () => {
       ingredients[ingredients.length - 1].ingredient_amount !== ""
     ) {
       let newIngredients = {
-        recipe_num: ingredients[0].recipe_num,
+        // recipe_num: ingredients[0].recipe_num,
+        recipe_num: ingredients.length + 1,
         ingredient_num: ingredients.length + 1,
         ingredient_name: "",
         ingredient_amount: "",
       };
       setIngredients([...ingredients, newIngredients]);
-      console.log(ingredients);
+      // console.log(ingredients);
     } else {
       alert("재료를 입력란을 채우고 추가해주세요.");
     }
   };
-  // useEffect(() => {
-  //   // swiper.disable();
-  //   alert(swiper);
-  // }, []);
+
   /**재료 제거 */
   const removeIngredient = (index, e) => {
     const ingreCopy = [...ingredients];
     if (ingreCopy.length > 1) {
-      ingreCopy.splice(index, 1);
+      ingreCopy.splice(ingredients.length - 1, 1);
       setIngredients(ingreCopy);
-      // console.log(ingreCopy);
+      // console.log("removeIngredient", ingreCopy);
     } else {
-      alert("재료는 1개 이상 넣어주세요.");
+      setIngredients([
+        {
+          recipe_num: recipeState,
+          ingredient_num: 1,
+          ingredient_name: "재료명",
+          ingredient_amount: "재료량",
+        },
+      ]);
+      alert("재료는 1개 이상 입력해주세요.");
     }
   };
 
@@ -87,14 +91,13 @@ const IngredientForm = () => {
   const onTemporarySave = useCallback(
     (e) => {
       e.preventDefault();
-      console.log("ingredients", ingredients);
-      // let ingreCopy = [...ingredients];
+      // console.log("ingredients", ingredients);
 
       const data = ingredients;
       const blob = new Blob([JSON.stringify(data)], {
         type: "application.json",
       });
-      console.log("data~~~~~~~~~~~", data);
+      // console.log("data~~~~~~~~~~~", data);
       const formData = new FormData();
       formData.append("data", blob);
       //레시피 배열 수 만큼 append 시켜 주기
@@ -126,125 +129,269 @@ const IngredientForm = () => {
 
   return (
     <>
-      <BasicFormWrap style={{ backgroundColor: "pink" }}>
-        <div>
-          <FontAwesomeIcon icon={faLightbulb} /> 재료 이름과 재료량 순으로
-          입력해주세요
-          <SmallBtn
-            type="button"
-            className="addIngreBtn"
-            style={{ marginRight: "1em" }}
-            onClick={onTemporarySave}
+      <div>
+        <TempSaveBtn
+          type="button"
+          className="addIngreBtn"
+          onClick={onTemporarySave}
+        >
+          <FontAwesomeIcon icon={faFloppyDisk} /> <div>임시저장</div>
+        </TempSaveBtn>
+      </div>
+      <BasicFormWrap
+        style={{
+          marginTop: "15vh",
+          clear: "left",
+        }}
+      >
+        <div
+          style={{
+            display: "inline-flex",
+            width: "100%",
+          }}
+        >
+          {/* 재료 리스트 칼럼 2개로 나뉘어서 표시되도록 */}
+          <div
+            style={{
+              width: "50%",
+              backgroundColor: "#FFFFFF",
+              borderRadius: "1vw",
+              display: "inline-flex",
+              padding: "4vh 2vw",
+            }}
           >
-            <FontAwesomeIcon icon={faFloppyDisk} /> 임시저장
-          </SmallBtn>
-        </div>
-        <BundleWrap>
-          <Scrollable>
-            <div>
-              {ingredients.map((item, index) => {
+            <div
+              style={{
+                display: "inline-flex",
+                width: "100%",
+
+                height: "100%",
+                flexDirection: "column",
+              }}
+            >
+              {ingredients.map((v) => {
                 return (
                   <>
-                    <div className="recipeBundleWrap" key={index}>
-                      <div className="recipeFlexBundle">
-                        <div className="ingredientBundle">재료 {index + 1}</div>
-                        <div className="bundleIngredientWrap">
-                          <div className="bundleFlexDown">
-                            <input
-                              className="bundleIngredient bundleInput"
-                              type="text"
-                              ref={inputFocus}
-                              onChange={(e) => {
-                                handleFormChange(index, e);
-                              }}
-                              name="ingredient_name"
-                              value={index.ingredient_name}
-                              placeholder={
-                                index % 4 == 0
-                                  ? "소금"
-                                  : index % 4 == 1
-                                  ? "밀가루"
-                                  : index % 4 == 2
-                                  ? "계란"
-                                  : index % 4 == 3
-                                  ? "후추"
-                                  : ""
-                              }
-                            />
-                            <input
-                              // onChange={onChangeInput}
-                              // key={item.ingredient_id}
-                              className="bundleIngredientAmount bundleInput"
-                              type="text"
-                              name="ingredient_amount"
-                              ref={IngreAmountRef}
-                              placeholder={
-                                index % 4 === 0
-                                  ? "1꼬집"
-                                  : index % 4 === 1
-                                  ? "300g"
-                                  : index % 4 === 2
-                                  ? "6알"
-                                  : index % 4 === 3
-                                  ? "1/2t"
-                                  : ""
-                              }
-                              onChange={(e) => {
-                                handleFormChange(index, e);
-                              }}
-                              value={index.ingredient_amount}
-                            />
+                    {ingredients.length <= 10 ? (
+                      <>
+                        {v.ingredient_num <= 10 && (
+                          <div
+                            key={v}
+                            style={{
+                              height: "3vh",
+                              margin: "1vh",
+                              display: "inline-flex",
+                              width: "100%",
+
+                              alignItems: "center",
+                              justifyContent: "space-around",
+                            }}
+                          >
+                            <Pin style={{ width: "1vw" }} />
+
+                            <div style={{ width: "40%" }}>
+                              {v.ingredient_name}
+                            </div>
+                            <div style={{ width: "40%" }}>
+                              {v.ingredient_amount}
+                            </div>
                           </div>
-                        </div>
+                        )}
+                      </>
+                    ) : (
+                      <div style={{ width: "100%", height: "100%" }}>
+                        {v.ingredient_num <= ingredients.length / 2 && (
+                          <div
+                            key={v}
+                            style={{
+                              height: "3vh",
+                              margin: "1vh",
+                              display: "inline-flex",
+                              width: "90%",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Pin style={{ width: "1vw" }} />
+
+                            <div>{v.ingredient_name}</div>
+                            <div>{v.ingredient_amount}</div>
+                          </div>
+                        )}
                       </div>
-                    </div>
+                    )}
                   </>
                 );
               })}
             </div>
-            <SmallBtn
-              type="button"
-              className="addIngreBtn"
-              style={{ marginTop: "1em" }}
-              onClick={removeIngredient}
-            >
-              <FontAwesomeIcon icon={faCircleMinus} /> 재료 삭제
-            </SmallBtn>
-            <SmallBtn
-              type="button"
-              className="addIngreBtn"
-              style={{ marginTop: "1em", marginRight: "1em" }}
-              onClick={onAddIngredientHandler}
-            >
-              <FontAwesomeIcon icon={faPlusCircle} /> 재료 추가
-            </SmallBtn>
-          </Scrollable>
-        </BundleWrap>
+            {ingredients.length > 10 ? (
+              <div
+                style={{
+                  display: "inline-flex",
+                  width: "100%",
+                  height: "100%",
+                  flexDirection: "column",
+                }}
+              >
+                {ingredients.map((v) => {
+                  return (
+                    <>
+                      {ingredients.length > 10 && (
+                        <>
+                          {v.ingredient_num > ingredients.length / 2 && (
+                            <div
+                              key={v}
+                              style={{
+                                height: "3vh",
+                                margin: "1vh",
+                                display: "inline-flex",
+                                width: "90%",
+                                flexWrap: "wrap",
+                                alignItems: "center",
+
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <Pin style={{ width: "1vw" }} />
+
+                              <div>{v.ingredient_name}</div>
+                              <div>{v.ingredient_amount}</div>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+          {/* 등록 section */}
+          <div style={{ width: "50%" }}>
+            <BundleWrap>
+              <Scrollable>
+                <div>
+                  {ingredients.map((item, index) => {
+                    return (
+                      <>
+                        <div className="recipeBundleWrap" key={index}>
+                          <div className="recipeFlexBundle">
+                            <div className="bundleIngredientWrap">
+                              <div className="bundleFlexDown">
+                                <div style={{ width: "20%" }}>
+                                  재료 {index + 1}
+                                </div>
+                                <input
+                                  style={{ width: "40%" }}
+                                  className="bundleIngredient bundleInput"
+                                  type="text"
+                                  ref={inputFocus}
+                                  onChange={(e) => {
+                                    handleFormChange(index, e);
+                                  }}
+                                  name="ingredient_name"
+                                  value={index.ingredient_name}
+                                  placeholder={
+                                    index % 4 === 0
+                                      ? "소금"
+                                      : index % 4 === 1
+                                      ? "밀가루"
+                                      : index % 4 === 2
+                                      ? "계란"
+                                      : index % 4 === 3
+                                      ? "후추"
+                                      : ""
+                                  }
+                                />
+                                <input
+                                  style={{ width: "40%" }}
+                                  className="bundleIngredientAmount bundleInput"
+                                  type="text"
+                                  name="ingredient_amount"
+                                  ref={IngreAmountRef}
+                                  placeholder={
+                                    index % 4 === 0
+                                      ? "1꼬집"
+                                      : index % 4 === 1
+                                      ? "300g"
+                                      : index % 4 === 2
+                                      ? "6알"
+                                      : index % 4 === 3
+                                      ? "1/2t"
+                                      : ""
+                                  }
+                                  onChange={(e) => {
+                                    handleFormChange(index, e);
+                                  }}
+                                  value={index.ingredient_amount}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    );
+                  })}
+                </div>
+                <Btn type="button" onClick={removeIngredient}>
+                  <FontAwesomeIcon icon={faCircleMinus} /> 재료 삭제
+                </Btn>
+                <Btn
+                  type="button"
+                  style={{ marginRight: "1em" }}
+                  onClick={onAddIngredientHandler}
+                >
+                  <FontAwesomeIcon icon={faPlusCircle} /> 재료 추가
+                </Btn>
+              </Scrollable>
+            </BundleWrap>
+          </div>
+        </div>
       </BasicFormWrap>
     </>
   );
 };
 export default IngredientForm;
 const BasicFormWrap = styled.div`
-  /* display: inline-flex; */
-  color: #463635;
-  margin: 0 4.5em;
-  min-width: 60%;
-  font-size: 14px;
+  margin: 0 auto;
+  list-style: none;
+  font-family: "mainFont";
+  font-size: 1vw;
   height: fit-content;
-  /* background-color: aquamarine; */
-  padding: 2em;
+  padding: 2vw;
+
+  & input {
+    font-family: "mainFont";
+    background-color: ${colors.color_greyish_white};
+    border: 1px solid transparent;
+  }
+
+  & .recipeBundleWrap {
+    border: 1px solid transparent;
+    background-color: ${colors.color_white};
+  }
+
+  & .bundleIngredientWrap {
+    display: inline-flex;
+    flex-direction: column;
+  }
+
+  & .bundleFlexDown {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 0;
+  }
 `;
 const BundleWrap = styled.div`
   height: 55vh;
 `;
+
 const Scrollable = styled.section`
   width: 100%;
-  margin: 1em auto;
-  padding: 1em;
+  height: 75vh;
+
   & > div {
-    padding: 2rem;
-    height: 33em;
+    height: 60vh;
     overflow-y: auto;
     margin: 0 auto;
 
@@ -253,11 +400,45 @@ const Scrollable = styled.section`
     }
     ::-webkit-scrollbar-thumb {
       height: 30%;
-      background-color: #463635;
+      background-color: ${colors.color_beige_tinted_white};
     }
     ::-webkit-scrollbar-track {
-      background-color: #fffdf5;
-      border: 1px solid #463635;
+      background-color: ${colors.color_milktea_brown};
+      border: 1px solid ${colors.color_beige_brown};
     }
+  }
+`;
+const Btn = styled.button`
+  font-family: "mainFont";
+  border: 1px solid transparent;
+  border-radius: 0.5vw;
+  background-color: ${colors.color_brown};
+  color: ${colors.color_beige_white};
+  padding: 1vh 1vw;
+  margin-top: 3vh;
+  float: right;
+  &:hover {
+    background-color: ${colors.color_carrot_orange};
+    cursor: pointer;
+  }
+`;
+const TempSaveBtn = styled.button`
+  width: 4vw;
+  height: 4vw;
+  /* z-index: 700; */
+  border-radius: 100%;
+  font-family: "mainFont";
+  padding: 1vh 1vw;
+
+  position: fixed;
+  right: 2vw;
+  background-color: ${colors.color_beige_brown};
+  border: 1px solid transparent;
+
+  &:hover {
+    cursor: pointer;
+    transform: scaleX(1.2) scaleY(1.2);
+    background-color: ${colors.color_carrot_orange};
+    color: ${colors.color_beige_tinted_white};
   }
 `;

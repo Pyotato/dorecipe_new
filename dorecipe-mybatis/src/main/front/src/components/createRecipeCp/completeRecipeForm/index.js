@@ -115,13 +115,9 @@ const CompleteRecipe = ({ recipeState }) => {
 
   return (
     <>
-      <TotalWrap>
+      <TotalWrap style={{ clear: "left" }}>
         <FlexWrap>
           <div>
-            <Instruction>
-              <FontAwesomeIcon icon={faLightbulb} /> 완성 요리 사진 : 완성된
-              사진을 등록하시면 레시피가 더욱 돋보입니다.
-            </Instruction>
             <BasicFormWrap>
               <div style={{ height: "60em", margin: "0 auto" }}>
                 <EditDropZone

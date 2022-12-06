@@ -466,7 +466,9 @@ const CommentCp = () => {
               })}
             </div>
           ) : (
-            <div>아직 코멘트가 없습니다. 코멘트를 달아보세요 :)</div>
+            <div style={{ marginTop: "3vh" }}>
+              아직 코멘트가 없습니다. 코멘트를 달아보세요 :)
+            </div>
           )}
         </CommentWrap>
       </div>

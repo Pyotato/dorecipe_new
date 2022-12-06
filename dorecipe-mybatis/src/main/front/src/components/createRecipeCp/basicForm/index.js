@@ -1,9 +1,6 @@
-import {} from "@fortawesome/free-solid-svg-icons";
-import { DefaultBtn } from "../../_common/buttons";
-// import "./style.css";
 import styled from "styled-components";
 import { useInput } from "../../../hooks/useInput";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import EditDropZone from "../../_common/dropzone";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -36,11 +33,18 @@ const BasicForm = ({
   const [recipe_thumbnail, setRecipeImgFiles] = useState("");
   const [thumbnailDropState, setThumbnailDropState] = useState("thumbnailDrop");
 
+  //모달창
   const [explanationState, setExplanationState] = useState("none");
-  // member_id 가져오기
 
+  //임시저장 버튼
+  const [tempSaveState, setTempSaveState] = useState(0);
+  const [btnState, setBtnState] = useState(false);
+  const [btnDisplayState, setBtnDisplayState] = useState("block");
+
+  // member_id 가져오기
   const user = useSelector((auth) => auth);
   const [member_id, setMemberId] = useState("");
+
   useEffect(() => {
     // if (user.auth.isLoggedIn) {
     setMemberId(user.auth.user.username);
@@ -50,110 +54,123 @@ const BasicForm = ({
     // console.log("setRecipeState: " + member_id);
     // }
   }, []);
-  // ----------------------------------------------------
 
   const onLoadImgFile = (e) => {
     onChangeRecipeThumbnail(e);
   };
 
+  useMemo(() => {}, []);
+
   const onTemporarySave = useCallback(
     (e) => {
       e.preventDefault();
-      if (recipe_url.length > 0) {
-        if (recipe_url.includes("/embed/")) {
-          if (recipe_url.includes("youtube")) {
-            //유튜브영상일 경우
-            setRecipeUrl(
-              recipe_url.slice(
-                recipe_url.indexOf("https"),
-                recipe_url.indexOf('" title')
-              )
-            );
-          } else if (recipe_url.includes("naver")) {
-            //네이버 영상일 경우
-            setRecipeUrl(
-              recipe_url.slice(
-                recipe_url.indexOf("https"),
-                recipe_url.indexOf(" 'frameborder")
-              )
-            );
+      if (recipe_title.length > 0) {
+        if (tempSaveState === 0) {
+          if (recipe_url.length > 0) {
+            if (recipe_url.includes("/embed/")) {
+              if (recipe_url.includes("youtube")) {
+                //유튜브영상일 경우
+                setRecipeUrl(
+                  recipe_url.slice(
+                    recipe_url.indexOf("https"),
+                    recipe_url.indexOf('" title')
+                  )
+                );
+              } else if (recipe_url.includes("naver")) {
+                //네이버 영상일 경우
+                setRecipeUrl(
+                  recipe_url.slice(
+                    recipe_url.indexOf("https"),
+                    recipe_url.indexOf(" 'frameborder")
+                  )
+                );
+              }
+            } else {
+              setRecipeUrl("");
+              alert("영상 형식이 잘못되었습니다.");
+            }
           }
+
+          const data = {
+            recipe_title: `${recipe_title}`,
+            recipe_savetype: 1, //임시저장
+            recipe_introduce: `${recipe_introduce}`,
+            recipe_url: `${recipe_url}`,
+            recipe_rpath: `${recipe_rpath}`,
+            category_kind: `${category_kind}`,
+            category_theme: `${category_theme}`,
+            category_way: `${category_way}`,
+            category_ing: `${category_ing}`,
+            information_person: `${information_person}`,
+            information_time: `${information_time}`,
+            information_level: `${information_level}`,
+            recipe_creDate: "",
+            member_id: `${member_id}`, //로그인한 멤버 정보 들어갈 자리
+          };
+
+          console.log("data", data);
+          const blob = new Blob([JSON.stringify(data)], {
+            type: "multipart/form-data",
+          });
+
+          const formData = new FormData();
+          formData.append("data", blob);
+          formData.append("recipe_title", data.recipe_title);
+          formData.append("recipe_savetype", data.recipe_savetype);
+          formData.append("recipe_introduce", data.recipe_introduce);
+          formData.append("recipe_url", data.recipe_url);
+          formData.append("recipe_rpath", data.recipe_rpath);
+          formData.append("recipe_thumbnail", recipe_thumbnail);
+          //기본값을 전체로 들어가게끔
+          data.category_kind !== ""
+            ? formData.append("category_kind", data.category_kind)
+            : formData.append("category_kind", "전체");
+          data.category_theme !== ""
+            ? formData.append("category_theme", data.category_theme)
+            : formData.append("category_theme", "전체");
+          data.category_way !== ""
+            ? formData.append("category_way", data.category_way)
+            : formData.append("category_way", "전체");
+          data.category_ing !== ""
+            ? formData.append("category_ing", data.category_ing)
+            : formData.append("category_ing", "전체");
+          formData.append("information_person", data.information_person);
+          formData.append("information_level", data.information_level);
+          formData.append("information_time", data.information_time);
+          formData.append("recipe_creDate", data.recipe_creDate);
+          formData.append("member_id", user.auth.user.username);
+
+          axios({
+            method: "POST",
+            // url: process.env.REACT_APP_HOST + "/recipe/save",
+            url: "http://localhost:9000/recipe/save",
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            data: formData,
+          })
+            .then(() => {
+              setSaveState(1);
+              setBtnDisplayState("none");
+              setBtnState(true);
+            })
+            .then((response) => {
+              for (let value of formData.values()) {
+                console.log(value);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         } else {
-          setRecipeUrl("");
-          alert("영상 형식이 잘못되었습니다.");
+          alert("임시저장실패하셨습니다.");
         }
+      } else {
+        alert("제목을 입력해주세요.");
       }
-      const data = {
-        recipe_title: `${recipe_title}`,
-        recipe_savetype: 1, //임시저장
-        recipe_introduce: `${recipe_introduce}`,
-        recipe_url: `${recipe_url}`,
-        recipe_rpath: `${recipe_rpath}`,
-        category_kind: `${category_kind}`,
-        category_theme: `${category_theme}`,
-        category_way: `${category_way}`,
-        category_ing: `${category_ing}`,
-        information_person: `${information_person}`,
-        information_time: `${information_time}`,
-        information_level: `${information_level}`,
-        recipe_creDate: "",
-        member_id: `${member_id}`, //로그인한 멤버 정보 들어갈 자리
-      };
-
-      console.log("data", data);
-      const blob = new Blob([JSON.stringify(data)], {
-        type: "multipart/form-data",
-      });
-
-      const formData = new FormData();
-      formData.append("data", blob);
-      formData.append("recipe_title", data.recipe_title);
-      formData.append("recipe_savetype", data.recipe_savetype);
-      formData.append("recipe_introduce", data.recipe_introduce);
-      formData.append("recipe_url", data.recipe_url);
-      formData.append("recipe_rpath", data.recipe_rpath);
-      formData.append("recipe_thumbnail", recipe_thumbnail);
-      //기본값을 전체로 들어가게끔
-      data.category_kind !== ""
-        ? formData.append("category_kind", data.category_kind)
-        : formData.append("category_kind", "전체");
-      data.category_theme !== ""
-        ? formData.append("category_theme", data.category_theme)
-        : formData.append("category_theme", "전체");
-      data.category_way !== ""
-        ? formData.append("category_way", data.category_way)
-        : formData.append("category_way", "전체");
-      data.category_ing !== ""
-        ? formData.append("category_ing", data.category_ing)
-        : formData.append("category_ing", "전체");
-      formData.append("information_person", data.information_person);
-      formData.append("information_level", data.information_level);
-      formData.append("information_time", data.information_time);
-      formData.append("recipe_creDate", data.recipe_creDate);
-      formData.append("member_id", user.auth.user.username);
-
-      axios({
-        method: "POST",
-        // url: process.env.REACT_APP_HOST + "/recipe/save",
-        url: "http://localhost:9000/recipe/save",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        data: formData,
-      })
-        .then(() => {
-          setSaveState(1);
-        })
-        .then((response) => {
-          for (let value of formData.values()) {
-            console.log(value);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     [
+      // btnState,
       recipe_title,
       recipe_introduce,
       recipe_url,
@@ -174,7 +191,7 @@ const BasicForm = ({
       <div style={{ height: "fit-content" }}>
         <BasicFormWrap
           style={{
-            backgroundColor: "green",
+            // backgroundColor: "green",
             clear: "both",
             display: "block",
             margin: "0 auto",
@@ -243,11 +260,13 @@ const BasicForm = ({
                 <Labels htmlFor="recipeVid" style={{ width: "15%" }}>
                   동영상
                   <Help
-                    onMouseOver={() => {
+                    onMouseEnter={() => {
                       setExplanationState("block");
                     }}
-                    onMouseLeave={() => {
-                      setExplanationState("none");
+                    onClick={() => {
+                      explanationState === "block"
+                        ? setExplanationState("none")
+                        : setExplanationState("block");
                     }}
                     style={{
                       width: "1vw",
@@ -257,17 +276,34 @@ const BasicForm = ({
                 </Labels>
                 <div
                   style={{
-                    position: "absolute",
-                    zIndex: 700,
-                    left: "15vw",
+                    position: "fixed",
+                    zIndex: 500,
                     display: explanationState,
-                    backgroundColor: "pink",
+                    backgroundColor: "black",
+                    width: "100%",
+                    left: 0,
+                    bottom: 0,
+                    top: 0,
+                    height: "100%",
+                    opacity: "0.6",
+                  }}
+                ></div>
+                <div
+                  style={{
+                    position: "fixed",
+                    zIndex: 600,
+                    left: "50%",
+                    top: "50%",
+                    transform: "translate(-50%,-50%)",
+                    opacity: "1",
+                    display: explanationState,
+                    backgroundColor: "#FFFFFF",
                     padding: "1vw",
                   }}
                 >
                   <div style={{ paddingBottom: "1vw" }}>
                     <div style={{ paddingBottom: "1vw" }}>
-                      1.공유하고자하는 영상의 "share" 또는 "공유하기" 버튼을
+                      1. 공유하고자하는 영상의 "share" 또는 "공유하기" 버튼을
                       클릭해주세요.
                     </div>
                     <img
@@ -278,7 +314,7 @@ const BasicForm = ({
                   </div>
                   <div style={{ paddingBottom: "1vw" }}>
                     <div style={{ paddingBottom: "1vw" }}>
-                      2. "embedded"을 클릭해주세요.
+                      2. "embed"를 클릭해주세요.
                     </div>
                     <img
                       style={{ width: "20vw" }}
@@ -295,6 +331,14 @@ const BasicForm = ({
                       alt="explanation 3"
                       style={{ width: "20vw" }}
                     />
+                  </div>
+                  <div
+                    onClick={() => {
+                      setExplanationState("none");
+                    }}
+                    style={{ textAlign: "center", fontWeight: 600 }}
+                  >
+                    [ 닫기 ]
                   </div>
                 </div>
                 <ContentTextarea
@@ -383,7 +427,6 @@ const BasicForm = ({
                   <select
                     name="category_ingredient"
                     value={category_ing}
-                    // style={{ width: "6.5vw" }}
                     style={{ width: "25%", margin: "0" }}
                     onChange={onChangeIngr}
                   >
@@ -499,7 +542,7 @@ const BasicForm = ({
             </div>
             <div
               className="recipeRightWrap"
-              style={{ overflow: "hidden", padding: "1vw" }}
+              style={{ overflow: "hidden", padding: "2vh 1vw" }}
             >
               <EditDropZone
                 files={files}
@@ -512,10 +555,16 @@ const BasicForm = ({
             </div>
           </div>
         </BasicFormWrap>
-        <DefaultBtn type="button" onClick={onTemporarySave}>
-          <FontAwesomeIcon icon={faFloppyDisk} /> 임시 저장하기
-        </DefaultBtn>
       </div>
+      <TempSaveBtn
+        type="button"
+        onClick={onTemporarySave}
+        disabled={btnState}
+        style={{ display: btnDisplayState }}
+      >
+        <FontAwesomeIcon icon={faFloppyDisk} />
+        <div>임시저장</div>
+      </TempSaveBtn>
     </>
   );
 };
@@ -535,18 +584,23 @@ const BasicFormWrap = styled.div`
   font-family: "mainFont";
   gap: 3em;
   width: 80vw;
-  /* padding: 1vw;/ */
+  justify-content: center;
 
   & .recipeLeftWrap {
     width: 50%;
     height: 100%;
-    background-color: red;
+    /* background-color: red; */
   }
   & .recipeRightWrap {
-    height: 100%;
-    width: 50%;
+    /* height: 100%; */
+    height: 50vh;
+    justify-content: center;
+    width: 45%;
     align-items: center;
-    background-color: yellow;
+
+    background-color: ${colors.color_white};
+    border-radius: 1vw;
+    /* background-color: yellow; */
   }
 
   & select {
@@ -559,6 +613,27 @@ const BasicFormWrap = styled.div`
     font-size: 1vw;
   }
 `;
+
+const TempSaveBtn = styled.button`
+  width: 4vw;
+  height: 4vw;
+  border-radius: 100%;
+  font-family: "mainFont";
+  padding: 1vh 1vw;
+  position: fixed;
+  z-index: 700;
+  right: 2vw;
+  background-color: ${colors.color_beige_brown};
+  border: 1px solid transparent;
+
+  &:hover {
+    cursor: pointer;
+    transform: scaleX(1.2) scaleY(1.2);
+    background-color: ${colors.color_carrot_orange};
+    color: ${colors.color_beige_tinted_white};
+  }
+`;
+
 const ContentInput = styled.input`
   width: 30vw;
   height: 3vh;

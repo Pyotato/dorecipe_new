@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors } from "../../../theme/theme";
 
 export const EditImgPreview = styled.section`
   width: 100%;
@@ -12,10 +13,6 @@ export const EditImgPreview = styled.section`
   padding: 3rem;
   & > .inputBox {
     width: 100%;
-    /* height: 100%; */
-    /* height: max-content;
-
-    overflow-y: hidden; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -43,7 +40,7 @@ export const EditImgPreviewInner = styled.div`
   max-height: 15em;
   z-index: 9999;
   margin: 0.2rem;
-
+  z-index: 100;
   :hover {
     opacity: 0.5;
   }
@@ -52,21 +49,27 @@ export const EditImgPreviewInner = styled.div`
     position: relative;
     width: 100%;
     height: 100%;
+    z-index: 100;
 
     & > img {
       max-width: 12em;
       max-height: 12em;
       padding: 1em;
+      z-index: 100;
     }
 
     & > p {
       font-size: 1rem;
-      color: #8d3232;
+      /* color: #8d3232; */
       text-align: center;
       width: 100%;
+      font-size: 1.5vw;
+      opacity: 1;
+      font-weight: 600;
+      color: ${colors.color_carrot_orange};
       position: absolute;
       transform: translate(-50%, -50%);
-      top: 50%;
+      top: 40%;
       left: 50%;
     }
   }

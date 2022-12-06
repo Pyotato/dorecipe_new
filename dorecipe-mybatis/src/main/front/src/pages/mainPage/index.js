@@ -460,6 +460,7 @@ const MainPage = () => {
                 zIndex: "700",
                 viewBox: "100vh",
                 paddingLeft: "4vw",
+                fontSize: "2vw",
                 transform: "translateY(-34vh)",
               }}
             >

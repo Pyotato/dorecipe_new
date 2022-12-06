@@ -9,10 +9,10 @@ import KnowhowPage from "./pages/knowhowPage/knowhowListPage";
 import KnowhowDetailPage from "./pages/knowhowPage/knowhowDetailPage";
 import KnowhowUpdatePage from "./pages/knowhowPage/knowhowFormPage";
 
-// import EventPage from "./pages/eventPage/eventListPage";
+// import EventPage from "./pages/event/eventListPage";
 import EventPage from "./pages/eventPage";
 import EventDetailPage from "./pages/eventPage/eventDetailPage";
-import EventModify from "./pages/eventPage/eventMod";
+import EventModify from "./pages/eventPage/eventModPage";
 
 import MyPage from "./pages/myPage";
 import AdminPostMng from "./pages/adminPage";

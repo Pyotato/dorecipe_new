@@ -1,26 +1,23 @@
 import styled from "styled-components";
 
-import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from "swiper";
-import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 // Import Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
+// import "swiper/css";
+// import "swiper/css/navigation";
+// import "swiper/css/pagination";
+// import "swiper/css/scrollbar";
 
-import "./style.css";
+// import "./style.css";
 import BasicForm from "./basicForm";
 import IngredientForm from "./ingredientForm";
 import CompleteRecipe from "./completeRecipeForm";
-import { SubmitRecipeBtn, DefaultBtn } from "../_common/buttons";
 import RecipeOrderDrag from "./recipeStepForm";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { isDisabled } from "@testing-library/user-event/dist/utils";
 import { colors } from "../../theme/theme";
-import { Toast } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
 
 const CreateRecipeForm = () => {
   const user = useSelector((auth) => auth);
@@ -29,13 +26,13 @@ const CreateRecipeForm = () => {
   const params = useParams();
   const [saveState, setSaveState] = useState(0);
   const [recipeState, setRecipeState] = useState(0);
-  // useDispatch(messageReducer(CLEAR_MESSAGE));
 
   // 임의로 페이지를 나가려고 할때 alert해주기
   window.onbeforeunload = function () {
     return "임시저장하지 않고 새로고침 시 정보가 저장되지 않을 수 있습니다.";
   };
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (user.auth.isLoggedIn) {
       axios({
         method: "POST",
@@ -57,81 +54,148 @@ const CreateRecipeForm = () => {
   }, [saveState]);
 
   return (
-    <>
-      <TotalWrap>
-        <form encType="multipart/form-data">
-          {saveState === 0 ? (
-            // <BasicFormSection style={{ marginBottom: "9em" }}>
-            <BasicFormSection>
-              <div
-                style={{
-                  backgroundColor: "#CF702C",
-                  float: "left",
-                  marginTop: "6vh",
-                  marginBottom: "6vh",
-                  padding: "1vw 1vh",
-                  fontWeight: "700",
-                  fontFamily: "mainFont",
-                }}
-                recipeId={params}
-              >
-                레시피 등록
+    <TotalWrap>
+      <form encType="multipart/form-data">
+        <BasicFormSection>
+          <div
+            style={{
+              backgroundColor: "#CF702C",
+              float: "left",
+              marginTop: "12vh",
+              marginBottom: "6vh",
+              width: "8vw",
+              textAlign: "center",
+              padding: "1vw 1vh",
+              fontWeight: "700",
+              fontFamily: "mainFont",
+            }}
+            recipeId={params}
+          >
+            레시피 등록
+          </div>
+
+          <BasicForm
+            setRecipeState={setRecipeState}
+            recipeState={recipeState}
+            saveState={saveState}
+            setSaveState={setSaveState}
+          />
+
+          <div recipeId={params}>
+            <div
+              style={{
+                backgroundColor: "#CF702C",
+                float: "left",
+                marginTop: "18vh",
+                marginBottom: "3vh",
+                width: "8vw",
+                textAlign: "center",
+                padding: "1vw 1vh",
+                fontWeight: "700",
+                fontFamily: "mainFont",
+              }}
+            >
+              재료 등록
+            </div>
+            <div
+              style={{
+                float: "left",
+                marginTop: "18vh",
+                marginBottom: "3vh",
+                padding: "1vw 1vh",
+                fontFamily: "mainFont",
+              }}
+            >
+              <FontAwesomeIcon icon={faLightbulb} /> 재료 이름과 재료량 순으로
+              입력해주세요.
+            </div>
+            <IngredientForm
+              setRecipeState={setRecipeState}
+              recipeState={recipeState}
+            />
+          </div>
+
+          <div recipeId={params}>
+            <div
+              style={{
+                backgroundColor: "#CF702C",
+                float: "left",
+                marginTop: "9vh",
+                marginBottom: "3vh",
+                width: "8vw",
+                textAlign: "center",
+                padding: "1vw 1vh",
+                fontWeight: "700",
+                fontFamily: "mainFont",
+              }}
+            >
+              요리 순서
+            </div>
+            <div
+              style={{
+                float: "left",
+                marginTop: "6vh",
+                marginBottom: "3vh",
+                padding: "1vw 1vh",
+                fontFamily: "mainFont",
+                lineHeight: "2",
+              }}
+            >
+              <div>
+                <FontAwesomeIcon icon={faLightbulb} /> 요리의 맛이 좌우될 수
+                있는 중요한 부분을 상세하게 적어주세요!
               </div>
-              <BasicForm
-                setRecipeState={setRecipeState}
-                recipeState={recipeState}
-                saveState={saveState}
-                setSaveState={setSaveState}
-              />
-            </BasicFormSection>
-          ) : (
-            <>
-              <Swiper
-                style={{
-                  backgroundColor: "yellow",
-                  height: "100vh",
-                }}
-                modules={[Navigation, Pagination, A11y]}
-                slidesPerView={1}
-                loop={false}
-                navigation
-                spaceBetween={120}
-                pagination={{ clickable: true }}
-              >
-                <SwiperSlide className="slide">
-                  <div recipeId={params}>재료 등록</div>
-                  <IngredientForm
-                    setRecipeState={setRecipeState}
-                    recipeState={recipeState}
-                  />
-                  {/* <IngredientForm recipeState={recipeState} swiper={swiper} /> */}
-                </SwiperSlide>
-                <SwiperSlide className="slide">
-                  <div recipeId={params}>요리 순서</div>
-                  <div>
-                    <RecipeOrderDrag
-                      recipeId={params}
-                      recipeState={recipeState}
-                    />
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide className="slide">
-                  <div>요리 완성</div>
-                  <CompleteRecipe recipeState={recipeState} />
-                </SwiperSlide>
-              </Swiper>
-            </>
-          )}
-        </form>
-      </TotalWrap>
-    </>
+              <div>
+                <FontAwesomeIcon icon={faLightbulb} /> 순서를 잡고 드래그해서
+                이리저리 옮겨보실 수 있습니다.
+              </div>
+            </div>
+            <RecipeOrderDrag recipeId={params} recipeState={recipeState} />
+          </div>
+
+          <div recipeId={params}>
+            <div
+              style={{
+                backgroundColor: "#CF702C",
+                float: "left",
+                marginTop: "6vh",
+                marginBottom: "6vh",
+                width: "8vw",
+                textAlign: "center",
+                padding: "1vw 1vh",
+                fontWeight: "700",
+                fontFamily: "mainFont",
+              }}
+            >
+              요리 완성
+            </div>
+            <div
+              style={{
+                float: "left",
+                marginTop: "6vh",
+                marginBottom: "6vh",
+                padding: "1vw 1vh",
+                fontFamily: "mainFont",
+              }}
+            >
+              <FontAwesomeIcon icon={faLightbulb} /> 완성 요리 사진 : 완성된
+              사진을 등록하시면 레시피가 더욱 돋보입니다.
+            </div>
+            <CompleteRecipe recipeState={recipeState} />
+          </div>
+        </BasicFormSection>
+      </form>
+    </TotalWrap>
   );
 };
 export default CreateRecipeForm;
 
 const TotalWrap = styled.div`
   font-style: "mainFont";
+  height: 400vh;
+  padding-bottom: 12vh;
   margin-top: 12vh;
+  margin-bottom: 12vh;
 `;
 const BasicFormSection = styled.div`
   width: 85%;

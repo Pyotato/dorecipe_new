@@ -261,10 +261,6 @@ const RecipeDetailModal = () => {
             >
               <div
                 style={{
-                  // width: "50vw",
-                  // margin: "0 auto",
-                  // transform: "translateY(-1vw)",
-                  // backgroundColor: "#C2B196",
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "0.5vw",
@@ -568,7 +564,6 @@ const RecipeDetailModal = () => {
                 <div
                   style={{
                     width: "70%",
-
                     backgroundColor: "white",
                     borderRadius: "0.5vw",
 
@@ -592,7 +587,6 @@ const RecipeDetailModal = () => {
                     <iframe
                       style={{ width: "30vw", height: "33vh" }}
                       allowfullscreen="true"
-                      // src="https://www.youtube.com/embed/2FsHfvXrx4g"
                       src={
                         detailState[0].recipe_url.includes("naver")
                           ? detailState[0].recipe_url.slice(
@@ -606,67 +600,16 @@ const RecipeDetailModal = () => {
                             )
                           : "null"
                       }
-                      // src={detailState[0].recipe_url}
                       title={detailState[0].recipe_url}
                     ></iframe>
-                    {/* <iframe
-                      width="560"
-                      height="315"
-                      src="https://www.youtube.com/embed/2FsHfvXrx4g"
-                      title="YouTube video player"
-                      frameborder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowfullscreen
-                    ></iframe> */}
                   </div>
                 </div>
               ) : (
                 <></>
               )}
-              <div style={{ paddingBottom: "6vh" }}>
+              <div style={{ paddingBottom: "3vh" }}>
                 <CommentCp />
               </div>
-              {/* <div
-                style={{
-                  width: "70%",
-
-                  backgroundColor: "white",
-                  borderRadius: "0.5vw",
-
-                  margin: "0 auto",
-                  padding: "3vh 0",
-                  marginBottom: "3vh",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "orange",
-                    padding: "1vh 1vw",
-                    width: "6vw",
-                    fontWeight: "700",
-                    marginBottom: "3vh",
-                  }}
-                >
-                  요리영상
-                </div>
-                <div>
-                  {detailState[0].recipe_url ? (
-                    <div
-                      style={{
-                        textAlign: "center",
-                        padding: "2vw",
-                        lineHeight: "",
-                      }}
-                    >
-                      {detailState[0].recipe_url}
-                    </div>
-                  ) : (
-                    <div style={{ textAlign: "center" }}>
-                      등록된 레시피 꿀팁이 없습니다.
-                    </div>
-                  )}
-                </div>
-              </div> */}
             </div>
           </div>
         </div>
@@ -683,10 +626,7 @@ const CompletedRecipeImages = styled.div`
 `;
 
 const Img = styled.img`
-  /* border-radius: 1vw; */
   overflow-x: hidden;
   padding: 1vw;
-  /* width: 8em; */
-  /* max-height: 8em; */
 `;
 export default RecipeDetailModal;
