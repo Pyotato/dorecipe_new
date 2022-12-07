@@ -10,23 +10,18 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { ReactComponent as Pin } from "../../../assets/Pin.svg";
 import { colors } from "../../../theme/theme";
+import { useMemo } from "react";
 
-const IngredientForm = () => {
+const IngredientForm = ({
+  btnState,
+  setBtnState,
+  recipeState,
+  setRecipeState,
+}) => {
   const user = useSelector((auth) => auth);
-  const [recipeState, setRecipeState] = useState(0);
-
-  useEffect(() => {
-    axios({
-      method: "POST",
-      url: "http://localhost:9000/recipe/getRecipeNum",
-      // url: process.env.REACT_APP_HOST + "/recipe/getRecipeNum",
-      headers: { "Content-Type": "multipart/form-data" },
-      data: { member_id: user.auth.user.username, recipe_num: 0 },
-    }).then((response) => {
-      // console.log("setRecipeState", response.data);
-      setRecipeState(response.data);
-    });
-  }, []);
+  // const [recipeState, setRecipeState] = useState(0);
+  const [btnDisabledState, setBtnDisabledState] = useState(false);
+  const [btnDisplayState, setBtnDisplayState] = useState("none");
 
   const [ingredients, setIngredients] = useState([
     {
@@ -37,11 +32,42 @@ const IngredientForm = () => {
     },
   ]);
 
+  //레시피 등록한 레시피번호 가져오기
+  useMemo(() => {
+    axios({
+      method: "POST",
+      url: "http://localhost:9000/recipe/getRecipeNum",
+      // url: process.env.REACT_APP_HOST + "/recipe/getRecipeNum",
+      headers: { "Content-Type": "multipart/form-data" },
+      data: { member_id: user.auth.user.username, recipe_num: 0 },
+    }).then((response) => {
+      console.log("setRecipeState , IngredientForm:", response.data);
+      setRecipeState(response.data);
+    });
+  }, [recipeState]);
+
+  useMemo(() => {
+    if (btnState === 1) {
+      setBtnDisabledState(false);
+      setBtnDisplayState("block");
+    } else {
+      setBtnDisabledState(true);
+      setBtnDisplayState("none");
+    }
+  }, [btnState]);
   // console.log("recipeState", recipeState);
 
   const IngreAmountRef = useRef();
   const inputFocus = useRef();
+  const endPointPosition = useRef();
 
+  // console.log("scroll", endPointPosition.scrollTop);
+  // useMemo(() => {
+  //   console.log("scroll", window.scrollY);
+  // }, [endPointPosition.current.offsetTop]);
+
+  // console.log("btnPosition", btnPosition.current.offsetTop);
+  // console.log("endPointPosition", endPointPosition.current.offsetTop);
   /**재료 추가 */
   const onAddIngredientHandler = () => {
     if (
@@ -91,39 +117,49 @@ const IngredientForm = () => {
   const onTemporarySave = useCallback(
     (e) => {
       e.preventDefault();
-      // console.log("ingredients", ingredients);
+      if (btnState === 1) {
+        const data = ingredients;
+        const blob = new Blob([JSON.stringify(data)], {
+          type: "application.json",
+        });
+        const formData = new FormData();
+        formData.append("data", blob);
+        //레시피 배열 수 만큼 append 시켜 주기
+        for (let i = 0; i < data.length; i++) {
+          formData.append(
+            `orderVoList[${i}].recipe_num`,
+            parseInt(recipeState)
+          );
+          formData.append(`orderVoList[${i}].ing_num`, data[i].ingredient_num);
+          formData.append(
+            `orderVoList[${i}].ing_ingredient`,
+            data[i].ingredient_name
+          );
+          formData.append(
+            `orderVoList[${i}].ing_amount`,
+            data[i].ingredient_amount
+          );
+        }
 
-      const data = ingredients;
-      const blob = new Blob([JSON.stringify(data)], {
-        type: "application.json",
-      });
-      // console.log("data~~~~~~~~~~~", data);
-      const formData = new FormData();
-      formData.append("data", blob);
-      //레시피 배열 수 만큼 append 시켜 주기
-      for (let i = 0; i < data.length; i++) {
-        formData.append(`orderVoList[${i}].recipe_num`, parseInt(recipeState));
-        formData.append(`orderVoList[${i}].ing_num`, data[i].ingredient_num);
-        formData.append(
-          `orderVoList[${i}].ing_ingredient`,
-          data[i].ingredient_name
-        );
-        formData.append(
-          `orderVoList[${i}].ing_amount`,
-          data[i].ingredient_amount
-        );
+        axios({
+          method: "POST",
+          url: "/recipe/insertRecipeIngredients",
+          headers: { "Content-Type": "multipart/form-data" },
+          data: formData,
+          baseURL: "http://localhost:9000",
+        })
+          .then((response) => {
+            console.log(response.data);
+            setBtnState(2);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        alert("레시피 임시저장 버튼 1회 이상 클릭했음..");
       }
-
-      axios({
-        method: "POST",
-        url: "/recipe/insertRecipeIngredients",
-        headers: { "Content-Type": "multipart/form-data" },
-        data: formData,
-        baseURL: "http://localhost:9000",
-      }).then((response) => {
-        console.log(response.data);
-      });
     },
+    // [ingredients, recipeState, btnState]
     [ingredients, recipeState]
   );
 
@@ -132,8 +168,9 @@ const IngredientForm = () => {
       <div>
         <TempSaveBtn
           type="button"
-          className="addIngreBtn"
           onClick={onTemporarySave}
+          disabled={btnDisabledState}
+          style={{ display: btnDisplayState }}
         >
           <FontAwesomeIcon icon={faFloppyDisk} /> <div>임시저장</div>
         </TempSaveBtn>
@@ -143,6 +180,7 @@ const IngredientForm = () => {
           marginTop: "15vh",
           clear: "left",
         }}
+        ref={endPointPosition}
       >
         <div
           style={{
@@ -182,13 +220,11 @@ const IngredientForm = () => {
                               margin: "1vh",
                               display: "inline-flex",
                               width: "100%",
-
                               alignItems: "center",
                               justifyContent: "space-around",
                             }}
                           >
                             <Pin style={{ width: "1vw" }} />
-
                             <div style={{ width: "40%" }}>
                               {v.ingredient_name}
                             </div>
@@ -213,7 +249,6 @@ const IngredientForm = () => {
                             }}
                           >
                             <Pin style={{ width: "1vw" }} />
-
                             <div>{v.ingredient_name}</div>
                             <div>{v.ingredient_amount}</div>
                           </div>
@@ -423,16 +458,15 @@ const Btn = styled.button`
   }
 `;
 const TempSaveBtn = styled.button`
-  width: 4vw;
-  height: 4vw;
-  /* z-index: 700; */
+  width: 5em;
+  height: 5em;
   border-radius: 100%;
-  font-family: "mainFont";
-  padding: 1vh 1vw;
-
+  padding: 0.5em;
   position: fixed;
-  right: 2vw;
-  background-color: ${colors.color_beige_brown};
+  right: 1.5vw;
+  bottom: 3vh;
+  /* background-color: ${colors.color_beige_brown}; */
+  background-color: blue;
   border: 1px solid transparent;
 
   &:hover {

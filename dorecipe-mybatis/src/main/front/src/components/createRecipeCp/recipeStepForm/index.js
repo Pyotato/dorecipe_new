@@ -11,8 +11,15 @@ import { SmallBtn } from "../../_common/buttons";
 import axios from "axios";
 import Dropzone from "react-dropzone";
 import { useSelector } from "react-redux";
+import { colors } from "../../../theme/theme";
+import { useMemo } from "react";
 
-const RecipeOrderDrag = ({ recipeState }) => {
+const RecipeOrderDrag = ({
+  recipeState,
+  setRecipeState,
+  btnState,
+  setBtnState,
+}) => {
   const [files1, setFiles1] = useState([]);
   const [files2, setFiles2] = useState([]);
   const [files3, setFiles3] = useState([]);
@@ -44,12 +51,35 @@ const RecipeOrderDrag = ({ recipeState }) => {
   const [files29, setFiles29] = useState([]);
   const [files30, setFiles30] = useState([]);
 
+  // 임시저장 버튼 state
+  const [btnDisabledState, setBtnDisabledState] = useState(false);
+  const [btnDisplayState, setBtnDisplayState] = useState("none");
+
   // member_id 가져오기
   const user = useSelector((auth) => auth);
   const [member_id, setMemberId] = useState();
   useEffect(() => {
     setMemberId(user.auth.user.username);
+    if (btnState === 2) {
+      setBtnDisabledState(false);
+      setBtnDisplayState("block");
+    }
   }, []);
+
+  // useMemo(() => {
+  //   setRecipeState(recipeState);
+  // }, [recipeState]);
+
+  //임시저장 1번 누르면 보이지 않도록
+  useMemo(() => {
+    if (btnState === 2) {
+      setBtnDisabledState(false);
+      setBtnDisplayState("block");
+    } else {
+      setBtnDisabledState(true);
+      setBtnDisplayState("none");
+    }
+  }, [btnState]);
 
   const [stepState, setStep] = useState([
     {
@@ -72,7 +102,7 @@ const RecipeOrderDrag = ({ recipeState }) => {
     },
   ]);
   //임시등록버튼 2번째로 클릭했을때는 update하도록
-  const [btnState, setBtnState] = useState(0);
+  // const [btnState, setBtnState] = useState(0);
 
   // save reference for dragItem and dragOverItem
   const dragItemRef = useRef();
@@ -161,8 +191,8 @@ const RecipeOrderDrag = ({ recipeState }) => {
       e.preventDefault();
       let steps = [...stepState];
       if (steps[0].stepDescription) {
-        setBtnState(btnState + 1);
-        console.log("btnState", btnState);
+        // setBtnState(btnState + 1);
+        // console.log("btnState", btnState);
         const data = steps;
         const blob = new Blob([JSON.stringify(data)], {
           // type: "application.json",
@@ -190,43 +220,45 @@ const RecipeOrderDrag = ({ recipeState }) => {
         for (let value of formData.values()) {
           console.log(value);
         }
-        if (btnState <= 1) {
-          axios({
-            method: "POST",
-            // url: process.env.REACT_APP_HOST + "/recipe/insertRecipeOrder",
-            url: "http://localhost:9000/recipe/insertRecipeOrder",
-            headers: { "Content-Type": "multipart/form-data" },
-            data: formData,
+        // if (btnState <= 1) {
+        axios({
+          method: "POST",
+          // url: process.env.REACT_APP_HOST + "/recipe/insertRecipeOrder",
+          url: "http://localhost:9000/recipe/insertRecipeOrder",
+          headers: { "Content-Type": "multipart/form-data" },
+          data: formData,
+        })
+          .then((response) => {
+            console.log(response.data);
+            alert("임시저장 하셨습니다.");
+            setBtnState(3);
+            e.preventDefault();
           })
-            .then((response) => {
-              console.log(response.data);
-              alert("임시저장 하셨습니다.");
-              setBtnState(btnState + 1);
-            })
-            .catch((e) => {
-              console.log(e);
-              alert("임시저장 실패.");
-            });
-        } else if (btnState > 1) {
-          //업데이트문
-          axios({
-            method: "POST",
-            url:
-              // process.env.REACT_APP_HOST + "/recipe/updateRecipeInstructions",
-              "http://localhost:9000/recipe/updateRecipeInstructions",
-            headers: { "Content-Type": "multipart/form-data" },
-            data: formData,
-          })
-            .then((response) => {
-              console.log(response.data);
-              alert("임시저장(업데이트) 하셨습니다.");
-              setBtnState(btnState + 1);
-            })
-            .catch((e) => {
-              console.log(e);
-              alert("임시저장 실패.");
-            });
-        }
+          .catch((e) => {
+            console.log(e);
+            alert("임시저장 실패.");
+          });
+        // }
+        //  else if (btnState > 1) {
+        //   //업데이트문
+        //   axios({
+        //     method: "POST",
+        //     url:
+        //       // process.env.REACT_APP_HOST + "/recipe/updateRecipeInstructions",
+        //       "http://localhost:9000/recipe/updateRecipeInstructions",
+        //     headers: { "Content-Type": "multipart/form-data" },
+        //     data: formData,
+        //   })
+        //     .then((response) => {
+        //       console.log(response.data);
+        //       alert("임시저장(업데이트) 하셨습니다.");
+        //       setBtnState(btnState + 1);
+        //     })
+        //     .catch((e) => {
+        //       console.log(e);
+        //       alert("임시저장 실패.");
+        //     });
+        // }
       } else {
         alert("순서는 하나 이상 설명해주세요.");
       }
@@ -236,7 +268,6 @@ const RecipeOrderDrag = ({ recipeState }) => {
 
   //순서 파일 드롭존
   const fileDropHandler = (index, files, setFiles) => {
-    console.log(`${index}, ${files}, ${setFiles}`);
     return (
       <>
         {files.length > 0 ? (
@@ -250,7 +281,11 @@ const RecipeOrderDrag = ({ recipeState }) => {
                 margin: "0",
               }}
             >
-              <p onClick={() => setFiles("")} className="removeFile">
+              <p
+                onClick={() => setFiles("")}
+                style={{ zIndex: "600" }}
+                className="removeFile"
+              >
                 이미지 삭제
               </p>
               <img
@@ -282,13 +317,9 @@ const RecipeOrderDrag = ({ recipeState }) => {
                 acceptedFiles.forEach((file) => {
                   const reader = new FileReader();
                   reader.readAsDataURL(file);
-                  console.log("readAsDataURL", file);
-                  console.log("readAsDataURL", file.name);
-
                   const copyState = [...stepState];
                   copyState[index].stepImg = file;
                   setStep(copyState);
-                  console.log("stepState", stepState);
                 });
               }}
               name="stepImages"
@@ -330,24 +361,28 @@ const RecipeOrderDrag = ({ recipeState }) => {
 
   return (
     <>
-      <BtnWrap style={{ transform: "translateY(200%)" }}>
-        <SmallBtn onClick={handleAddedSteps}>
-          {" "}
-          <FontAwesomeIcon icon={faCirclePlus} /> 순서 추가하기
-        </SmallBtn>
-        <SmallBtn onClick={handleRemovedSteps}>
-          {" "}
-          <FontAwesomeIcon icon={faCircleMinus} /> 순서 제거하기
-        </SmallBtn>
-        <SmallBtn
+      <div>
+        <TempSaveBtn
           type="button"
           className="addIngreBtn"
           onClick={onTemporarySave}
-          btnState={btnState}
+          // btnState={btnState}
+          disabled={btnDisabledState}
+          style={{ display: btnDisplayState }}
         >
-          <FontAwesomeIcon icon={faFloppyDisk} /> 임시저장
-        </SmallBtn>
-      </BtnWrap>
+          <FontAwesomeIcon icon={faFloppyDisk} /> <div>임시저장</div>
+        </TempSaveBtn>
+      </div>
+      {/* <BtnWrap style={{ transform: "translateY(200%)" }}>
+        <Btn onClick={handleAddedSteps}>
+          {" "}
+          <FontAwesomeIcon icon={faCirclePlus} /> 순서 추가하기
+        </Btn>
+        <Btn onClick={handleRemovedSteps}>
+          {" "}
+          <FontAwesomeIcon icon={faCircleMinus} /> 순서 제거하기
+        </Btn>
+      </BtnWrap> */}
       <TotalWrap
         style={{
           clear: "left",
@@ -394,7 +429,6 @@ const RecipeOrderDrag = ({ recipeState }) => {
                           border: "1px solid black",
                           height: "18vh",
                           fontSize: "1vw",
-                          fontFamily: "mainFont",
                           paddingTop: "7.5vh",
                           width: "9vw",
                           backgroundColor: "#554543",
@@ -414,7 +448,6 @@ const RecipeOrderDrag = ({ recipeState }) => {
 
                           width: "50vw",
                         }}
-                        key={item.stepId}
                         placeholder={
                           index % 4 === 0
                             ? "예) 소고기는 기름기를 떼어내고 적당한 크기로 썰어주세요."
@@ -490,6 +523,17 @@ const RecipeOrderDrag = ({ recipeState }) => {
               })}
             </DroppableDiv>
           </DraggableWrap>
+          <BtnWrap>
+            {/* <BtnWrap style={{ transform: "translateY(200%)" }}> */}
+            <Btn onClick={handleAddedSteps}>
+              {" "}
+              <FontAwesomeIcon icon={faCirclePlus} /> 순서 추가하기
+            </Btn>
+            <Btn onClick={handleRemovedSteps}>
+              {" "}
+              <FontAwesomeIcon icon={faCircleMinus} /> 순서 제거하기
+            </Btn>
+          </BtnWrap>
         </div>
       </TotalWrap>
     </>
@@ -529,11 +573,42 @@ const DroppableDiv = styled.div`
     }
   }
 `;
+
+const Btn = styled.button`
+  width: 9em;
+  background-color: ${colors.color_milktea_brown};
+  display: block;
+  margin-top: 1vw;
+  margin-right: 8vw;
+  border: 1px solid transparent;
+  border-radius: 0.3vw;
+`;
+
 const BtnWrap = styled.div`
   float: right;
-  margin-right: 1em;
+  transform: translateY(-14vh) translateX(3vw);
 
-  & > button:nth-child(2) {
-    margin: 0 1em;
+  position: sticky;
+  position: -webkit-sticky;
+  bottom: 0;
+  right: 30;
+`;
+const TempSaveBtn = styled.button`
+  width: 5em;
+  height: 5em;
+  border-radius: 100%;
+  padding: 0.5em;
+  position: fixed;
+  right: 1.5vw;
+  bottom: 3vh;
+  /* background-color: ${colors.color_beige_brown}; */
+  background-color: pink;
+  border: 1px solid transparent;
+
+  &:hover {
+    cursor: pointer;
+    transform: scaleX(1.2) scaleY(1.2);
+    background-color: ${colors.color_carrot_orange};
+    color: ${colors.color_beige_tinted_white};
   }
 `;

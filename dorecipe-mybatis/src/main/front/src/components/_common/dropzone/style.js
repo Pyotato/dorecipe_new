@@ -3,12 +3,12 @@ import { colors } from "../../../theme/theme";
 
 export const EditImgPreview = styled.section`
   width: 100%;
-  border: 1px solid ${(props) => props.theme.mainColor};
+  border: 1px solid ${colors.color_milktea_brown};
   border-radius: 0.5rem;
   font-size: 2rem;
   cursor: pointer;
-  max-height: 18em;
-  min-height: 6em;
+  /* max-height: 18em;
+  min-height: 6em; */
 
   padding: 3rem;
   & > .inputBox {
@@ -52,7 +52,7 @@ export const EditImgPreviewInner = styled.div`
     z-index: 100;
 
     & > img {
-      max-width: 12em;
+      max-width: 9em;
       max-height: 12em;
       padding: 1em;
       z-index: 100;

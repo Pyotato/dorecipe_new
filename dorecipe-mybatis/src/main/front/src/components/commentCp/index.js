@@ -382,7 +382,6 @@ const CommentCp = () => {
                           float: "left",
                           width: "fit-content",
                           textAlign: "right",
-                          fontFamily: "mainFont",
                         }}
                         onClick={() => deleteComment(cmt.comment_num)}
                       >

@@ -153,7 +153,8 @@ export const DropZone = ({
   return (
     <Dropzone onDrop={onDropHandler} index={index}>
       {({ getRootProps, getInputProps }) => (
-        <EditImgPreview style={{ height: "100%" }}>
+        // <EditImgPreview style={{ height: "100%" }}>
+        <EditImgPreview>
           {files.length > 0 ? (
             <EditImgPreviewForm>
               {files.map((v, index) =>
@@ -166,7 +167,7 @@ export const DropZone = ({
                       <img
                         src={v.preview}
                         style={{
-                          maxHeight: "9em",
+                          maxWidth: "6.5em",
                           transform: "translateY(-10%)",
                         }}
                         alt={v.preview}
@@ -203,7 +204,7 @@ export const DropZone = ({
               <div
                 className="inputBox"
                 {...getRootProps()}
-                style={{ height: "60vh" }}
+                // style={{ height: "60vh" }}
               >
                 <input
                   {...getInputProps()}
@@ -212,7 +213,10 @@ export const DropZone = ({
                   accept="image/*"
                   onChange={onLoadImgFile}
                 />{" "}
-                + <p>최대 4개의 파일을 등록하실 수 있습니다.</p>
+                <Camera style={{ marginBottom: "3vh" }} />{" "}
+                <div style={{ fontSize: "1.5vw" }}>
+                  최대 4개의 파일을 등록하실 수 있습니다.
+                </div>
               </div>
             </>
           ) : (
@@ -230,9 +234,7 @@ export const DropZone = ({
                 style={{ display: "none" }}
               />
               <Camera style={{ height: "30%" }} />
-              <p style={{ fontFamily: "mainFont", fontSize: "1.5vw" }}>
-                썸네일 등록
-              </p>
+              <p style={{ fontSize: "1.5vw" }}>썸네일 등록</p>
             </div>
           )}
         </EditImgPreview>

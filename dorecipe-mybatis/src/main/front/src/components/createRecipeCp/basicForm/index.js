@@ -14,6 +14,8 @@ const BasicForm = ({
   setRecipeState,
   saveState,
   setSaveState,
+  btnState,
+  setBtnState,
 }) => {
   const [recipe_title, onChangeRecipeTitle, setRecipeTitle] = useInput("");
   const [recipe_introduce, onChangeRecipeIntro, setRecipeIntro] = useInput("");
@@ -38,7 +40,7 @@ const BasicForm = ({
 
   //임시저장 버튼
   const [tempSaveState, setTempSaveState] = useState(0);
-  const [btnState, setBtnState] = useState(false);
+  const [btnDisabledState, setBtnDisabledState] = useState(false);
   const [btnDisplayState, setBtnDisplayState] = useState("block");
 
   // member_id 가져오기
@@ -49,8 +51,11 @@ const BasicForm = ({
     // if (user.auth.isLoggedIn) {
     setMemberId(user.auth.user.username);
     setSaveState(0);
-
+    // if (btnState === 1) {
+    //   setBtnDisplayState("none");
+    // }
     console.log(user.auth.user.username);
+
     // console.log("setRecipeState: " + member_id);
     // }
   }, []);
@@ -152,11 +157,12 @@ const BasicForm = ({
             .then(() => {
               setSaveState(1);
               setBtnDisplayState("none");
-              setBtnState(true);
+              setBtnState(1);
+              setBtnDisabledState(true);
             })
             .then((response) => {
               for (let value of formData.values()) {
-                console.log(value);
+                console.log("value", value);
               }
             })
             .catch((err) => {
@@ -559,7 +565,7 @@ const BasicForm = ({
       <TempSaveBtn
         type="button"
         onClick={onTemporarySave}
-        disabled={btnState}
+        disabled={btnDisabledState}
         style={{ display: btnDisplayState }}
       >
         <FontAwesomeIcon icon={faFloppyDisk} />
@@ -615,15 +621,15 @@ const BasicFormWrap = styled.div`
 `;
 
 const TempSaveBtn = styled.button`
-  width: 4vw;
-  height: 4vw;
+  width: 5em;
+  height: 5em;
   border-radius: 100%;
-  font-family: "mainFont";
-  padding: 1vh 1vw;
+  padding: 0.5em;
   position: fixed;
-  z-index: 700;
-  right: 2vw;
-  background-color: ${colors.color_beige_brown};
+  right: 1.5vw;
+  bottom: 3vh;
+  /* background-color: ${colors.color_beige_brown}; */
+  background-color: green;
   border: 1px solid transparent;
 
   &:hover {

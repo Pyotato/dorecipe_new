@@ -222,8 +222,6 @@ const RecipeDetailModal = () => {
           width: "100%",
           paddingTop: "21vh",
           paddingBottom: "18vh",
-
-          fontFamily: "mainFont",
           fontSize: "1vw",
         }}
       >

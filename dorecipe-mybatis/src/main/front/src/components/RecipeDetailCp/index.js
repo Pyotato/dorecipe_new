@@ -345,7 +345,7 @@ const DetailSearch = () => {
                           value={v}
                           selected={"종류별"}
                           key={v.recipe_num}
-                          style={{ fontFamily: "mainFont", fontSize: "1vw" }}
+                          style={{ fontSize: "1vw" }}
                         >
                           {v}
                         </SelectedBtn>
@@ -356,7 +356,7 @@ const DetailSearch = () => {
                           key={v.recipe_num}
                           onClick={onClickOption}
                           value={v}
-                          style={{ fontFamily: "mainFont", fontSize: "1vw" }}
+                          style={{ fontSize: "1vw" }}
                           selected={"종류별"}
                         >
                           {v}
@@ -374,7 +374,7 @@ const DetailSearch = () => {
                           <SelectedBtn
                             onClick={onClickOption}
                             value={v}
-                            style={{ fontFamily: "mainFont", fontSize: "1vw" }}
+                            style={{ fontSize: "1vw" }}
                             selected={"상황•테마별"}
                             key={v.recipe_num}
                           >
@@ -386,7 +386,7 @@ const DetailSearch = () => {
                           <DefaultBtn
                             onClick={onClickOption}
                             value={v}
-                            style={{ fontFamily: "mainFont", fontSize: "1vw" }}
+                            style={{ fontSize: "1vw" }}
                             selected={"상황•테마별"}
                             key={v.recipe_num}
                           >
@@ -405,7 +405,6 @@ const DetailSearch = () => {
                           <SelectedBtn
                             key={v.recipe_num}
                             style={{
-                              fontFamily: "mainFont",
                               fontSize: "1vw",
                             }}
                             onClick={onClickOption}
@@ -418,7 +417,7 @@ const DetailSearch = () => {
                       ) : (
                         <>
                           <DefaultBtn
-                            style={{ fontFamily: "mainFont", fontSize: "1vw" }}
+                            style={{ fontSize: "1vw" }}
                             key={v.recipe_num}
                             onClick={onClickOption}
                             value={v}
@@ -439,7 +438,6 @@ const DetailSearch = () => {
                           <SelectedBtn
                             onClick={onClickOption}
                             style={{
-                              fontFamily: "mainFont",
                               fontSize: "1vw",
                             }}
                             value={v}
@@ -454,7 +452,7 @@ const DetailSearch = () => {
                           <DefaultBtn
                             onClick={onClickOption}
                             value={v}
-                            style={{ fontFamily: "mainFont", fontSize: "1vw" }}
+                            style={{ fontSize: "1vw" }}
                             key={v.recipe_num}
                             selected={"방법별"}
                           >
@@ -466,10 +464,7 @@ const DetailSearch = () => {
                   </div>
                 </div>
                 <SubmitBtnWrap>
-                  <MediumBtn
-                    onClick={searchRecipe}
-                    style={{ fontFamily: "mainFont", fontSize: "1vw" }}
-                  >
+                  <MediumBtn onClick={searchRecipe} style={{ fontSize: "1vw" }}>
                     검색
                   </MediumBtn>
                 </SubmitBtnWrap>
