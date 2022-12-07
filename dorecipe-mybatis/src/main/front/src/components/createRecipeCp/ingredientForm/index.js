@@ -83,6 +83,8 @@ const IngredientForm = ({
       };
       setIngredients([...ingredients, newIngredients]);
       // console.log(ingredients);
+      // alert(inputFocus.current.value);
+      ingredients[ingredients.length - 1].focus();
     } else {
       alert("재료를 입력란을 채우고 추가해주세요.");
     }

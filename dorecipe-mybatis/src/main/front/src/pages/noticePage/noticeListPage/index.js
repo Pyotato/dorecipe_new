@@ -1,11 +1,10 @@
-import "./style.css";
 import { useState, useCallback, useEffect } from "react";
 import NoticeList from "./noticeList";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import MainLayout from "../../../layout/mainLayOut";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { colors } from "../../../theme/theme";
 
 const NoticePage = () => {
   const [state, setState] = useState([
@@ -23,7 +22,7 @@ const NoticePage = () => {
       setBtnState(false);
       return;
     } else {
-      console.log("BtnState", user.auth.user.roles.includes("ROLE_ADMIN"));
+      // console.log("BtnState", user.auth.user.roles.includes("ROLE_ADMIN"));
       setBtnState(user.auth.user.roles.includes("ROLE_ADMIN"));
     }
   }, []);
@@ -41,7 +40,6 @@ const NoticePage = () => {
       baseURL: "http://localhost:9000",
       // baseURL: process.env.REACT_APP_HOST,
     }).then(function (response) {
-      // console.log(response.data);
       setState(response.data);
     });
   }
@@ -58,29 +56,26 @@ const NoticePage = () => {
       .then((data) => {
         console.log(data);
       });
-  });
+  }, []);
 
   return (
     <>
       <MainLayout>
-        <div className="noticeWrap">
-          <h2>| Notice |</h2>
+        <TotalWrap>
+          <div>
+            <h1>공지사항</h1>
+          </div>
 
-          {/* {BtnState && (
-            <Link className="updateList" to={"/admin"}>
-              등록
-            </Link>
-          )} */}
-
-          <div className="noticeTableWrap">
-            <ul>
+          <div className="noticeWrap">
+            <div className="noticeTableWrap">
               <div className="tableHead">
                 <div className="noticeNo">No.</div>
                 <div className="noticeTitle">제목</div>
                 <div className="noticeDate">작성일자</div>
-
-                {BtnState && <div className="updateOrDelete">수정 및 삭제</div>}
+                {BtnState && <div className="updateOrDelete">수정 • 삭제</div>}
               </div>
+            </div>
+            <div className="noticeTableWrap">
               <Scrollable>
                 <div>
                   {state.map((e) => (
@@ -93,15 +88,36 @@ const NoticePage = () => {
                   ))}
                 </div>
               </Scrollable>
-            </ul>
+            </div>
           </div>
-        </div>
-        <div className="bottom" />
+
+          <div className="bottom" />
+        </TotalWrap>
       </MainLayout>
     </>
   );
 };
 export default NoticePage;
+
+const TotalWrap = styled.div`
+  width: 100%;
+  padding: 12vh 6vw 6vh 6vw;
+  height: 100vh;
+
+  & h1 {
+    float: left;
+    font-weight: 700;
+    margin-bottom: 3vh;
+  }
+
+  & .noticeTableWrap {
+    border-bottom: 1px solid ${colors.color_brown};
+  }
+
+  & .tableHead {
+    border-top: 1px solid ${colors.color_brown};
+  }
+`;
 
 const Scrollable = styled.section`
   width: 100%;
@@ -119,10 +135,10 @@ const Scrollable = styled.section`
     }
     ::-webkit-scrollbar-thumb {
       height: 30%;
-      background-color: #fffdf5;
+      background-color: ${colors.color_beige_brown};
     }
     ::-webkit-scrollbar-track {
-      background-color: #8d3232;
+      background-color: ${colors.color_beige_white};
     }
   }
   & > div > li {
@@ -133,5 +149,21 @@ const Scrollable = styled.section`
     align-items: center;
     padding: 1em 0;
     border-bottom: 1px solid #ad939156;
+
+    &:hover {
+      color: ${colors.color_carrot_orange};
+    }
+  }
+
+  & .listItem {
+    border-radius: 0.5vw;
+    padding: 0.5vw;
+    background-color: ${colors.color_beige_brown};
+    border: 1px solid transparent;
+
+    &:hover {
+      background-color: ${colors.color_carrot_orange};
+      color: ${colors.color_beige_white};
+    }
   }
 `;

@@ -14,23 +14,20 @@ const NoticeList = ({ removePost, state, BtnState }) => {
     <>
       <li>
         <div className="noticeNo">{state.notice_num}</div>
-        {/* <div className="noticeTitle">{state.NoticeTitle}</div> */}
+
         <div className="noticeTitle" onClick={onNoticeDetailClick}>
           {state.notice_title}
         </div>
         <div className="noticeDate">{state.notice_creDate}</div>
-        {/* {user.auth.user.roles.includes("ROLE_ADMIN") && ( */}
-        {/* {user.auth.includes("ROLE_ADMIN") && ( */}
-        {/* {user.includes("ROLE_ADMIN") && ( */}
         {BtnState && (
           <div className="updateOrDelete">
             <Link
-              className="updateList"
+              className="updateList listItem"
               to={`/notice/update/${state.notice_num}`}
             >
               수정
             </Link>
-            <span className="deleteList" onClick={removePostOnclick}>
+            <span className="deleteList listItem" onClick={removePostOnclick}>
               삭제
             </span>
           </div>

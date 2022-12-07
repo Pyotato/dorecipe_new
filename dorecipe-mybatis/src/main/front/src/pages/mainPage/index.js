@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import "./style.css";
+import { useEffect } from "react";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -30,6 +31,10 @@ const MainPage = () => {
   // const onScrollToLocation = () => {
   //   alert(":)");
   // };
+
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, []);
 
   function myFunction() {
     if (document.documentElement.scrollTop < 60) {

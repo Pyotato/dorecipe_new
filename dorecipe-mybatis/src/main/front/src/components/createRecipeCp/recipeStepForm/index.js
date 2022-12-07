@@ -66,10 +66,6 @@ const RecipeOrderDrag = ({
     }
   }, []);
 
-  // useMemo(() => {
-  //   setRecipeState(recipeState);
-  // }, [recipeState]);
-
   //임시저장 1번 누르면 보이지 않도록
   useMemo(() => {
     if (btnState === 2) {
@@ -373,16 +369,6 @@ const RecipeOrderDrag = ({
           <FontAwesomeIcon icon={faFloppyDisk} /> <div>임시저장</div>
         </TempSaveBtn>
       </div>
-      {/* <BtnWrap style={{ transform: "translateY(200%)" }}>
-        <Btn onClick={handleAddedSteps}>
-          {" "}
-          <FontAwesomeIcon icon={faCirclePlus} /> 순서 추가하기
-        </Btn>
-        <Btn onClick={handleRemovedSteps}>
-          {" "}
-          <FontAwesomeIcon icon={faCircleMinus} /> 순서 제거하기
-        </Btn>
-      </BtnWrap> */}
       <TotalWrap
         style={{
           clear: "left",
@@ -446,7 +432,7 @@ const RecipeOrderDrag = ({
                           borderLeft: "none",
                           lineHeight: "1.5",
 
-                          width: "50vw",
+                          maxwidth: "50vw",
                         }}
                         placeholder={
                           index % 4 === 0
@@ -555,7 +541,8 @@ const DroppableDiv = styled.div`
   width: 100%;
   cursor: pointer;
   & > .draggableItem {
-    width: 100%;
+    width: 85%;
+    /* width: 100%; */
     margin: 2vh auto;
     align-items: center;
     border: 1px solid #463635;
@@ -567,6 +554,7 @@ const DroppableDiv = styled.div`
     font-family: "mainFont";
     border-radius: 0.5vw;
     height: 18vh;
+    width: 30vw;
     padding: 0.5vw;
     ::-webkit-scrollbar {
       display: none;
@@ -582,6 +570,12 @@ const Btn = styled.button`
   margin-right: 8vw;
   border: 1px solid transparent;
   border-radius: 0.3vw;
+
+  &:hover {
+    cursor: pointer;
+    background-color: ${colors.color_carrot_orange};
+    color: ${colors.color_beige_tinted_white};
+  }
 `;
 
 const BtnWrap = styled.div`
