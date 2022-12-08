@@ -5,7 +5,7 @@ import KnowhowList from "./knowhowList";
 import axios from "axios";
 import styled from "styled-components";
 
-const KnowhowPage = () => {
+const KnowhowListCp = () => {
   const [state, setState] = useState([
     {
       know_num: 0,
@@ -81,7 +81,7 @@ const KnowhowPage = () => {
   );
 };
 
-export default KnowhowPage;
+export default KnowhowListCp;
 
 const Scrollable = styled.section`
   width: 100%;

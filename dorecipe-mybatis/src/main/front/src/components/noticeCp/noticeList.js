@@ -23,9 +23,7 @@ const NoticeList = ({ removePost, state, BtnState }) => {
           <div className="updateOrDelete">
             <span
               className="updateList listItem"
-              onClick={() => {
-                navigate(`/notice/update/${state.notice_num}`);
-              }}
+              to={`/notice/update/${state.notice_num}`}
             >
               수정
             </span>

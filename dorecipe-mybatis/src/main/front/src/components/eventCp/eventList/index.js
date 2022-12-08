@@ -1,9 +1,10 @@
-import "./style.css";
 import { useState, useCallback, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import EventListItems from "./eventList.js";
+import { colors } from "../../../theme/theme.js";
 
 const EventList = () => {
   const [state, setState] = useState([
@@ -35,58 +36,79 @@ const EventList = () => {
 
   useEffect(() => {
     testAxios();
-  }, []);
+  }, [state]);
 
-  const removePost = useCallback((event_num) => {
-    const removeState = state.filter((item) => item.event_num !== event_num);
-    setState(removeState);
-    axios
-      .get(`http://localhost:9000/event/delete/${event_num}`)
-      .then((data) => {
-        // console.log(data);
-      });
-  });
+  const removePost = useCallback(
+    (event_num) => {
+      const removeState = state.filter((item) => item.event_num !== event_num);
+      setState(removeState);
+      axios
+        .get(`http://localhost:9000/event/delete/${event_num}`)
+        .catch((err) => {
+          // console.log(err);
+        });
+    },
+    [state]
+  );
 
   return (
     <>
-      <div className="eventWrap">
-        <h2>| Event |</h2>
-
-        {BtnState && (
-          <Link className="updateList" to={"/admin"}>
-            등록
-          </Link>
-        )}
-        <div className="eventTableWrap">
-          <ul>
-            <div className="tableHead">
-              <div className="noticeNo">No.</div>
-              <div className="noticeTitle">제목</div>
-              <div className="noticeDate">참여 기간</div>
-              {BtnState && <div className="updateOrDelete">수정 및 삭제</div>}
-            </div>
-            <Scrollable>
-              <div>
-                {state.map((e) => (
-                  <EventList
-                    key={e.event_num}
-                    removePost={removePost}
-                    BtnState={BtnState}
-                    // updatePost={updatePost}
-                    state={e}
-                  />
-                ))}
+      <div className="paddingNormal" style={{ width: "100%" }}>
+        <TotalWrap>
+          <div className="eventTableWrap">
+            <ul>
+              <div className="tableHead">
+                <div style={{ width: "5%" }} className="noticeNo">
+                  No.
+                </div>
+                <div style={{ width: "50%" }} className="noticeTitle">
+                  제목
+                </div>
+                <div
+                  style={{ width: "22%", textAlign: "center" }}
+                  className="noticeDate"
+                >
+                  참여 기간
+                </div>
+                {BtnState && (
+                  <div style={{ width: "20%" }} className="updateOrDelete">
+                    수정 및 삭제
+                  </div>
+                )}
               </div>
-            </Scrollable>
-          </ul>
-        </div>
+              <Scrollable>
+                <div>
+                  {state.map((e) => (
+                    <EventListItems
+                      key={e.event_num}
+                      removePost={removePost}
+                      BtnState={BtnState}
+                      state={e}
+                    />
+                  ))}
+                </div>
+              </Scrollable>
+            </ul>
+          </div>
+        </TotalWrap>
       </div>
-      <div className="bottom" />
     </>
   );
 };
 export default EventList;
 
+const TotalWrap = styled.div`
+  width: 100%;
+  & .tableHead {
+    justify-content: space-between;
+    border-bottom: 1px solid ${colors.color_brown};
+    border-top: 1px solid ${colors.color_brown};
+    padding: 1vh 1vw;
+  }
+  & .eventTableWrap {
+    border-bottom: 1px solid ${colors.color_brown};
+  }
+`;
 const Scrollable = styled.section`
   width: 100%;
   margin: 0 auto;
@@ -94,7 +116,8 @@ const Scrollable = styled.section`
   & > div {
     padding: 0 0.6rem;
     width: 102%;
-    height: 450px;
+    /* height: 450px; */
+    height: 55vh;
     overflow-y: auto;
     margin: 0 auto;
     transform: translateX(-1%);
@@ -103,19 +126,36 @@ const Scrollable = styled.section`
     }
     ::-webkit-scrollbar-thumb {
       height: 30%;
-      background-color: #fffdf5;
+      background-color: ${colors.color_beige_brown};
     }
     ::-webkit-scrollbar-track {
-      background-color: #8d3232;
+      background-color: ${colors.color_beige_white};
     }
   }
   & > div > li {
     list-style: none;
     display: inline-flex;
-    justify-content: center;
+    justify-content: space-between;
     width: 100%;
     align-items: center;
-    padding: 1em 0;
-    border-bottom: 1px solid #ad939156;
+    padding: 1em 1vw;
+    font-size: 1vw;
+
+    border-bottom: 1px solid ${colors.color_beige_brown};
+
+    &:hover {
+      color: ${colors.color_carrot_orange};
+    }
+  }
+  & .listItem {
+    border-radius: 0.5vw;
+    padding: 0.5vw;
+    background-color: ${colors.color_beige_brown};
+    border: 1px solid transparent;
+
+    &:hover {
+      background-color: ${colors.color_carrot_orange};
+      color: ${colors.color_beige_white};
+    }
   }
 `;

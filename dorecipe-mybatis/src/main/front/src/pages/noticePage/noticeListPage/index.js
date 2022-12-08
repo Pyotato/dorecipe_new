@@ -109,12 +109,31 @@ const TotalWrap = styled.div`
     font-weight: 700;
     margin-bottom: 3vh;
   }
+  & .noticeNo {
+    width: 5%;
+    text-align: center;
+  }
+  & .noticeTitle {
+    width: 60%;
+    text-align: center;
+  }
+  & .noticeDate {
+    width: 10%;
+    text-align: center;
+  }
+  & .updateOrDelete {
+    width: 15%;
+    color: ${colors.color_brown};
+    text-align: center;
+  }
 
   & .noticeTableWrap {
     border-bottom: 1px solid ${colors.color_brown};
   }
 
   & .tableHead {
+    justify-content: space-between;
+    padding: 0 1vw;
     border-top: 1px solid ${colors.color_brown};
   }
 `;
@@ -129,6 +148,7 @@ const Scrollable = styled.section`
     height: 450px;
     overflow-y: auto;
     margin: 0 auto;
+
     transform: translateX(-1%);
     ::-webkit-scrollbar {
       width: 0.5rem;
@@ -144,10 +164,11 @@ const Scrollable = styled.section`
   & > div > li {
     list-style: none;
     display: inline-flex;
-    justify-content: center;
+
     width: 100%;
     align-items: center;
-    padding: 1em 0;
+    padding: 1em 1vw;
+    justify-content: space-between;
     border-bottom: 1px solid #ad939156;
 
     &:hover {

@@ -488,7 +488,7 @@ const SignUpTemplate = () => {
                           type="text"
                           name="member_value"
                           required
-                          placeholder="내용을 입력해주세요"
+                          placeholder="공백없이 지어주세요."
                           onChange={onChangeNickname}
                         />
                       </div>

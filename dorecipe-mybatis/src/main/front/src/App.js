@@ -5,11 +5,9 @@ import NoticePage from "./pages/noticePage/noticeListPage";
 import NoticeDetailPage from "./pages/noticePage/noticeDetailPage";
 import NoticeUpdatePage from "./pages/noticePage/noticeFormPage";
 
-import KnowhowPage from "./pages/knowhowPage/knowhowListPage";
 import KnowhowDetailPage from "./pages/knowhowPage/knowhowDetailPage";
 import KnowhowUpdatePage from "./pages/knowhowPage/knowhowFormPage";
 
-// import EventPage from "./pages/event/eventListPage";
 import EventPage from "./pages/eventPage";
 import EventDetailPage from "./pages/eventPage/eventDetailPage";
 import EventModify from "./pages/eventPage/eventModPage";
@@ -116,7 +114,6 @@ function App() {
           element={<NoticeUpdatePage />}
         />
 
-        <Route path={"/knowhow/list"} element={<KnowhowPage />} user={user} />
         <Route
           path={"/knowhow/detail/:knowhowId"}
           element={<KnowhowDetailPage />}

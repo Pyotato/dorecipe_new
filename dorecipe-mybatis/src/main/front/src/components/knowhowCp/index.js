@@ -1,9 +1,8 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useInput } from "../../../hooks/useInput";
+import { useInput } from "../../hooks/useInput";
 // import "./style.css";
-import MainLayout from "../../../layout/mainLayOut";
 
 const KnowhowUpdatePage = () => {
   let { knowhowId } = useParams();
@@ -123,95 +122,95 @@ const KnowhowUpdatePage = () => {
 
   return (
     <>
-      <MainLayout>
-        <div>
-          <li>
-            <div className="knowhowWrap">
-              <h2>| Knowhow |</h2>
-              <div className="knowhowBorder" />
-            </div>
-          </li>
-          <form>
-            <table className="left dpib">
-              <thead>
-                <tr>
-                  <td>글번호</td>
-                  <td>
-                    <input
-                      type="text"
-                      className="text center"
-                      defaultValue={state.know_num}
-                      disabled
-                    />
-                  </td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>제목</td>
-                  <td>
-                    <input
-                      name="know_title"
-                      className="text"
-                      type="text"
-                      id="postTitle"
-                      defaultValue={state.know_title}
-                      placeholder=" 제목을 입력해주세요"
-                      onChange={onChangeKnowhowTitle}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>파일 첨부</td>
-                  <td>
-                    <input
-                      name="know_path"
-                      type="file"
-                      id="postTitle"
-                      onChange={onLoadFile}
-                      defaultValue={state.know_path}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>내용</td>
-                  <td>
-                    <textarea
-                      name="know_content"
-                      className="text"
-                      rows="4"
-                      cols="50"
-                      defaultValue={state.know_content}
-                      placeholder="내용을 입력해주세요"
-                      onChange={onChangeKnowhowContent}
-                    ></textarea>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+      {/* <MainLayout> */}
+      <div>
+        <li>
+          <div className="knowhowWrap">
+            <h2>| Knowhow |</h2>
+            <div className="knowhowBorder" />
+          </div>
+        </li>
+        <form>
+          <table className="left dpib">
+            <thead>
+              <tr>
+                <td>글번호</td>
+                <td>
+                  <input
+                    type="text"
+                    className="text center"
+                    defaultValue={state.know_num}
+                    disabled
+                  />
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>제목</td>
+                <td>
+                  <input
+                    name="know_title"
+                    className="text"
+                    type="text"
+                    id="postTitle"
+                    defaultValue={state.know_title}
+                    placeholder=" 제목을 입력해주세요"
+                    onChange={onChangeKnowhowTitle}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>파일 첨부</td>
+                <td>
+                  <input
+                    name="know_path"
+                    type="file"
+                    id="postTitle"
+                    onChange={onLoadFile}
+                    defaultValue={state.know_path}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>내용</td>
+                <td>
+                  <textarea
+                    name="know_content"
+                    className="text"
+                    rows="4"
+                    cols="50"
+                    defaultValue={state.know_content}
+                    placeholder="내용을 입력해주세요"
+                    onChange={onChangeKnowhowContent}
+                  ></textarea>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-            {/* 이미지 */}
-            <div className="mt-5 imgPreview floatRight">
-              <div className="img_box" />
-              {/* src={state.event_path}  */}
-            </div>
+          {/* 이미지 */}
+          <div className="mt-5 imgPreview floatRight">
+            <div className="img_box" />
+            {/* src={state.event_path}  */}
+          </div>
 
-            <Link
-              className="mt-3 left2 btn btn-outline-secondary"
-              to={"/knowhow/list"}
-            >
-              목록으로 돌아가기
-            </Link>
-            <button
-              type="button"
-              className="left2 btn btn-outline-secondary"
-              onClick={modHandler}
-            >
-              수정
-            </button>
-          </form>
-        </div>
-      </MainLayout>
+          <Link
+            className="mt-3 left2 btn btn-outline-secondary"
+            to={"/knowhow/list"}
+          >
+            목록으로 돌아가기
+          </Link>
+          <button
+            type="button"
+            className="left2 btn btn-outline-secondary"
+            onClick={modHandler}
+          >
+            수정
+          </button>
+        </form>
+      </div>
+      {/* </MainLayout> */}
     </>
   );
 };
