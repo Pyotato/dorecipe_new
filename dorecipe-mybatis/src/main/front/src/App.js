@@ -39,6 +39,7 @@ import { theme } from "./style/theme";
 import "./App.css";
 
 import ModifyRecipePage from "./pages/modifyRecipePage";
+import { useMemo } from "react";
 
 function App() {
   const userMsg = useSelector((state) => state.message);
@@ -93,7 +94,7 @@ function App() {
       currentUser: undefined,
     });
     user.state = userState;
-    console.log("logOut", user);
+    // console.log("logOut", user);
   };
 
   const { currentUser } = user;
@@ -103,7 +104,6 @@ function App() {
       <Routes history={history}>
         {/* <Routes> */}
         <Route path={"/notice/list"} element={<NoticePage />} user={user} />
-
         <Route
           path={"/notice/detail/:noticeId"}
           element={<NoticeDetailPage />}
@@ -113,7 +113,6 @@ function App() {
           path={"/notice/update/:noticeId"}
           element={<NoticeUpdatePage />}
         />
-
         <Route
           path={"/knowhow/detail/:knowhowId"}
           element={<KnowhowDetailPage />}
@@ -122,25 +121,34 @@ function App() {
           path={"/knowhow/update/:knowhowId"}
           element={<KnowhowUpdatePage />}
         />
-
         <Route path={"/event/list"} element={<EventPage />} auth={user} />
         <Route path={"/event/detail/:detailId"} element={<EventDetailPage />} />
         <Route path={"/event/update/:detailId"} element={<EventModify />} />
 
-        <Route path={"/admin"} element={<AdminPostMng />} />
         <Route path={"/join"} element={<JoinMemberPage />} />
 
+        <Route path={"/member/info/:memberId"} element={<MyPage />} />
+        {user.auth.user ? (
+          user.auth.user.roles.includes("ROLE_ADMIN") && (
+            <Route path={"/admin"} element={<AdminPostMng />} />
+          )
+        ) : (
+          <Route path={"/"} element={<MainPage />} />
+        )}
+        {/* {user.auth.user.roles.includes("ROLE_ADMIN") ? (
+          <Route path={"/admin"} element={<AdminPostMng />} auth={user} />
+        ) : (
+          // <Route path={"/member/info/:memberId"} element={<MyPage />} />
+          <Route path={"/"} element={<MainPage />} />
+        )} */}
         {currentUser ? (
           <Route path={"/member/info/"} element={<MyPage />} />
         ) : (
           // <Route path={"/member/info/:memberId"} element={<MyPage />} />
           <Route path={"/"} element={<MainPage />} />
         )}
-
         <Route path={"/member/info"} element={<MyPage />} />
-
         <Route path={"/login"} element={<LoginPage />} />
-
         <Route exact path={"/"} element={<MainPage />} />
         {currentUser ? (
           <Route
@@ -165,14 +173,11 @@ function App() {
           path={"/recipe/search/:searchId"}
           element={<SearchRecipePage />}
         />
-
         <Route
           path={"/recipe/search/:searchId"}
           element={<SearchRecipePage />}
         />
-
         <Route path={"/recipe/create"} element={<CreateRecipePage />} />
-
         <Route
           path={"/recipe/update/:recipeID"}
           element={<ModifyRecipePage />}

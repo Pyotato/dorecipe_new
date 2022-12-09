@@ -583,7 +583,7 @@ const BtnWrap = styled.div`
   transform: translateY(-14vh) translateX(3vw);
 
   position: sticky;
-  position: -webkit-sticky;
+  position: -webkit-sticky; //edge,safari
   bottom: 0;
   right: 30;
 `;

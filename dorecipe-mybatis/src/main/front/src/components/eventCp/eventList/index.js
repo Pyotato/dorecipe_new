@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import EventListItems from "./eventList.js";
 import { colors } from "../../../theme/theme.js";
+import { useMemo } from "react";
+import BasicSpinner from "../../_common/loading/index.js";
 
 const EventList = () => {
   const [state, setState] = useState([
@@ -28,14 +30,17 @@ const EventList = () => {
       setBtnState(user.auth.user.roles.includes("ROLE_ADMIN"));
     }
   }, []);
-  function testAxios() {
+
+  useEffect(() => {
     axios.get("http://localhost:9000/event/list").then((result) => {
       setState(result.data);
     });
-  }
+  }, []);
 
-  useEffect(() => {
-    testAxios();
+  useMemo(() => {
+    axios.get("http://localhost:9000/event/list").then((result) => {
+      setState(result.data);
+    });
   }, [state]);
 
   const removePost = useCallback(
@@ -76,18 +81,36 @@ const EventList = () => {
                   </div>
                 )}
               </div>
-              <Scrollable>
-                <div>
-                  {state.map((e) => (
-                    <EventListItems
-                      key={e.event_num}
-                      removePost={removePost}
-                      BtnState={BtnState}
-                      state={e}
-                    />
-                  ))}
-                </div>
-              </Scrollable>
+              {state[0].event_title === "" ? (
+                <>
+                  <Scrollable>
+                    <div
+                      style={{
+                        padding: "25% 0 ",
+                        textAlign: "center",
+                        width: "100%",
+                      }}
+                    >
+                      <BasicSpinner />
+                    </div>
+                  </Scrollable>
+                </>
+              ) : (
+                <>
+                  <Scrollable>
+                    <div>
+                      {state.map((e) => (
+                        <EventListItems
+                          key={e.event_num}
+                          removePost={removePost}
+                          BtnState={BtnState}
+                          state={e}
+                        />
+                      ))}
+                    </div>
+                  </Scrollable>
+                </>
+              )}
             </ul>
           </div>
         </TotalWrap>

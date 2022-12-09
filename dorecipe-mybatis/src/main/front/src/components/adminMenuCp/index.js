@@ -12,6 +12,10 @@ import KnowhowListCp from "../knowhowCp/knowhowListCp";
 import UploadNoticeCp from "../noticeCp/uploadNoticeCp";
 import { colors } from "../../theme/theme";
 import CreateEventCp from "../eventCp/eventCreate";
+import CreateKnowhowCp from "../knowhowCp/knowhowCreate";
+import { useSelector } from "react-redux";
+import NoticePage from "../../pages/noticePage/noticeListPage";
+import NotFoundPage from "../../pages/errorPage";
 
 const AdminMenuPage = () => {
   /** 관리자홈 == 0, 공지사항===1 ,이벤트===2, 노하우===3 에 따라 화면 바꾸기 */
@@ -21,131 +25,164 @@ const AdminMenuPage = () => {
   /** 관리자홈 네비버튼 호버할때:메뉴보이기, 아닐때는 아이콘 표시 */
   const [toggleNavState, setToggleNavState] = useState(0);
 
+  const user = useSelector((auth) => auth);
+  console.log("auth", user);
   useEffect(() => {
     setNavState(0);
     setNavDisplayState("none");
     setToggleNavState(0);
     console.log("navState", navState);
+    console.log("auth", user);
   }, []);
 
   return (
     <>
-      <BackGround>
-        {toggleNavState === 0 ? (
-          <HomeIcon
-            style={{ zIndex: "700", display: navDisplayState }}
-            onMouseOver={() => {
-              setToggleNavState(1);
-            }}
-          >
-            <Home style={{ transform: "translateX(9%)" }} />
-          </HomeIcon>
-        ) : (
-          <Navbar
-            style={{ zIndex: "700", display: navDisplayState }}
-            onMouseLeave={() => {
-              setToggleNavState(0);
-            }}
-          >
-            <div>
-              <div
-                className="navItems"
-                onClick={() => {
-                  setNavState(0);
-                  setNavDisplayState("none");
-                }}
-              >
-                관리자홈
-              </div>
-              <div className="navItems" onClick={() => setNavState(1)}>
-                공지사항{" "}
-              </div>
-
-              <div className="navItems" onClick={() => setNavState(2)}>
-                이벤트
-              </div>
-
-              <div className="navItems" onClick={() => setNavState(3)}>
-                노하우
-              </div>
-            </div>
-          </Navbar>
-        )}
-
-        {navState === 0 ? (
-          <>
-            <NavWrap style={{ height: "100vh" }}>
-              <div
-                className="iconWrap"
-                onClick={() => {
-                  setNavState(1);
-                  setNavDisplayState("block");
-                }}
-              >
-                <div className="title">공지사항</div>
-                <Notice width="16vw" height="16vw" fill="blue" />
-              </div>
-              <div
-                className="iconWrap"
-                onClick={() => {
-                  setNavState(2);
-                  setNavDisplayState("block");
-                }}
-              >
-                <div className="title">이벤트</div>
-                <EventBoard width="16vw" height="16vw" fill="blue" />
-              </div>
-              <div
-                className="iconWrap"
-                onClick={() => {
-                  setNavState(3);
-                  setNavDisplayState("block");
-                }}
-              >
-                <div className="title">노하우</div>
-                <Knowhow width="16vw" height="16vw" fill="blue" />
-              </div>
-            </NavWrap>
-          </>
-        ) : navState === 1 ? (
-          <>
-            <UploadNoticeCp navState={navState} setNavState={setNavState} />
-          </>
-        ) : navState === 2 ? (
-          <>
-            <div style={{ padding: "11vh  4vw" }}>
-              <div className="borderLine">
-                <h1>이벤트</h1>
-              </div>
-              <div
-                style={{
-                  display: "inline-flex",
-                  width: "100%",
-                }}
-              >
-                <div style={{ width: "50%" }}>
-                  <div>
-                    <h2>등록</h2>
-                  </div>
-                  <CreateEventCp />
+      {user.auth.user.roles.includes("ROLE_ADMIN") ? (
+        <BackGround>
+          {toggleNavState === 0 ? (
+            <HomeIcon
+              style={{ zIndex: "700", display: navDisplayState }}
+              onMouseOver={() => {
+                setToggleNavState(1);
+              }}
+            >
+              <Home style={{ transform: "translateX(9%)" }} />
+            </HomeIcon>
+          ) : (
+            <Navbar
+              style={{ zIndex: "700", display: navDisplayState }}
+              onMouseLeave={() => {
+                setToggleNavState(0);
+              }}
+            >
+              <div>
+                <div
+                  className="navItems"
+                  onClick={() => {
+                    setNavState(0);
+                    setNavDisplayState("none");
+                  }}
+                >
+                  관리자홈
                 </div>
-                <div style={{ width: "50%" }}>
-                  {" "}
-                  <div>
-                    <h2>목록</h2>
-                  </div>
-                  <EventList />
+                <div className="navItems" onClick={() => setNavState(1)}>
+                  공지사항{" "}
                 </div>
-              </div>{" "}
-            </div>
-          </>
-        ) : (
-          <div style={{ display: "inline-flex" }}>
-            <KnowhowUpdatePage />
-            <KnowhowListCp navState={navState} setNavState={setNavState} />
-          </div>
-        )}
-      </BackGround>
+
+                <div className="navItems" onClick={() => setNavState(2)}>
+                  이벤트
+                </div>
+
+                <div className="navItems" onClick={() => setNavState(3)}>
+                  노하우
+                </div>
+              </div>
+            </Navbar>
+          )}
+
+          {navState === 0 ? (
+            <>
+              <NavWrap style={{ height: "100vh" }}>
+                <div
+                  className="iconWrap"
+                  onClick={() => {
+                    setNavState(1);
+                    setNavDisplayState("block");
+                  }}
+                >
+                  <div className="title">공지사항</div>
+                  <Notice width="16vw" height="16vw" fill="blue" />
+                </div>
+                <div
+                  className="iconWrap"
+                  onClick={() => {
+                    setNavState(2);
+                    setNavDisplayState("block");
+                  }}
+                >
+                  <div className="title">이벤트</div>
+                  <EventBoard width="16vw" height="16vw" fill="blue" />
+                </div>
+                <div
+                  className="iconWrap"
+                  onClick={() => {
+                    setNavState(3);
+                    setNavDisplayState("block");
+                  }}
+                >
+                  <div className="title">노하우</div>
+                  <Knowhow width="16vw" height="16vw" fill="blue" />
+                </div>
+              </NavWrap>
+            </>
+          ) : navState === 1 ? (
+            <>
+              <UploadNoticeCp navState={navState} setNavState={setNavState} />
+            </>
+          ) : navState === 2 ? (
+            <>
+              <div style={{ padding: "11vh  4vw", height: "100vh" }}>
+                <div className="borderLine">
+                  <h1>이벤트</h1>
+                </div>
+                <div
+                  style={{
+                    display: "inline-flex",
+                    width: "100%",
+                  }}
+                >
+                  <div style={{ width: "50%" }}>
+                    <div>
+                      <h2>등록</h2>
+                    </div>
+                    <CreateEventCp />
+                  </div>
+                  <div style={{ width: "50%" }}>
+                    {" "}
+                    <div>
+                      <h2>목록</h2>
+                    </div>
+                    <EventList />
+                  </div>
+                </div>{" "}
+              </div>
+            </>
+          ) : (
+            <>
+              <div style={{ padding: "11vh  4vw", height: "100vh" }}>
+                <div className="borderLine">
+                  <h1>노하우</h1>
+                </div>
+                <div
+                  style={{
+                    display: "inline-flex",
+                    width: "100%",
+                  }}
+                >
+                  <div style={{ width: "50%" }}>
+                    <div>
+                      <h2>등록</h2>
+                    </div>
+                    <CreateKnowhowCp />
+                  </div>
+                  <div style={{ width: "50%" }}>
+                    {" "}
+                    <div>
+                      <h2>목록</h2>
+                    </div>
+                    <KnowhowListCp
+                      navState={navState}
+                      setNavState={setNavState}
+                    />
+                  </div>
+                </div>{" "}
+              </div>
+            </>
+          )}
+        </BackGround>
+      ) : (
+        <NotFoundPage />
+      )}
     </>
   );
 };

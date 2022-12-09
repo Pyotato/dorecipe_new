@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useRef } from "react";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +8,7 @@ import { useInput } from "../../../hooks/useInput";
 
 import { logout } from "../../../reduxRefresh/actions/auth";
 import { colors } from "../../../theme/theme";
+import BasicSpinner from "../../_common/loading";
 import NoticeList from "../noticeList";
 
 const UploadNoticeCp = ({ navState, setNavState }) => {
@@ -16,7 +18,16 @@ const UploadNoticeCp = ({ navState, setNavState }) => {
   const user = useSelector((auth) => auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const noticeTitle = useRef();
+  const noticeContent = useRef();
+  const [state, setState] = useState([
+    {
+      notice_num: 0,
+      notice_title: "",
+      notice_content: "",
+      notice_creDate: "",
+    },
+  ]);
   const testAxios = () => {
     axios({
       url: "/notice/list",
@@ -35,14 +46,6 @@ const UploadNoticeCp = ({ navState, setNavState }) => {
     });
   };
 
-  const [state, setState] = useState([
-    {
-      notice_num: 0,
-      notice_title: "",
-      notice_content: "",
-      notice_creDate: "",
-    },
-  ]);
   const insertNotice = useCallback(
     (e) => {
       e.preventDefault();
@@ -82,8 +85,8 @@ const UploadNoticeCp = ({ navState, setNavState }) => {
           }).then((response) => {
             console.log(response.data);
             console.log("줄바꿈 적용됐나..? ", notice_content);
-            document.getElementById("noticeTitle").value = "";
-            document.getElementById("noticeContent").value = "";
+            noticeTitle.current.value = "";
+            noticeContent.current.value = "";
             alert("공지사항이 등록되었습니다.");
           });
         }
@@ -135,7 +138,7 @@ const UploadNoticeCp = ({ navState, setNavState }) => {
                     <div style={{ width: "10%" }}>제목</div>
                     <div style={{ width: "80%" }}>
                       <input
-                        id="noticeTitle"
+                        ref={noticeTitle}
                         name="notice_title"
                         type="text"
                         placeholder=" 제목을 입력해주세요"
@@ -155,7 +158,7 @@ const UploadNoticeCp = ({ navState, setNavState }) => {
                     <div style={{ width: "10%" }}>내용</div>
 
                     <textarea
-                      id="noticeContent"
+                      ref={noticeContent}
                       name="notice_content"
                       className="content"
                       style={{
@@ -193,18 +196,38 @@ const UploadNoticeCp = ({ navState, setNavState }) => {
                     <div className="updateOrDelete">수정 및 삭제</div>
                   )}
                 </div>
-                <Scrollable>
-                  <div style={{ height: "60vh" }}>
-                    {state.map((e) => (
-                      <NoticeList
-                        key={e.notice_num}
-                        removePost={removePost}
-                        BtnState={BtnState}
-                        state={e}
-                      />
-                    ))}
-                  </div>
-                </Scrollable>
+                {state[0].notice_title === "" ? (
+                  <>
+                    <>
+                      <Scrollable>
+                        <div
+                          style={{
+                            padding: "25% 0 ",
+                            textAlign: "center",
+                            width: "100%",
+                          }}
+                        >
+                          <BasicSpinner />{" "}
+                        </div>
+                      </Scrollable>
+                    </>
+                  </>
+                ) : (
+                  <>
+                    <Scrollable>
+                      <div style={{ height: "60vh" }}>
+                        {state.map((e) => (
+                          <NoticeList
+                            key={e.notice_num}
+                            removePost={removePost}
+                            BtnState={BtnState}
+                            state={e}
+                          />
+                        ))}
+                      </div>
+                    </Scrollable>
+                  </>
+                )}
               </ul>
             </div>
           </div>

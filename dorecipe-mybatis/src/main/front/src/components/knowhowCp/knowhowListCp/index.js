@@ -1,9 +1,9 @@
 import "./style.css";
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import KnowhowList from "./knowhowList";
 import axios from "axios";
 import styled from "styled-components";
+import { useMemo } from "react";
 
 const KnowhowListCp = () => {
   const [state, setState] = useState([
@@ -16,45 +16,41 @@ const KnowhowListCp = () => {
     },
   ]);
 
-  function testAxios() {
+  useEffect(() => {
     axios({
       url: "/knowhow/list",
       method: "get",
-      data: {
-        know_num: "test",
-        know_title: "test",
-        know_content: "test",
-        know_creDate: "2022/08/24",
-        know_path: "test_path",
-      },
       baseURL: "http://localhost:9000",
       // baseURL: process.env.REACT_APP_HOST,
     }).then(function (response) {
-      console.log(response.data);
+      // console.log(response.data);
       // console.log(response.data[0]);
       setState(response.data);
     });
-  }
-
-  useEffect(() => {
-    testAxios();
   }, []);
 
-  const removePost = useCallback((know_num) => {
-    const removeState = state.filter((item) => item.know_num !== know_num);
-    setState(removeState);
+  useMemo(() => {
     axios
-      .get(`http://localhost:9000/knowhow/delete/${know_num}`)
-      .then((data) => {
-        console.log(data);
-      });
-  });
+      .get("http://localhost:9000/knowhow/list")
+      .then((res) => setState(res.data));
+  }, [state]);
+
+  const removePost = useCallback(
+    (know_num) => {
+      const removeState = state.filter((item) => item.know_num !== know_num);
+      setState(removeState);
+      axios
+        .get(`http://localhost:9000/knowhow/delete/${know_num}`)
+        .then((data) => {
+          console.log(data);
+        });
+    },
+    [state]
+  );
 
   return (
     <>
       <div className="postMngWrap bottom">
-        <h3 className="left">노하우 게시물 관리</h3>
-        <hr className="left width" />
         <div className="knowTableWrap width left">
           <ul>
             <div className="tableHead">

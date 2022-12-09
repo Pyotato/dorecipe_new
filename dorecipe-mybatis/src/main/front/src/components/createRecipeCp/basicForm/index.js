@@ -307,6 +307,9 @@ const BasicForm = ({
                     padding: "1vw",
                   }}
                 >
+                  <div style={{ paddingBottom: "1vw", fontWeight: "700" }}>
+                    ※ 유튜브 또는 네이버 영상만 지원합니다.
+                  </div>
                   <div style={{ paddingBottom: "1vw" }}>
                     <div style={{ paddingBottom: "1vw" }}>
                       1. 공유하고자하는 영상의 "share" 또는 "공유하기" 버튼을
@@ -354,7 +357,7 @@ const BasicForm = ({
                   value={recipe_url}
                   onChange={onChangeRecipeUrl}
                   name="recipeVid"
-                  placeholder="레시피에 등록할 동영상이 있으면 URL 주소를 입력해주세요. (예: https://www.youtube.com/embed/내 영상). embedded 영상이 아닐 시 등록되지 않을 수 있습니다."
+                  placeholder="레시피 URL 주소를 입력해주세요. (예: https://www.youtube.com/embed/내 영상)."
                 ></ContentTextarea>
               </div>
               <div
