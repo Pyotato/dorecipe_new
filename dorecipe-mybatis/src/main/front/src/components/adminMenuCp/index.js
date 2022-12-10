@@ -4,18 +4,16 @@ import { ReactComponent as EventBoard } from "../../assets/EventBoard.svg";
 import { ReactComponent as Notice } from "../../assets/Notice.svg";
 import { ReactComponent as Home } from "../../assets/Home.svg";
 import { useEffect, useState } from "react";
-import AdminNotice from "../noticeCp";
+import { useSelector } from "react-redux";
+
 import EventList from "../eventCp/eventList";
-import EventModify from "../eventCp/eventModify";
-import KnowhowUpdatePage from "../knowhowCp";
 import KnowhowListCp from "../knowhowCp/knowhowListCp";
 import UploadNoticeCp from "../noticeCp/uploadNoticeCp";
-import { colors } from "../../theme/theme";
 import CreateEventCp from "../eventCp/eventCreate";
 import CreateKnowhowCp from "../knowhowCp/knowhowCreate";
-import { useSelector } from "react-redux";
-import NoticePage from "../../pages/noticePage/noticeListPage";
 import NotFoundPage from "../../pages/errorPage";
+
+import { colors } from "../../theme/theme";
 
 const AdminMenuPage = () => {
   /** 관리자홈 == 0, 공지사항===1 ,이벤트===2, 노하우===3 에 따라 화면 바꾸기 */
@@ -24,6 +22,10 @@ const AdminMenuPage = () => {
   const [navDisplayState, setNavDisplayState] = useState("none");
   /** 관리자홈 네비버튼 호버할때:메뉴보이기, 아닐때는 아이콘 표시 */
   const [toggleNavState, setToggleNavState] = useState(0);
+  /** 관리자홈 화면만 바탕색 주기*/
+  const [backgroundState, setBackGroundState] = useState(
+    colors.color_beige_brown
+  );
 
   const user = useSelector((auth) => auth);
   console.log("auth", user);
@@ -38,7 +40,7 @@ const AdminMenuPage = () => {
   return (
     <>
       {user.auth.user.roles.includes("ROLE_ADMIN") ? (
-        <BackGround>
+        <BackGround style={{ backgroundColor: backgroundState }}>
           {toggleNavState === 0 ? (
             <HomeIcon
               style={{ zIndex: "700", display: navDisplayState }}
@@ -61,19 +63,38 @@ const AdminMenuPage = () => {
                   onClick={() => {
                     setNavState(0);
                     setNavDisplayState("none");
+                    setBackGroundState(colors.color_beige_brown);
                   }}
                 >
                   관리자홈
                 </div>
-                <div className="navItems" onClick={() => setNavState(1)}>
+                <div
+                  className="navItems"
+                  onClick={() => {
+                    setNavState(1);
+                    setBackGroundState("");
+                  }}
+                >
                   공지사항{" "}
                 </div>
 
-                <div className="navItems" onClick={() => setNavState(2)}>
+                <div
+                  className="navItems"
+                  onClick={() => {
+                    setNavState(2);
+                    setBackGroundState("");
+                  }}
+                >
                   이벤트
                 </div>
 
-                <div className="navItems" onClick={() => setNavState(3)}>
+                <div
+                  className="navItems"
+                  onClick={() => {
+                    setNavState(3);
+                    setBackGroundState("");
+                  }}
+                >
                   노하우
                 </div>
               </div>
@@ -88,30 +109,33 @@ const AdminMenuPage = () => {
                   onClick={() => {
                     setNavState(1);
                     setNavDisplayState("block");
+                    setBackGroundState("");
                   }}
                 >
                   <div className="title">공지사항</div>
-                  <Notice width="16vw" height="16vw" fill="blue" />
+                  <Notice width="16vw" height="16vw" />
                 </div>
                 <div
                   className="iconWrap"
                   onClick={() => {
                     setNavState(2);
                     setNavDisplayState("block");
+                    setBackGroundState("");
                   }}
                 >
                   <div className="title">이벤트</div>
-                  <EventBoard width="16vw" height="16vw" fill="blue" />
+                  <EventBoard width="16vw" height="16vw" />
                 </div>
                 <div
                   className="iconWrap"
                   onClick={() => {
                     setNavState(3);
                     setNavDisplayState("block");
+                    setBackGroundState("");
                   }}
                 >
                   <div className="title">노하우</div>
-                  <Knowhow width="16vw" height="16vw" fill="blue" />
+                  <Knowhow width="16vw" height="16vw" />
                 </div>
               </NavWrap>
             </>
@@ -192,6 +216,18 @@ const BackGround = styled.div`
     width: 100%;
     padding-bottom: 1vh;
     border-bottom: 1px solid ${colors.color_brown};
+  }
+
+  & .title {
+    padding-bottom: 3vh;
+  }
+
+  & .iconWrap {
+    color: ${colors.color_brown};
+    font-weight: 900;
+    &:hover {
+      color: ${colors.color_carrot_orange};
+    }
   }
 `;
 const Navbar = styled.div`

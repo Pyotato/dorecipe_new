@@ -1,10 +1,21 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Spinner } from "react-bootstrap";
 import "./style.css";
 
-const SearchRecipe = ({ state }) => {
-  // const [state2, setState2] = useState();
-
+const SearchRecipe = ({ state, search }) => {
+  /** 검색어만 주황색으로 나오도록 */
+  const highlightedTitle = () => {
+    return (
+      <span>
+        {state.recipe_title.slice(0, state.recipe_title.indexOf(search))}
+        <span className="carrot">{search}</span>
+        {state.recipe_title.slice(
+          state.recipe_title.indexOf(search) + search.length
+        )}
+      </span>
+    );
+  };
   return (
     <>
       <div className="dpib width3 bottom2">
@@ -14,17 +25,21 @@ const SearchRecipe = ({ state }) => {
               <a
                 href={`http://localhost:3000/recipe/search/details/${state.recipe_num}`}
               >
-                <img
-                  className="searchRecipeImg"
-                  src={state.recipe_rpath}
-                  alt="x"
-                />
+                {state.recipe_rpath.length <= 0 ? (
+                  <Spinner />
+                ) : (
+                  <img
+                    className="searchRecipeImg"
+                    src={state.recipe_rpath}
+                    alt={state.recipe_rpath}
+                  />
+                )}
               </a>
             </div>
           </li>
           <li>
             <div>
-              <h5 className="r_title mt-2">{state.recipe_title}</h5>
+              <h5 className="r_title mt-2">{highlightedTitle()}</h5>
               <span>
                 {state.information_level} &nbsp; {state.information_time}
               </span>
