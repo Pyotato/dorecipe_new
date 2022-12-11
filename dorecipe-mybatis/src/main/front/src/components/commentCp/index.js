@@ -272,6 +272,8 @@ const CommentCp = () => {
                   style={{
                     display: "inline-flex",
                     gap: "1vw",
+                    alignItems: "center",
+                    // alignItems: "flex-end",
                     margin: " 0 auto",
                   }}
                 >
@@ -292,26 +294,31 @@ const CommentCp = () => {
                       <>
                         {previewstate.length > 0 ? (
                           <>
-                            <div>
-                              <Close
-                                className="removeFile"
-                                onClick={() =>
-                                  onPreviewDelete(previewstate[0].preview)
-                                }
-                              ></Close>
+                            <div style={{ width: "25%", height: "6em" }}>
                               <img
                                 onClick={() =>
                                   onPreviewDelete(previewstate[0].preview)
                                 }
                                 src={previewstate[0].preview}
                                 style={{
-                                  height: "10vh",
+                                  width: "6em",
                                   borderRadius: "1vw",
-                                  margin: "2vh 45.5%",
+                                  // margin: "15% ",
+                                  height: "6em",
+                                  // margin: "15% 0.5vw",
                                 }}
                                 alt="프로필 이미지"
                                 className="profileImg"
                               />
+
+                              <div
+                                onClick={() =>
+                                  onPreviewDelete(previewstate[0].preview)
+                                }
+                                className="deleteImg"
+                              >
+                                삭제
+                              </div>
                             </div>
                           </>
                         ) : (
@@ -321,6 +328,7 @@ const CommentCp = () => {
                             style={{
                               border: "1px solid black",
                               width: "6vw",
+
                               borderRadius: "1vw",
                               padding: "1vw",
                               fontSize: "0.5vw",
@@ -350,7 +358,12 @@ const CommentCp = () => {
                     className="insertCmt"
                     onClick={insertComment}
                     disabled={error}
-                    style={{ width: "3vw", margin: "0" }}
+                    style={{
+                      width: "3vw",
+                      margin: "0",
+                      height: "3em",
+                      zIndex: "600",
+                    }}
                   >
                     등록
                   </button>
@@ -506,6 +519,38 @@ const CommentWrap = styled.div`
 
   & .hoverZoom:hover {
     transform: scaleX(1.5) scaleY(1.5);
+  }
+
+  & .deleteImg {
+    z-index: 600;
+    /* background-color: red; */
+    /* position: sticky; */
+    top: 0;
+    transform: translateY(-300%);
+    color: ${colors.color_carrot_orange};
+    font-weight: 700;
+  }
+
+  & .deleteImg:hover {
+    cursor: pointer;
+  }
+  & .profileImg:hover {
+    opacity: 0.2;
+    cursor: pointer;
+  }
+  //삭제버튼
+  & .insertCmt {
+    width: 3vw;
+    z-index: 700;
+    color: ${colors.color_beige_white};
+    background-color: ${colors.color_carrot_orange};
+    border: 1px solid transparent;
+    border-radius: 0.5vw;
+  }
+  & .insertCmt:hover {
+    color: ${colors.color_beige_white};
+    background-color: ${colors.color_brown};
+    cursor: pointer;
   }
 `;
 

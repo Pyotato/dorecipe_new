@@ -30,11 +30,11 @@ const EventList = () => {
     }
   }, []);
 
-  useEffect(() => {
-    axios.get("http://localhost:9000/event/list").then((result) => {
-      setState(result.data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios.get("http://localhost:9000/event/list").then((result) => {
+  //     setState(result.data);
+  //   });
+  // }, []);
 
   useMemo(() => {
     axios.get("http://localhost:9000/event/list").then((result) => {
@@ -80,7 +80,7 @@ const EventList = () => {
                   </div>
                 )}
               </div>
-              {state[0].event_title === "" ? (
+              {state.length <= 1 ? (
                 <>
                   <Scrollable>
                     <div

@@ -45,7 +45,7 @@ const RecipeWrap = styled.div`
   padding: 1em;
   display: inline-flex;
   border-radius: 1vw;
-  height: 100%;
+  /* height: 100%; */
   font-size: 1vw;
   background-color: ${colors.color_white};
   height: 50vh;
@@ -76,6 +76,7 @@ const ItemWrap = styled.div`
 
   & .titleWrap {
     margin: 3vh 0;
+    min-height: 3em;
   }
 
   & .flexBox {
@@ -89,7 +90,7 @@ const ItemWrap = styled.div`
     border-radius: 1vw 0 0 1vw;
     text-align: center;
     height: 4vh;
-    padding: 1vh 1vw;
+    padding: 0.5vh 1vw;
   }
 
   & .infoTimeWrap {
@@ -97,7 +98,7 @@ const ItemWrap = styled.div`
     width: 50%;
     height: 4vh;
     /* padding: 1vh; */
-    padding: 1vh 1vw;
+    padding: 0.5vh 1vw;
     border-radius: 0 1vw 1vw 0;
     text-align: center;
   }

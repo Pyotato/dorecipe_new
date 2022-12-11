@@ -9,6 +9,9 @@ const NoticeList = ({ removePost, state, BtnState }) => {
   const onNoticeDetailClick = () => {
     navigate(`/notice/detail/${state.notice_num}`);
   };
+  const onNoticeUpdateClick = () => {
+    navigate(`/notice/update/${state.notice_num}`);
+  };
 
   return (
     <>
@@ -23,7 +26,9 @@ const NoticeList = ({ removePost, state, BtnState }) => {
           <div className="updateOrDelete">
             <span
               className="updateList listItem"
-              to={`/notice/update/${state.notice_num}`}
+              onClick={() => {
+                onNoticeUpdateClick();
+              }}
             >
               수정
             </span>

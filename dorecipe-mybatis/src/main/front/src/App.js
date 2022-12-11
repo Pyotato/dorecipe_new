@@ -142,7 +142,7 @@ function App() {
           <Route path={"/"} element={<MainPage />} />
         )} */}
         {currentUser ? (
-          <Route path={"/member/info/"} element={<MyPage />} />
+          <Route path={"/member/info"} element={<MyPage />} />
         ) : (
           // <Route path={"/member/info/:memberId"} element={<MyPage />} />
           <Route path={"/"} element={<MainPage />} />

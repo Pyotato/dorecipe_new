@@ -11,12 +11,12 @@ import { useSelector } from "react-redux";
 import { useMemo } from "react";
 import BasicSpinner from "../../_common/loading";
 
-const LikeRecipeList = ({ currentUser }) => {
+const ReceivedLikesRecipeList = ({ currentUser }) => {
   // let { memberId } = useParams();
 
   // 작성중 레시피
   const navigate = useNavigate();
-  const [likeState, setLikeState] = useState([
+  const [receivedLikesRecipes, setReceivedLikesRecipes] = useState([
     "로딩중", // {
     //   recipe_num: 0,
     //   recipe_title: "",
@@ -27,53 +27,40 @@ const LikeRecipeList = ({ currentUser }) => {
     // },
   ]);
   // const currentUser = useSelector((user) => user.auth.user.username);
-  // useMemo(() => {
-  //   axios
-  //     .get("http://localhost:9000/recipe/getLikedRecipes", {
-  //       params: { param1: currentUser.toString() },
-  //     })
-  //     .then((res) => {
-  //       console.log("getLikedRecipes", res.data);
-  //       setLikeState(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  //   // }
-  // }, [likeState]);
-
   useEffect(() => {
     axios
-      .get("http://localhost:9000/recipe/getLikedRecipes", {
+      .get("http://localhost:9000/recipe/getMyRecipesLikes", {
         params: { param1: currentUser.toString() },
       })
       .then((res) => {
-        console.log("getLikedRecipes", res.data);
-        setLikeState(res.data);
+        console.log("getMyRecipesLikes", res.data);
+        setReceivedLikesRecipes(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
+    // }
   }, []);
 
   return (
     <>
-      <div>{currentUser}님이 좋아하는 레시피들</div>
-      {likeState[0] === "로딩중" ? (
+      <div>좋아요를 받은 {currentUser}님의 레시피들</div>
+      {receivedLikesRecipes[0] === "로딩중" ? (
         <>
           <BasicSpinner />
         </>
       ) : (
         <>
-          {likeState.map((e) => (
+          {receivedLikesRecipes.map((e) => (
             <>
               <div
-                key={e}
+                key={e.recipe_num}
                 onClick={() => {
                   navigate(`/recipe/search/details/${e.recipe_num}`);
                 }}
               >
                 <div>{e.recipe_title}</div>
+                <div>{e.likes_count}</div>
                 <div>{e.recipe_num}</div>
                 <div>{e.information_level}</div>
                 <div>{e.information_time}</div>
@@ -127,7 +114,7 @@ const LikeRecipeList = ({ currentUser }) => {
   );
 };
 
-export default LikeRecipeList;
+export default ReceivedLikesRecipeList;
 const SectionTitle = styled.div`
   background-color: #8d3232;
   display: inline-block;

@@ -1,11 +1,14 @@
 import { useState, useCallback, useEffect } from "react";
 import NoticeList from "./noticeList";
 import axios from "axios";
+import MainLayout from "../../../layout/mainLayOut";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { colors } from "../../theme/theme";
+import { colors } from "../../../theme/theme";
+import { useMemo } from "react";
+import BasicSpinner from "../../../components/_common/loading";
 
-const NoticePage = () => {
+const NoticePageCp = () => {
   const [state, setState] = useState([
     {
       notice_num: 0,
@@ -21,30 +24,16 @@ const NoticePage = () => {
       setBtnState(false);
       return;
     } else {
+      // console.log("BtnState", user.auth.user.roles.includes("ROLE_ADMIN"));
       setBtnState(user.auth.user.roles.includes("ROLE_ADMIN"));
     }
   }, []);
 
-  function testAxios() {
-    axios({
-      url: "/notice/list",
-      method: "get",
-      data: {
-        notice_num: "test1",
-        notice_title: "test1",
-        notice_content: "test입닌당",
-        notice_creDate: "2022/08/17",
-      },
-      baseURL: "http://localhost:9000",
-      // baseURL: process.env.REACT_APP_HOST,
-    }).then(function (response) {
-      setState(response.data);
+  useMemo(() => {
+    axios.get("http://localhost:9000/notice/list").then((result) => {
+      setState(result.data);
     });
-  }
-
-  useEffect(() => {
-    testAxios();
-  }, []);
+  }, [state]);
 
   const removePost = useCallback((notice_num) => {
     const removeState = state.filter((item) => item.notice_num !== notice_num);
@@ -58,41 +47,60 @@ const NoticePage = () => {
 
   return (
     <>
-      <TotalWrap>
-        <div>
-          <h1>공지사항</h1>
-        </div>
+      <MainLayout>
+        <TotalWrap>
+          <div>
+            <h1>공지사항</h1>
+          </div>
 
-        <div className="noticeWrap">
-          <div className="noticeTableWrap">
-            <div className="tableHead">
-              <div className="noticeNo">No.</div>
-              <div className="noticeTitle">제목</div>
-              <div className="noticeDate">작성일자</div>
-              {BtnState && <div className="updateOrDelete">수정 • 삭제</div>}
+          <div className="noticeWrap">
+            <div className="noticeTableWrap">
+              <div className="tableHead">
+                <div className="noticeNo">No.</div>
+                <div className="noticeTitle">제목</div>
+                <div className="noticeDate">작성일자</div>
+                {BtnState && <div className="updateOrDelete">수정 • 삭제</div>}
+              </div>
+            </div>
+            <div className="noticeTableWrap">
+              <Scrollable>
+                {state.length === 1 ? (
+                  <>
+                    <div
+                      style={{
+                        padding: "25% 0 ",
+                        textAlign: "center",
+                        width: "100%",
+                      }}
+                    >
+                      <BasicSpinner />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      {state.map((e) => (
+                        <NoticeList
+                          key={e.notice_num}
+                          removePost={removePost}
+                          BtnState={BtnState}
+                          state={e}
+                        />
+                      ))}
+                    </div>{" "}
+                  </>
+                )}
+              </Scrollable>
             </div>
           </div>
-          <div className="noticeTableWrap">
-            <Scrollable>
-              <div>
-                {state.map((e) => (
-                  <NoticeList
-                    key={e.notice_num}
-                    removePost={removePost}
-                    BtnState={BtnState}
-                    state={e}
-                  />
-                ))}
-              </div>
-            </Scrollable>
-          </div>
-        </div>
-        <div className="bottom" />
-      </TotalWrap>
+
+          <div className="bottom" />
+        </TotalWrap>
+      </MainLayout>
     </>
   );
 };
-export default NoticePage;
+export default NoticePageCp;
 
 const TotalWrap = styled.div`
   width: 100%;
@@ -104,12 +112,31 @@ const TotalWrap = styled.div`
     font-weight: 700;
     margin-bottom: 3vh;
   }
+  & .noticeNo {
+    width: 5%;
+    text-align: center;
+  }
+  & .noticeTitle {
+    width: 60%;
+    text-align: center;
+  }
+  & .noticeDate {
+    width: 10%;
+    text-align: center;
+  }
+  & .updateOrDelete {
+    width: 15%;
+    color: ${colors.color_brown};
+    text-align: center;
+  }
 
   & .noticeTableWrap {
     border-bottom: 1px solid ${colors.color_brown};
   }
 
   & .tableHead {
+    justify-content: space-between;
+    padding: 0 1vw;
     border-top: 1px solid ${colors.color_brown};
   }
 `;
@@ -124,6 +151,7 @@ const Scrollable = styled.section`
     height: 450px;
     overflow-y: auto;
     margin: 0 auto;
+
     transform: translateX(-1%);
     ::-webkit-scrollbar {
       width: 0.5rem;
@@ -139,11 +167,12 @@ const Scrollable = styled.section`
   & > div > li {
     list-style: none;
     display: inline-flex;
-    justify-content: center;
+
     width: 100%;
     align-items: center;
-    padding: 1em 0;
-    border-bottom: 1px solid ${colors.color_beige_brown};
+    padding: 1em 1vw;
+    justify-content: space-between;
+    border-bottom: 1px solid #ad939156;
 
     &:hover {
       color: ${colors.color_carrot_orange};

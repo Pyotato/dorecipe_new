@@ -29,6 +29,8 @@ export const colors = {
   color_brown: "#554543",
   color_beige_brown: "#FAF3E7",
   color_milktea_brown: "#C2B196",
+  color_black_brown: "#292D32",
+
   color_gray_red: "#796763",
   color_gray_red2: "#A07667",
   color_gray_red3: "#B79686",

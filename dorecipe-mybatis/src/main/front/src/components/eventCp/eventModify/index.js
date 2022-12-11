@@ -1,15 +1,13 @@
 import { useCallback, useState, useEffect } from "react";
 import axios from "axios";
-// import "./style.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useInput } from "../../../hooks/useInput";
 import { Link } from "react-router-dom";
-import MainLayout from "../../../layout/mainLayOut";
 import styled from "styled-components";
 
 const EventModify = () => {
   const params = useParams();
-
+  const navigate = useNavigate();
   let [state, setState] = useState([
     {
       event_num: 0,
@@ -22,7 +20,7 @@ const EventModify = () => {
   ]);
 
   function Axios() {
-    const event_num = params.detailId; // app.js에서 보내줌
+    const event_num = params.detailId;
 
     axios
       .get("http://localhost:9000/event/detail/" + event_num)
@@ -75,11 +73,11 @@ const EventModify = () => {
     (e) => {
       e.preventDefault();
 
-      event_title = document.getElementById("eventTitle").value;
-      event_path = document.getElementById("eventPath").value;
-      event_content = document.getElementById("eventContent").value;
-      event_creDate = document.getElementById("eventCreDate").value;
-      event_finDate = document.getElementById("eventFinDate").value;
+      // event_title = document.getElementById("eventTitle").value;
+      // event_path = document.getElementById("eventPath").value;
+      // event_content = document.getElementById("eventContent").value;
+      // event_creDate = document.getElementById("eventCreDate").value;
+      // event_finDate = document.getElementById("eventFinDate").value;
 
       const data = {
         event_title: `${event_title}`,
@@ -115,8 +113,7 @@ const EventModify = () => {
           data: formData,
         }).then((response) => {
           alert("수정되었습니다.");
-          //이벤트 리스트로 이동
-          window.location.href = "http://localhost:3000/event/list";
+          navigate("/event/list");
         });
       }
     },
