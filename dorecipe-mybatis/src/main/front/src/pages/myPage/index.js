@@ -4,7 +4,6 @@ import CompleteRecipeList from "../../components/myPageCp/completeRecipe";
 import RecordingRecipeList from "../../components/myPageCp/recordingRecipe";
 import { connect, useSelector } from "react-redux";
 
-// import "./style.css";
 import LikeRecipeList from "../../components/myPageCp/likeRecipe";
 import ReceivedLikesRecipeList from "../../components/myPageCp/receivedLikesRecipe";
 import styled from "styled-components";
@@ -14,9 +13,13 @@ import { ReactComponent as GivenHearts } from "../../assets/GivenHearts.svg";
 import { ReactComponent as ReceivedHearts } from "../../assets/ReceivedHearts.svg";
 import { ReactComponent as IncompleteRecipes } from "../../assets/IncompleteRecipes.svg";
 import { ReactComponent as NavTab4 } from "../../assets/NavTab4.svg";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useEffect } from "react";
+import {
+  CompleteRecipeState,
+  IncompleteRecipeState,
+} from "../../components/myPageCp/RecipeStates";
 import { useCallback } from "react";
-import { useMemo } from "react";
 
 const MyPage = (user) => {
   console.log("MyPage", user);
@@ -25,6 +28,50 @@ const MyPage = (user) => {
 
   const [navTabState, setNavTabState] = useState(0);
   const [showTabState, setShowTabState] = useState(false);
+  const [recipeState, setRecipeState] = useState([
+    {
+      recipe_num: 0,
+      recipe_title: "로딩중",
+      recipe_rpath: `로딩중`,
+      recipe_savetype: 0,
+      information_level: "로딩중",
+      information_time: "로딩중",
+    },
+  ]);
+
+  const [loadingState, setLoadingState] = useState(true);
+
+  const [recipeLength, setRecipeLength] = useState(0); //레시피 삭제 감지
+
+  const [incompleteRecipeState, setIncompleteRecipeState] = useState({
+    recipe_num: 0,
+    recipe_title: "로딩중",
+    recipe_rpath: `로딩중`,
+    recipe_savetype: 0,
+    information_level: "로딩중",
+    information_time: "로딩중",
+  }); //미완성레시피 삭제 감지
+  const [incompleteRecipeLength, setIncompleteRecipeLength] = useState(0); //미완성레시피 삭제 감지
+  CompleteRecipeState({
+    currentUser,
+    setRecipeState,
+    setRecipeLength,
+    setLoadingState,
+    recipeLength,
+  });
+
+  IncompleteRecipeState({
+    currentUser,
+    setIncompleteRecipeState,
+    setIncompleteRecipeLength,
+    setLoadingState,
+    incompleteRecipeState,
+    incompleteRecipeLength,
+  });
+
+  useEffect(() => {
+    setNavTabState(0);
+  }, []);
 
   useMemo(() => {
     if (navTabState === 0) {
@@ -59,19 +106,18 @@ const MyPage = (user) => {
       });
     }
   }, [navTabState]);
-
   return (
     <>
       <MainLayout>
-        <BasicFormSection>
-          <MemberInfoForm />
-        </BasicFormSection>
-        <BasicFormSection>
-          <CompleteRecipeList />
-        </BasicFormSection>
-        <BasicFormSection>
-          <RecordingRecipeList />
-        </BasicFormSection>
+        <MemberInfoForm
+          recipeLength={recipeLength}
+          incompleteRecipeLength={incompleteRecipeLength}
+        />
+
+        <CompleteRecipeList currentUser={currentUser} />
+
+        <RecordingRecipeList currentUser={currentUser} />
+
         <BasicFormSection>
           <LikeRecipeList currentUser={currentUser} />
         </BasicFormSection>
@@ -103,7 +149,7 @@ const MyPage = (user) => {
                 />
               </div>
               <div>
-                <GivenHearts
+                <IncompleteRecipes
                   className="accented svgStrokes"
                   onClick={() => setNavTabState(2)}
                 />
@@ -115,7 +161,7 @@ const MyPage = (user) => {
                 />
               </div>
               <div>
-                <IncompleteRecipes
+                <GivenHearts
                   className="accented svgStrokes"
                   onClick={() => setNavTabState(4)}
                 />
@@ -140,7 +186,8 @@ const BasicFormSection = styled.div`
   margin: 12vh auto;
   border-radius: 2vw;
   padding-bottom: 6vh;
-  height: 82vh;
+  /* min-height: 82vh; */
+  height: fit-content;
   margin-bottom: 16vh;
 
   background-color: ${colors.color_beige_brown};

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Navigation, Pagination, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
 import "swiper/css";
@@ -15,7 +15,7 @@ import CompleteRecipe from "./completeRecipeForm";
 import RecipeOrderDrag from "./recipeStepForm";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { historylocation } from "../../reduxRefresh/helpers/history";
 
@@ -23,67 +23,105 @@ const EditRecipeForm = () => {
   const user = useSelector((auth) => auth);
   const [member_id, setMemberId] = useState();
   const navigate = useNavigate();
-
+  // const recipeId = useParams();
   const params = historylocation.pathname.substring(
     historylocation.pathname.lastIndexOf("/") + 1, //현재위치
     historylocation.pathname.length
   );
   const [recipeNumState, setRecipeNumState] = useState(params);
   const [detailState, setDetailState] = useState();
+  const { recipeid } = useParams();
   const [IngredieState, setIngredientState] = useState();
-  // useDispatch(messageReducer(CLEAR_MESSAGE));
+
+  const [recipeState, setRecipeState] = useState();
   useEffect(() => {
     if (user.auth.isLoggedIn) {
       setMemberId(user.auth.user.username);
-      setRecipeNumState(params);
-      axios
-        .get(
-          // process.env.REACT_APP_HOST + "/recipe/update/" + params
-          "http://localhost:9000/recipe/update/" + params
-          // historylocation.pathname.substring(
-          //   historylocation.pathname.lastIndexOf("/") + 1, //현재위치
-          //   historylocation.pathname.length
-          // )
-        )
-        .then((response) => {
-          console.log("response", response.data);
-        })
-        .catch((e) => console.log(e));
-      axios
-        .get(
-          // process.env.REACT_APP_HOST +
-          "http://localhost:9000/recipe/temporary/" +
-            historylocation.pathname.substring(
-              historylocation.pathname.lastIndexOf("/") + 1, //현재위치
-              historylocation.pathname.length
-            )
-        )
-        .then((response) => {
-          console.log("response", response.data);
-        })
-        .catch((e) => console.log(e));
-      axios
-        // .get(process.env.REACT_APP_HOST + "/recipe/getIngredientList/" + params)
-        .get("http://localhost:9000/recipe/getIngredientList/" + params)
-        .then((response) => {
-          setIngredientState(response.data);
-        })
-        .catch((e) => console.log(e));
-    } else {
-      navigate("/");
-    }
-    console.log(
-      "currentLocation : " +
-        historylocation.pathname.substring(
-          historylocation.pathname.lastIndexOf("/"), //현재위치
-          historylocation.pathname.length
-        )
-    );
-    // console.log("historylocation : " + historylocation);
-    // console.log("CreateRecipeForm", user);
-  }, []);
+      setRecipeNumState(recipeid);
+      console.log(recipeid);
 
-  const [recipeState, setRecipeState] = useState();
+      axios
+        .get("http://localhost:9000/recipe/temporary/" + recipeid)
+        .then((response) => {
+          console.log("/recipe/temporary/", response.data);
+          setRecipeState(response.data);
+        })
+        .catch((e) => console.log(e));
+      axios
+        .get("http://localhost:9000/recipe/getIngredientList/" + recipeid)
+        .then((response) => {
+          console.log("recipe/getIngredientList/", response.data);
+          // setRecipeState(response.data);
+        })
+        .catch((e) => console.log(e));
+      axios
+        .get("http://localhost:9000/recipe/temporary/getOrder/" + recipeid)
+        .then((response) => {
+          console.log("recipe/getOrder/", response.data);
+          // setRecipeState(response.data);
+        })
+        .catch((e) => console.log(e));
+    }
+  }, []);
+  //     axios
+  //       .get(
+  //         // process.env.REACT_APP_HOST +
+  //         "http://localhost:9000/recipe/temporary/" + recipeid
+  //         // historylocation.pathname.substring(
+  //         //   historylocation.pathname.lastIndexOf("/") + 1, //현재위치
+  //         //   historylocation.pathname.length
+  //         // )
+  //       )
+  //       .then((response) => {
+  //         console.log("/recipe/temporary/", response.data);
+  //       })
+  //       .catch((e) => console.log(e));
+  //     axios
+  //       .get(
+  //         // process.env.REACT_APP_HOST +
+  //         "http://localhost:9000/recipe/temporary/" + recipeid
+  //         // historylocation.pathname.substring(
+  //         //   historylocation.pathname.lastIndexOf("/") + 1, //현재위치
+  //         //   historylocation.pathname.length
+  //         // )
+  //       )
+  //       .then((response) => {
+  //         console.log("response", response.data);
+  //       })
+  //       .catch((e) => console.log(e));
+  //     axios
+  //       .get(
+  //         "http://localhost:9000/recipe/getIngredientList/" +
+  //           //   historylocation.pathname.substring(
+  //           //     historylocation.pathname.lastIndexOf("/") + 1, //현재위치
+  //           //     historylocation.pathname.length
+  //           //   )
+  //           recipeid
+  //         // parseInt(
+  //         //   historylocation.pathname.substring(
+  //         //     historylocation.pathname.lastIndexOf("/") + 1, //현재위치
+  //         //     historylocation.pathname.length
+  //         //   )
+  //         // )
+  //       )
+  //       .then((response) => {
+  //         console.log("recipeid!!!!!!!!!!!!", recipeid);
+  //         console.log("getIngredientList!!!!!!!!!!!!", response.data);
+  //       })
+  //       .catch((e) => console.log(e));
+  //     // axios
+  //     //   .get(
+  //     //     // process.env.REACT_APP_HOST + "/recipe/update/" + params
+  //     //     "http://localhost:9000/recipe/update/" + params
+  //     //     // historylocation.pathname.substring(
+  //     //     //   historylocation.pathname.lastIndexOf("/") + 1, //현재위치
+  //     //     //   historylocation.pathname.length
+  //     //     // )
+  //     //   )
+  //     //   .then((response) => {
+  //     //     console.log("response", response.data);
+  //     //   })
+  //     //   .catch((e) => console.log(e));
 
   return (
     <>

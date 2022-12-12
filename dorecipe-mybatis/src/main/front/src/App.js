@@ -179,7 +179,7 @@ function App() {
         />
         <Route path={"/recipe/create"} element={<CreateRecipePage />} />
         <Route
-          path={"/recipe/update/:recipeID"}
+          path={"/recipe/update/:recipeid"}
           element={<ModifyRecipePage />}
         />
         <Route

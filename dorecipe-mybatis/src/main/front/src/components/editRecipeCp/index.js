@@ -16,102 +16,112 @@ import RecipeOrderDrag from "./recipeStepForm";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { historylocation } from "../../reduxRefresh/helpers/history";
 
 const EditRecipeForm = () => {
   const user = useSelector((auth) => auth);
   const [member_id, setMemberId] = useState();
   const navigate = useNavigate();
-
+  // const recipeId = useParams();
   const params = historylocation.pathname.substring(
     historylocation.pathname.lastIndexOf("/") + 1, //현재위치
     historylocation.pathname.length
   );
   const [recipeNumState, setRecipeNumState] = useState(params);
   const [detailState, setDetailState] = useState();
-  const [IngredieState, setIngredientState] = useState();
-  // useDispatch(messageReducer(CLEAR_MESSAGE));
+  const { recipeid } = useParams();
+  const [IngredientState, setIngredientState] = useState();
+
+  const [recipeState, setRecipeState] = useState();
   useEffect(() => {
     if (user.auth.isLoggedIn) {
       setMemberId(user.auth.user.username);
-      setRecipeNumState(params);
+      setRecipeNumState(recipeid);
+      console.log(recipeid);
 
       axios
-        .get(
-          "http://localhost:9000/recipe/getIngredientList/" +
-            //   historylocation.pathname.substring(
-            //     historylocation.pathname.lastIndexOf("/") + 1, //현재위치
-            //     historylocation.pathname.length
-            //   )
-
-            parseInt(
-              historylocation.pathname.substring(
-                historylocation.pathname.lastIndexOf("/") + 1, //현재위치
-                historylocation.pathname.length
-              )
-            )
-        )
+        .get("http://localhost:9000/recipe/temporary/" + recipeid)
         .then((response) => {
-          console.log("getIngredientList!!!!!!!!!!!!", response.data);
-        })
-        .catch((e) => console.log(e));
-      // axios
-      //   .get(
-      //     // process.env.REACT_APP_HOST + "/recipe/update/" + params
-      //     "http://localhost:9000/recipe/update/" + params
-      //     // historylocation.pathname.substring(
-      //     //   historylocation.pathname.lastIndexOf("/") + 1, //현재위치
-      //     //   historylocation.pathname.length
-      //     // )
-      //   )
-      //   .then((response) => {
-      //     console.log("response", response.data);
-      //   })
-      //   .catch((e) => console.log(e));
-      axios
-        .get(
-          // process.env.REACT_APP_HOST +
-          "http://localhost:9000/recipe/temporary/" +
-            historylocation.pathname.substring(
-              historylocation.pathname.lastIndexOf("/") + 1, //현재위치
-              historylocation.pathname.length
-            )
-        )
-        .then((response) => {
-          console.log("response", response.data);
+          console.log("/recipe/temporary/", response.data);
+          setRecipeState(response.data);
         })
         .catch((e) => console.log(e));
       axios
-        // .get(process.env.REACT_APP_HOST + "/recipe/getIngredientList/" + params)
-        // .get("http://localhost:9000/recipe/getIngredientList/" + params)
-        .get(
-          "http://localhost:9000/recipe/getIngredientList/" +
-            historylocation.pathname.substring(
-              historylocation.pathname.lastIndexOf("/") + 1, //현재위치
-              historylocation.pathname.length
-            )
-        )
+        .get("http://localhost:9000/recipe/getIngredientList/" + recipeid)
         .then((response) => {
-          setIngredientState(response.data);
-          console.log("getIngredientList", response.data);
+          console.log("recipe/getIngredientList/", response.data);
+          // setRecipeState(response.data);
         })
         .catch((e) => console.log(e));
-    } else {
-      navigate("/");
+      axios
+        .get("http://localhost:9000/recipe/temporary/getOrder/" + recipeid)
+        .then((response) => {
+          console.log("recipe/getOrder/", response.data);
+          // setRecipeState(response.data);
+        })
+        .catch((e) => console.log(e));
     }
-    console.log(
-      "currentLocation : " +
-        historylocation.pathname.substring(
-          historylocation.pathname.lastIndexOf("/") + 1, //현재위치
-          historylocation.pathname.length
-        )
-    );
-    // console.log("historylocation : " + historylocation);
-    // console.log("CreateRecipeForm", user);
   }, []);
-
-  const [recipeState, setRecipeState] = useState();
+  //     axios
+  //       .get(
+  //         // process.env.REACT_APP_HOST +
+  //         "http://localhost:9000/recipe/temporary/" + recipeid
+  //         // historylocation.pathname.substring(
+  //         //   historylocation.pathname.lastIndexOf("/") + 1, //현재위치
+  //         //   historylocation.pathname.length
+  //         // )
+  //       )
+  //       .then((response) => {
+  //         console.log("/recipe/temporary/", response.data);
+  //       })
+  //       .catch((e) => console.log(e));
+  //     axios
+  //       .get(
+  //         // process.env.REACT_APP_HOST +
+  //         "http://localhost:9000/recipe/temporary/" + recipeid
+  //         // historylocation.pathname.substring(
+  //         //   historylocation.pathname.lastIndexOf("/") + 1, //현재위치
+  //         //   historylocation.pathname.length
+  //         // )
+  //       )
+  //       .then((response) => {
+  //         console.log("response", response.data);
+  //       })
+  //       .catch((e) => console.log(e));
+  //     axios
+  //       .get(
+  //         "http://localhost:9000/recipe/getIngredientList/" +
+  //           //   historylocation.pathname.substring(
+  //           //     historylocation.pathname.lastIndexOf("/") + 1, //현재위치
+  //           //     historylocation.pathname.length
+  //           //   )
+  //           recipeid
+  //         // parseInt(
+  //         //   historylocation.pathname.substring(
+  //         //     historylocation.pathname.lastIndexOf("/") + 1, //현재위치
+  //         //     historylocation.pathname.length
+  //         //   )
+  //         // )
+  //       )
+  //       .then((response) => {
+  //         console.log("recipeid!!!!!!!!!!!!", recipeid);
+  //         console.log("getIngredientList!!!!!!!!!!!!", response.data);
+  //       })
+  //       .catch((e) => console.log(e));
+  //     // axios
+  //     //   .get(
+  //     //     // process.env.REACT_APP_HOST + "/recipe/update/" + params
+  //     //     "http://localhost:9000/recipe/update/" + params
+  //     //     // historylocation.pathname.substring(
+  //     //     //   historylocation.pathname.lastIndexOf("/") + 1, //현재위치
+  //     //     //   historylocation.pathname.length
+  //     //     // )
+  //     //   )
+  //     //   .then((response) => {
+  //     //     console.log("response", response.data);
+  //     //   })
+  //     //   .catch((e) => console.log(e));
 
   return (
     <>
