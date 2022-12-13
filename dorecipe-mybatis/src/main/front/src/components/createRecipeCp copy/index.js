@@ -128,8 +128,8 @@ const CreateRecipeForm = () => {
               style={{
                 float: "left",
                 marginTop: "6vh",
-                marginBottom: "3vh",
-                padding: "1vw 1vh",
+                // marginBottom: "3vh",
+                padding: "3vh 1vh",
 
                 lineHeight: "2",
               }}

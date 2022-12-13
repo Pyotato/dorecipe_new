@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { useState, useCallback, useEffect } from "react";
 import EditDropZone from "../../_common/dropzone";
@@ -8,6 +8,7 @@ import axios from "axios";
 import { SubmitRecipeBtn } from "../../_common/buttons";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { colors } from "../../../theme/theme";
 
 const CompleteRecipe = ({ recipeState }) => {
   //btn state : 버튼 1번 이상 클릭 시 전체 임시저장/등록, 한번만 클릭시 해당 페이지 저장
@@ -26,6 +27,9 @@ const CompleteRecipe = ({ recipeState }) => {
   const [path4, onChangePath4, setPath4] = useInput("");
 
   const [completion_tip, onChangeTip, setCompletion_tip] = useInput("");
+
+  const [btnDisabledState, setBtnDisabledState] = useState(false);
+  const [btnDisplayState, setBtnDisplayState] = useState("none");
 
   const [files, setFiles] = useState("");
   const [recipe_thumbnail, setRecipeImgFiles] = useState([]);
@@ -117,13 +121,9 @@ const CompleteRecipe = ({ recipeState }) => {
 
   return (
     <>
-      <TotalWrap>
+      {/* <TotalWrap>
         <FlexWrap>
           <div>
-            <Instruction>
-              <FontAwesomeIcon icon={faLightbulb} /> 완성 요리 사진 : 완성된
-              사진을 등록하시면 레시피가 더욱 돋보입니다.
-            </Instruction>
             <BasicFormWrap>
               <div style={{ height: "60em", margin: "0 auto" }}>
                 <EditDropZone
@@ -188,69 +188,151 @@ const CompleteRecipe = ({ recipeState }) => {
             </BtnWrap>
           </>
         )}
+      </TotalWrap> */}
+
+      <div>
+        <TempSaveBtn
+          type="button"
+          // onClick={onTempSubmit}
+          disabled={btnDisabledState}
+          style={{ display: btnDisplayState }}
+        >
+          <FontAwesomeIcon icon={faFloppyDisk} /> <div>임시저장</div>
+        </TempSaveBtn>
+      </div>
+      <TotalWrap style={{ clear: "left" }}>
+        <div
+          style={{
+            margin: "0 auto",
+            width: "85%",
+            backgroundColor: "white",
+            padding: "1vw",
+            borderRadius: "0.5vw",
+          }}
+        >
+          <EditDropZone
+            files={files}
+            setFiles={setFiles}
+            setPath1={setPath1}
+            setPath2={setPath2}
+            setPath3={setPath3}
+            setPath4={setPath4}
+            onChange={onLoadImgFile}
+            setRecipeImgFiles={setRecipeImgFiles}
+            completionDropState={completionDropState}
+          />
+        </div>
+        <div
+          style={{
+            backgroundColor: "#CF702C",
+            float: "left",
+            transform: "translateX(-2.2vw)",
+            marginTop: "6vh",
+            width: "8vw",
+            textAlign: "center",
+            padding: "1vw 1vh",
+            fontWeight: "700",
+          }}
+        >
+          요리팁
+        </div>
+        <div
+          style={{
+            transform: "translateX(-2.2vw)",
+            float: "left",
+            marginTop: "6vh",
+            marginBottom: "6vh",
+            padding: "1vw 1vh",
+          }}
+        >
+          <FontAwesomeIcon icon={faLightbulb} /> 레시피를 더욱 맛있게 하기
+          위해서 담은 노하우를 공유해주세요.
+        </div>
       </TotalWrap>
+      <div style={{ width: "100%" }}>
+        <ContentTextarea
+          rows="2"
+          cols="50"
+          value={completion_tip}
+          onChange={onChangeTip}
+          placeholder="예: 양파를 고를때는 납작한 암양파를 고르시면 덜 맵고 단맛이 강해요."
+        ></ContentTextarea>
+      </div>
+      <div style={{ width: "80%", margin: "0 auto" }}>
+        <SubmitBtn
+          type="button"
+          //  onClick={onFinalSubmit}
+          value="submit"
+        >
+          레시피 등록하기
+        </SubmitBtn>
+      </div>
     </>
   );
 };
 export default CompleteRecipe;
 
 const TotalWrap = styled.div`
-  width: 90%;
+  width: 95%;
+  font-family: "mainFont";
   height: fit-content;
   margin: 0 auto;
   font-size: 14px;
 `;
-const FlexWrap = styled.div`
-  /* display: flex; */
-  min-width: 30em;
-  max-width: 100%;
-`;
-const BasicFormWrap = styled.div`
-  display: inline-flex;
-  color: #463635;
-  margin: 0 4.5em;
-  width: 90%;
-  align-items: center;
-  font-size: 6px;
-  /* height: 12em; */
-  padding: 2em;
-  justify-content: center;
-  & > div {
-    height: 30em;
-    padding: 2rem;
-    height: 27em;
-    width: 100%;
-    overflow-y: auto;
-    margin: 0 auto;
 
-    ::-webkit-scrollbar {
-      width: 0.5rem;
-    }
-    ::-webkit-scrollbar-thumb {
-      height: 30%;
-      background-color: #463635;
-    }
-    ::-webkit-scrollbar-track {
-      background-color: #fffdf5;
-      border: 1px solid #463635;
-    }
+const TempSaveBtn = styled.button`
+  width: 5em;
+  height: 5em;
+  border-radius: 100%;
+  padding: 0.5em;
+  position: fixed;
+  right: 1.5vw;
+  bottom: 3vh;
+  /* background-color: ${colors.color_beige_brown}; */
+  background-color: magenta;
+  border: 1px solid transparent;
+
+  &:hover {
+    cursor: pointer;
+    transform: scaleX(1.2) scaleY(1.2);
+    background-color: ${colors.color_carrot_orange};
+    color: ${colors.color_beige_tinted_white};
+  }
+`;
+const SubmitBtn = styled.button`
+  width: 100%;
+  margin-top: 6vh;
+
+  border-radius: 0.5vw;
+  font-size: 2em;
+  border: 1px solid transparent;
+  background-color: ${colors.color_milktea_brown};
+  color: ${colors.color_beige_tinted_white};
+
+  &:hover {
+    cursor: pointer;
+    transform: scaleY(1.2);
+    background-color: ${colors.color_carrot_orange};
+    color: ${colors.color_beige_tinted_white};
   }
 `;
 const ContentTextarea = styled.textarea`
+  font-family: "mainFont";
   resize: none;
-  width: 44em;
-  height: 4em;
-  margin-bottom: 1em;
+  width: 80%;
+  margin: auto 8.3vw;
+  height: 24vh;
+  margin-bottom: 1vh;
+  line-height: 1.5;
   padding: 10px;
+  background-color: ${colors.color_white};
+  border: 1px solid transparent;
   border-radius: 0.5em;
   ::-webkit-scrollbar {
     display: none;
   }
 `;
-const Instruction = styled.div`
-  display: inline-block;
-  height: 2em;
-`;
+
 const BtnWrap = styled.div`
   display: flex;
 `;

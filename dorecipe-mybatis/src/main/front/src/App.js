@@ -179,11 +179,11 @@ function App() {
         />
         <Route path={"/recipe/create"} element={<CreateRecipePage />} />
         <Route
-          path={"/recipe/update/:recipeid"}
+          path={"/recipe/update/:recipeId"}
           element={<ModifyRecipePage />}
         />
         <Route
-          path={"/recipes/search/details/:recipeid"}
+          path={"/recipes/search/details/:recipeId"}
           element={<DetailRecipePage />}
         />
         <Route path={"/*"} element={<NotFoundPage />} />

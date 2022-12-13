@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { ReactComponent as Pin } from "../../../assets/Pin.svg";
 import { colors } from "../../../theme/theme";
 import { useMemo } from "react";
-
+import "./style.css";
 const IngredientForm = ({
   btnState,
   setBtnState,
