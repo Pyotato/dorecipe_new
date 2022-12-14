@@ -24,12 +24,12 @@ const IngredientForm = ({
   // console.log("IngredientForm", recipeId.recipeId);
   console.log("btnState", btnState);
   const [ingredients, setIngredients] = useState([
-    {
-      recipe_num: parseInt(recipeId.recipeId),
-      ing_num: 1,
-      ing_ingredient: "",
-      ing_amount: "",
-    },
+    // {
+    //   recipe_num: parseInt(recipeId.recipeId),
+    //   ing_num: 1,
+    //   ing_ingredient: "",
+    //   ing_amount: "",
+    // },
   ]);
 
   const IngreAmountRef = useRef();
@@ -120,6 +120,50 @@ const IngredientForm = ({
     setIngredients(ingreCopy);
   };
 
+  // const onTemporarySave = useCallback(
+  //   (e) => {
+  //     e.preventDefault();
+  //     console.log("ingredients", ingredients);
+  //     let ingreCopy = [...ingredients];
+
+  //     const data = ingredients;
+  //     const blob = new Blob([JSON.stringify(data)], {
+  //       type: "application.json",
+  //     });
+  //     console.log("data", data);
+  //     const formData = new FormData();
+  //     formData.append("data", blob);
+  //     //레시피 배열 수 만큼 append 시켜 주기
+  //     for (let i = 0; i < data.length; i++) {
+  //       formData.append(
+  //         `orderVoList[${i}].recipe_num`,
+  //         ingredients[0].recipe_num
+  //       );
+  //       formData.append(`orderVoList[${i}].ing_num`, data[i].ing_num);
+  //       formData.append(
+  //         `orderVoList[${i}].ing_ingredient`,
+  //         data[i].ing_ingredient
+  //       );
+  //       formData.append(`orderVoList[${i}].ing_amount`, data[i].ing_amount);
+  //     }
+
+  //     //!!!!!!!!!!!!!!!!!!!!!!!!!//수정한 거 백에 보내기
+
+  //     axios({
+  //       method: "POST",
+  //       // url: process.env.REACT_APP_HOST + "/recipe/insertRecipeIngredients",
+  //       url: "http://localhost:9000/recipe/updateRecipeIngredients",
+  //       headers: { "Content-Type": "multipart/form-data" },
+  //       data: formData,
+  //     })
+  //       .then((response) => {
+  //         console.log(response.data);
+  //       })
+  //       .catch((e) => console.log(e));
+  //   },
+  //   [ingredients]
+  // );
+
   const onTemporarySave = useCallback(
     (e) => {
       e.preventDefault();
@@ -129,7 +173,7 @@ const IngredientForm = ({
       const blob = new Blob([JSON.stringify(data)], {
         type: "application.json",
       });
-      console.log("data", data);
+      // console.log("data", data);
       const formData = new FormData();
       formData.append("data", blob);
       //!!!!!!!!!!!!!!!!!!!!!!!!!//수정한 거 백에 보내기
@@ -160,27 +204,26 @@ const IngredientForm = ({
           })
           .catch((e) => console.log(e));
       } else {
-        // const data = ingredients;
-        // const blob = new Blob([JSON.stringify(data)], {
-        //   type: "application.json",
-        // });
-        // console.log("data", data);
-        // const formData = new FormData();
-        // formData.append("data", blob);
-        //수정했던 것들은 update, 새로 추가된 거는 insert로
-
+        //재료를 추가적으로 등록한다면
         if (IngredientState.length < ingredients.length) {
-          for (let i = IngredientState.length; i < data.length; i++) {
+          const copyState = ingredients.slice(
+            IngredientState.length,
+            ingredients.length
+          );
+          for (let i = 0; i < copyState.length; i++) {
             formData.append(
               `orderVoList[${i}].recipe_num`,
-              ingredients[0].recipe_num
+              copyState[0].recipe_num
             );
-            formData.append(`orderVoList[${i}].ing_num`, data[i].ing_num);
+            formData.append(`orderVoList[${i}].ing_num`, copyState[i].ing_num);
             formData.append(
               `orderVoList[${i}].ing_ingredient`,
-              data[i].ing_ingredient
+              copyState[i].ing_ingredient
             );
-            formData.append(`orderVoList[${i}].ing_amount`, data[i].ing_amount);
+            formData.append(
+              `orderVoList[${i}].ing_amount`,
+              copyState[i].ing_amount
+            );
           }
           axios({
             method: "POST",
@@ -194,17 +237,25 @@ const IngredientForm = ({
             })
             .catch((e) => console.log(e));
         } else {
-          for (let i = 0; i <= IngredientState.length; i++) {
+          // formData.append(`recipe_num`, ingredients[0].recipe_num);
+          console.log("updateRecipeIngredients", ingredients);
+          for (let i = 0; i < ingredients.length; i++) {
             formData.append(
               `orderVoList[${i}].recipe_num`,
-              ingredients[0].recipe_num
+              ingredients[i].recipe_num
             );
-            formData.append(`orderVoList[${i}].ing_num`, data[i].ing_num);
+            formData.append(
+              `orderVoList[${i}].ing_num`,
+              ingredients[i].ing_num
+            );
             formData.append(
               `orderVoList[${i}].ing_ingredient`,
-              data[i].ing_ingredient
+              ingredients[i].ing_ingredient
             );
-            formData.append(`orderVoList[${i}].ing_amount`, data[i].ing_amount);
+            formData.append(
+              `orderVoList[${i}].ing_amount`,
+              ingredients[i].ing_amount
+            );
           }
           axios({
             method: "POST",
@@ -238,7 +289,7 @@ const IngredientForm = ({
         IngredientState.map((e) => {
           return copyState.push({
             recipe_num: IngredientState[0].recipe_num,
-            ing_num: e.ing_num + 1,
+            ing_num: e.ing_num,
             ing_ingredient: e.ing_ingredient,
             // stepImg: e.order_path,
             ing_amount: e.ing_amount,
