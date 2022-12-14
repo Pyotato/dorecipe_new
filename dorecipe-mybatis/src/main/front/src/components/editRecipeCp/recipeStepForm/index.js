@@ -574,7 +574,7 @@ const RecipeOrderDrag = ({
                           >
                             <img
                               onClick={() => onChangeorder_path(1)}
-                              style={{ width: "9.8vw" }}
+                              style={{ width: "9.8vw", maxHeight: "16vh" }}
                               src={item.order_path}
                               alt={item.order_path}
                             />

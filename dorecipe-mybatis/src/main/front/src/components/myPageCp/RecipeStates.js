@@ -16,7 +16,7 @@ export const CompleteRecipeState = ({
     formData.append("member_id", currentUser);
     if (currentUser) {
       axios({
-        url: "/recipe/recordingType1",
+        url: "/recipe/recordingType0",
         method: "POST",
         data: formData,
         baseURL: "http://localhost:9000",
@@ -51,7 +51,7 @@ export const IncompleteRecipeState = ({
     formData.append("member_id", currentUser);
     if (currentUser) {
       axios({
-        url: "/recipe/recordingType0",
+        url: "/recipe/recordingType1",
         method: "POST",
         data: formData,
         baseURL: "http://localhost:9000",

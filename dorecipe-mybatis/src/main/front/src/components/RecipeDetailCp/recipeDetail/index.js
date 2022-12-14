@@ -21,12 +21,13 @@ const RecipeDetailModal = () => {
   const user = useSelector((auth) => auth);
   const params = useParams();
   const navigate = useNavigate();
-
+  const recipeId = params.recipeId;
   console.log("user", user);
+  console.log("recipeId", recipeId);
   // const [loginState, setLoginState] = useState("admin");
   const [loginState, setLoginState] = useState(user.auth.isLoggedIn);
   const [userState, setUserState] = useState(user.auth);
-  const searchParam = params.recipeId;
+  // const params = params.recipeId;
   const [dataErrorState, setDataErrorState] = useState();
   const [detailState, setDetailState] = useState([
     {
@@ -75,9 +76,9 @@ const RecipeDetailModal = () => {
   const [heartClickState, setHeartClickState] = useState(null);
 
   useEffect(() => {
-    if (searchParam !== undefined) {
+    if (recipeId !== undefined) {
       axios
-        .get("http://localhost:9000/recipe/search/details/" + searchParam)
+        .get("http://localhost:9000/recipe/search/details/" + recipeId)
         .then(function (response) {
           setDetailState(response.data);
           console.log("/search/details/", response.data);
@@ -95,13 +96,13 @@ const RecipeDetailModal = () => {
         })
         .catch((e) => console.log("데이터 불러오기 실패!"));
       axios
-        .get("http://localhost:9000/recipe/getIngredientList/" + searchParam)
+        .get("http://localhost:9000/recipe/getIngredientList/" + recipeId)
         .then(function (response) {
           setIngredientState(response.data);
         })
         .catch((e) => setDataErrorState(true));
       axios
-        .get("http://localhost:9000/recipe/getRecipeLikes/" + searchParam)
+        .get("http://localhost:9000/recipe/getRecipeLikes/" + recipeId)
         .then(function (response) {
           // console.log("getRecipeLikes", response);
           response.data ? setRecipeLikes(response.data) : setRecipeLikes(0);
@@ -112,7 +113,7 @@ const RecipeDetailModal = () => {
         axios
           .get("http://localhost:9000/recipe/checkLikeType", {
             params: {
-              recipe_num: parseInt(searchParam),
+              recipe_num: parseInt(recipeId),
               member_id: userState.user.username,
             },
           })
@@ -132,7 +133,7 @@ const RecipeDetailModal = () => {
   console.log("detailState", detailState);
   useMemo(() => {
     axios
-      .get("http://localhost:9000/recipe/getRecipeLikes/" + searchParam)
+      .get("http://localhost:9000/recipe/getRecipeLikes/" + recipeId)
       .then(function (response) {
         // console.log("getRecipeLikes", response);
         response.data ? setRecipeLikes(response.data) : setRecipeLikes(0);
@@ -142,7 +143,7 @@ const RecipeDetailModal = () => {
       axios
         .get("http://localhost:9000/recipe/checkLikeType", {
           params: {
-            recipe_num: parseInt(searchParam),
+            recipe_num: parseInt(recipeId),
             member_id: userState.user.username,
           },
         })
@@ -157,10 +158,10 @@ const RecipeDetailModal = () => {
     } else {
       setHeartState(0);
     }
-  }, [heartState, recipe_likes, searchParam]);
+  }, [heartState, recipe_likes, recipeId]);
 
   const onLikeHandler = () => {
-    const searchParam = params.recipeId;
+    const params = params.recipeId;
 
     if (loginState) {
       if (heartState === 1) {
@@ -169,7 +170,7 @@ const RecipeDetailModal = () => {
           .get("http://localhost:9000/recipe/removeLikes", {
             params: {
               member_id: userState.user.username, //좋아요 누른 사람
-              recipe_num: parseInt(searchParam),
+              recipe_num: parseInt(params),
             },
           })
           .then(() => {
@@ -186,7 +187,7 @@ const RecipeDetailModal = () => {
             .get("http://localhost:9000/recipe/insertRecipeLikes", {
               params: {
                 member_id: userState.user.username, //좋아요 누른 사람
-                recipe_num: parseInt(searchParam),
+                recipe_num: parseInt(params),
               },
             })
             .then(() => {
@@ -199,7 +200,7 @@ const RecipeDetailModal = () => {
             .get("http://localhost:9000/recipe/giveLikes", {
               params: {
                 member_id: userState.user.username, //좋아요 누른 사람
-                recipe_num: parseInt(searchParam),
+                recipe_num: parseInt(params),
               },
             })
             .then(() => {
@@ -218,7 +219,7 @@ const RecipeDetailModal = () => {
   return (
     <>
       {dataErrorState ? (
-        // {searchParam === undefined && detailState[0].recipe_title.length <= 0 ? (
+        // {params === undefined && detailState[0].recipe_title.length <= 0 ? (
         <NotFoundPage />
       ) : (
         <div

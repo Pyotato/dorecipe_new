@@ -258,7 +258,7 @@ const EditRecipeForm = () => {
               <div
                 style={{
                   float: "left",
-                  marginTop: "6vh",
+                  marginTop: "2.8em",
                   // marginBottom: "3vh",
                   padding: "3vh 1vh",
 

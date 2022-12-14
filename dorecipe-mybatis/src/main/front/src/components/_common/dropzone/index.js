@@ -144,6 +144,13 @@ export const DropZone = ({
     (preview) => {
       const deleteFiles = files.filter((v) => v.preview !== preview);
       setFiles(deleteFiles);
+      !deleteFiles[0] && setPath1("");
+      !deleteFiles[1] && setPath2("");
+      !deleteFiles[2] && setPath3("");
+      !deleteFiles[3] && setPath4("");
+      // setPath2(deleteFiles);
+      // setPath3(deleteFiles);
+      // setPath4(deleteFiles);
       setRecipeImgFiles(deleteFiles);
       console.log("deleted", deleteFiles);
     },
@@ -164,14 +171,7 @@ export const DropZone = ({
                       className="fileBox"
                       onClick={() => onPreviewDelete(v.preview)}
                     >
-                      <img
-                        src={v.preview}
-                        style={{
-                          maxWidth: "6.5em",
-                          transform: "translateY(-10%)",
-                        }}
-                        alt={v.preview}
-                      />
+                      <img src={v.preview} alt={v.preview} />
                       <p>파일 삭제</p>
                     </div>
                   </EditImgPreviewInner>
@@ -220,11 +220,7 @@ export const DropZone = ({
               </div>
             </>
           ) : (
-            <div
-              className="inputBox"
-              {...getRootProps()}
-              style={{ height: "100%" }}
-            >
+            <div className="inputBox" {...getRootProps()}>
               <input
                 {...getInputProps()}
                 id="file"
@@ -233,7 +229,7 @@ export const DropZone = ({
                 onChange={onLoadImgFile}
                 style={{ display: "none" }}
               />
-              <Camera style={{ height: "30%" }} />
+              <Camera style={{ height: "2em" }} />
               <p style={{ fontSize: "1.5vw" }}>썸네일 등록</p>
             </div>
           )}

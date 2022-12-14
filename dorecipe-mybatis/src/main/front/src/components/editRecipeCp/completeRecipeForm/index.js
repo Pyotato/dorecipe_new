@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFloppyDisk, faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import EditDropZone from "../../_common/dropzone";
 import { useInput } from "../../../hooks/useInput";
 import axios from "axios";
@@ -9,15 +9,22 @@ import { SubmitRecipeBtn } from "../../_common/buttons";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { colors } from "../../../theme/theme";
+import { ReactComponent as Toggle } from "../../../assets/Toggle.svg";
+import { ReactComponent as ToggleClose } from "../../../assets/ToggleClose.svg";
 
-const CompleteRecipe = ({ recipeState }) => {
+const CompleteRecipe = ({
+  recipeState,
+  btnState,
+  setBtnState,
+  setRecipeState,
+}) => {
   //btn state : 버튼 1번 이상 클릭 시 전체 임시저장/등록, 한번만 클릭시 해당 페이지 저장
-  const [buttonState, setBtnState] = useState(0);
+  const [btnClickState, setBtnClickState] = useState(0);
   // file state
   const [completionDropState, setCompletionDropState] = useState(
     "completionDropState"
   );
-
+  const [totalInfoState, setTotalInfoState] = useState(recipeState);
   const user = useSelector((state) => state.auth.isLoggedIn);
   const navigate = useNavigate();
 
@@ -33,6 +40,10 @@ const CompleteRecipe = ({ recipeState }) => {
 
   const [files, setFiles] = useState("");
   const [recipe_thumbnail, setRecipeImgFiles] = useState([]);
+
+  // 데이터 로드
+  const [loadState, setLoadState] = useState(true);
+
   const onLoadImgFile = (e) => {
     onChangePath1(e);
     onChangePath2(e);
@@ -40,84 +51,344 @@ const CompleteRecipe = ({ recipeState }) => {
     onChangePath4(e);
   };
 
-  const onSubmit = useCallback((e) => {
-    const { value } = e.target;
-    e.preventDefault();
-    const data = {
-      recipe_savetype: 1,
-      completion_path1: `${path1}`,
-      completion_path2: `${path2}`,
-      completion_path3: `${path3}`,
-      completion_path4: `${path4}`,
-      completion_tip: `${completion_tip}`,
-      recipe_num: `${recipeState}`,
-      member_id: `${recipeState.member_id}`, //로그인한 멤버 정보 들어갈 자리
-    };
+  useEffect(() => {
+    setTotalInfoState(recipeState);
+  }, []);
 
-    console.log("data", data);
-    const blob = new Blob([JSON.stringify(data)], {
-      type: "multipart/form-data",
-    });
-
-    const formData = new FormData();
-    formData.append("data", blob);
-    formData.append("member_id", data.member_id);
-
-    recipe_thumbnail[0] !== undefined
-      ? formData.append("recipe_imgs_completed", recipe_thumbnail[0])
-      : formData.append("recipe_imgs_completed", null); /////파일 업로드
-    recipe_thumbnail[1] !== undefined
-      ? formData.append("recipe_imgs_completed", recipe_thumbnail[1])
-      : formData.append("recipe_imgs_completed", null); /////파일 업로드
-    recipe_thumbnail[2] !== undefined
-      ? formData.append("recipe_imgs_completed", recipe_thumbnail[2])
-      : formData.append("recipe_imgs_completed", null); /////파일 업로드
-    recipe_thumbnail[3] !== undefined
-      ? formData.append("recipe_imgs_completed", recipe_thumbnail[3])
-      : formData.append("recipe_imgs_completed", null); /////파일 업로드
-    recipe_thumbnail[0] !== undefined
-      ? formData.append("completion_path1", data.completion_path1)
-      : formData.append("completion_path1", null);
-    recipe_thumbnail[1] !== undefined
-      ? formData.append("completion_path2", data.completion_path2)
-      : formData.append("completion_path2", null);
-    recipe_thumbnail[2] !== undefined
-      ? formData.append("completion_path3", data.completion_path3)
-      : formData.append("completion_path3", null);
-    recipe_thumbnail[3] !== undefined
-      ? formData.append("completion_path4", data.completion_path4)
-      : formData.append("completion_path4", null);
-    formData.append("completion_tip", data.completion_tip);
-    formData.append("recipe_num", recipeState);
-
-    axios({
-      method: "POST",
-      url: "http://localhost:9000/recipe/insertRecipeComplete",
-      // url: process.env.REACT_APP_HOST + "/recipe/insertRecipeComplete",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      data: formData,
-    }).then((response) => {
-      console.log(response);
-      for (let value of formData.values()) {
-        console.log(value);
+  useMemo(() => {
+    // useCallback(() => {
+    if (recipeState === undefined || recipeState.length === 0) {
+      setLoadState(true);
+    } else {
+      if (totalInfoState === undefined || totalInfoState.length === 0) {
+        // const copyState = [...recipeState];
+        setTotalInfoState(recipeState);
+      } else {
+        setLoadState(false);
       }
-      console.log("성공?");
-    });
-
-    console.log({ value });
-    if (value === "submit") {
-      if (buttonState === 0) {
-      }
-
-      alert(" 등록하셨습니다.");
-      setBtnState(buttonState + 1);
-    } else if (value === "saveAsDraft") {
-      alert(" 임시저장 하셨습니다.");
-      setBtnState(buttonState + 1);
     }
-  });
+    console.log("totalInfoState", totalInfoState);
+    console.log("recipeState", recipeState);
+  }, [recipeState, totalInfoState]);
+
+  useMemo(() => {
+    if (totalInfoState !== undefined && totalInfoState.length > 0) {
+      //null값이면 공백으로
+      totalInfoState[0].completion_path !== null
+        ? setPath1(totalInfoState[0].completion_path1)
+        : setPath1("");
+      totalInfoState[0].completion_path2 !== null
+        ? setPath2(totalInfoState[0].completion_path2)
+        : setPath2("");
+      totalInfoState[0].completion_path3 !== null
+        ? setPath3(totalInfoState[0].completion_path3)
+        : setPath3("");
+      totalInfoState[0].completion_path4 !== null
+        ? setPath4(totalInfoState[0].completion_path4)
+        : setPath4("");
+      totalInfoState[0].completion_tip !== null
+        ? setCompletion_tip(totalInfoState[0].completion_tip)
+        : setCompletion_tip("");
+    }
+  }, [totalInfoState]);
+
+  // const onSubmit = useCallback((e) => {
+  //   const { value } = e.target;
+  //   e.preventDefault();
+  //   const data = {
+  //     recipe_savetype: 1,
+  //     completion_path1: `${path1}`,
+  //     completion_path2: `${path2}`,
+  //     completion_path3: `${path3}`,
+  //     completion_path4: `${path4}`,
+  //     completion_tip: `${completion_tip}`,
+  //     recipe_num: `${recipeState}`,
+  //     member_id: `${recipeState.member_id}`, //로그인한 멤버 정보 들어갈 자리
+  //   };
+
+  //   console.log("data", data);
+  //   const blob = new Blob([JSON.stringify(data)], {
+  //     type: "multipart/form-data",
+  //   });
+
+  //   const formData = new FormData();
+  //   formData.append("data", blob);
+  //   formData.append("member_id", data.member_id);
+
+  //   recipe_thumbnail[0] !== undefined
+  //     ? formData.append("recipe_imgs_completed", recipe_thumbnail[0])
+  //     : formData.append("recipe_imgs_completed", null); /////파일 업로드
+  //   recipe_thumbnail[1] !== undefined
+  //     ? formData.append("recipe_imgs_completed", recipe_thumbnail[1])
+  //     : formData.append("recipe_imgs_completed", null); /////파일 업로드
+  //   recipe_thumbnail[2] !== undefined
+  //     ? formData.append("recipe_imgs_completed", recipe_thumbnail[2])
+  //     : formData.append("recipe_imgs_completed", null); /////파일 업로드
+  //   recipe_thumbnail[3] !== undefined
+  //     ? formData.append("recipe_imgs_completed", recipe_thumbnail[3])
+  //     : formData.append("recipe_imgs_completed", null); /////파일 업로드
+  //   recipe_thumbnail[0] !== undefined
+  //     ? formData.append("completion_path1", data.completion_path1)
+  //     : formData.append("completion_path1", null);
+  //   recipe_thumbnail[1] !== undefined
+  //     ? formData.append("completion_path2", data.completion_path2)
+  //     : formData.append("completion_path2", null);
+  //   recipe_thumbnail[2] !== undefined
+  //     ? formData.append("completion_path3", data.completion_path3)
+  //     : formData.append("completion_path3", null);
+  //   recipe_thumbnail[3] !== undefined
+  //     ? formData.append("completion_path4", data.completion_path4)
+  //     : formData.append("completion_path4", null);
+  //   formData.append("completion_tip", data.completion_tip);
+  //   formData.append("recipe_num", recipeState);
+
+  //   axios({
+  //     method: "POST",
+  //     url: "http://localhost:9000/recipe/insertRecipeComplete",
+  //     // url: process.env.REACT_APP_HOST + "/recipe/insertRecipeComplete",
+  //     headers: {
+  //       "Content-Type": "multipart/form-data",
+  //     },
+  //     data: formData,
+  //   }).then((response) => {
+  //     console.log(response);
+  //     for (let value of formData.values()) {
+  //       console.log(value);
+  //     }
+  //     console.log("성공?");
+  //   });
+
+  //   console.log({ value });
+  //   if (value === "submit") {
+  //     if (btnClickState === 0) {
+  //     }
+
+  //     alert(" 등록하셨습니다.");
+  //     setBtnClickState(btnClickState + 1);
+  //   } else if (value === "saveAsDraft") {
+  //     alert(" 임시저장 하셨습니다.");
+  //     setBtnClickState(btnClickState + 1);
+  //   }
+  // });
+  console.log("path1", path1);
+  console.log("path2", path2);
+  console.log("path3", path3);
+  console.log("path4", path4);
+
+  const [showPreviousSavePath, setShowPreviousSavePath] = useState(0);
+  const showPreviousSave = useMemo(() => {
+    // path1.length > 0 && setShowPreviousSavePath(saveNum);
+    // totalInfoState !== undefined && setShowPreviousSavePath(saveNum);
+    if (
+      totalInfoState.length > 0 &&
+      totalInfoState[0].completion_path1 !== "null" &&
+      totalInfoState[0].completion_path1 !== null
+    ) {
+      return (
+        <>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5em",
+              height: "2em",
+            }}
+            className="toggleImg"
+          >
+            {showPreviousSavePath === 1 && (
+              <ToggleClose
+                onClick={() => {
+                  showPreviousSavePath === 1
+                    ? setShowPreviousSavePath(0)
+                    : setShowPreviousSavePath(1);
+                }}
+              />
+            )}
+            {showPreviousSavePath === 0 && (
+              <Toggle
+                onClick={() => {
+                  showPreviousSavePath === 1
+                    ? setShowPreviousSavePath(0)
+                    : setShowPreviousSavePath(1);
+                }}
+              />
+            )}
+
+            {showPreviousSavePath === 0 && (
+              <div
+                onClick={() => {
+                  showPreviousSavePath === 1
+                    ? setShowPreviousSavePath(0)
+                    : setShowPreviousSavePath(1);
+                }}
+              >
+                이전 등록했던 이미지 파일 보기
+              </div>
+            )}
+            {showPreviousSavePath === 1 && (
+              <div
+                onClick={() => {
+                  showPreviousSavePath === 1
+                    ? setShowPreviousSavePath(0)
+                    : setShowPreviousSavePath(1);
+                }}
+              >
+                닫기
+              </div>
+            )}
+          </div>
+          {showPreviousSavePath === 1 ? (
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5em",
+                width: "100%",
+              }}
+            >
+              {totalInfoState !== undefined &&
+              totalInfoState[0].completion_path1 !== "null" &&
+              totalInfoState[0].completion_path1 === path1 ? (
+                <div
+                  style={{
+                    textAlign: "center",
+                    width: "25%",
+                    color: "red",
+                    margin: "0",
+                  }}
+                  onClick={() => {
+                    setPath1(totalInfoState[0].completion_path1);
+                    console.log("setPath1", path1);
+                  }}
+                >
+                  <div style={{ transform: "translateY(6vw)" }}>
+                    파일 되돌리기
+                  </div>
+                  <img
+                    className="previousCompleteImg"
+                    src={path1}
+                    alt={path1}
+                    style={{ maxHeight: "12em", maxWidth: "13vw" }}
+                  />
+                </div>
+              ) : totalInfoState[0].completion_path1 !== "null" ? (
+                <div
+                  onClick={() => {
+                    setPath1(totalInfoState[0].completion_path1);
+                    console.log("setPath1", path1);
+                  }}
+                >
+                  <div style={{ transform: "translateY(6vw)" }}>
+                    파일 되돌리기
+                  </div>
+                  <img
+                    className="previousCompleteImg"
+                    src={totalInfoState[0].completion_path1}
+                    alt={totalInfoState[0].completion_path1}
+                    style={{ maxHeight: "12em", maxWidth: "13vw" }}
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
+              {totalInfoState !== undefined &&
+              totalInfoState[0].completion_path2 !== "null" &&
+              totalInfoState[0].completion_path2 === path2 ? (
+                <div
+                  onClick={() => {
+                    setPath2(totalInfoState[0].completion_path2);
+                    console.log("setPath2", path2);
+                  }}
+                  style={{
+                    textAlign: "center",
+                    width: "25%",
+                    color: "red",
+                    margin: "0",
+                  }}
+                >
+                  <div style={{ transform: "translateY(6vw)" }}>
+                    파일 되돌리기
+                  </div>
+                  <img
+                    src={path2}
+                    alt={path2}
+                    className="previousCompleteImg"
+                    style={{ maxHeight: "12em", maxWidth: "13vw" }}
+                  />
+                </div>
+              ) : totalInfoState[0].completion_path2 !== "null" ? (
+                <div
+                  onClick={() => {
+                    setPath2(totalInfoState[0].completion_path2);
+                    console.log("setPath2", path2);
+                  }}
+                >
+                  <div style={{ transform: "translateY(6vw)" }}>
+                    파일 되돌리기
+                  </div>
+                  <img
+                    className="previousCompleteImg"
+                    src={totalInfoState[0].completion_path2}
+                    alt={totalInfoState[0].completion_path2}
+                    style={{ maxHeight: "12em", maxWidth: "13vw" }}
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
+              {totalInfoState !== undefined &&
+              totalInfoState[0].completion_path3 !== "null" &&
+              totalInfoState[0].completion_path3 === path3 ? (
+                <div
+                  onClick={() => {
+                    setPath3(totalInfoState[0].completion_path3);
+                    console.log("setPath3", path3);
+                  }}
+                  style={{
+                    textAlign: "center",
+                    width: "25%",
+                    color: "red",
+                    margin: "0",
+                  }}
+                >
+                  <div style={{ transform: "translateY(6vw)" }}>
+                    파일 되돌리기
+                  </div>
+                  <img
+                    src={path3}
+                    alt={path3}
+                    className="previousCompleteImg"
+                    style={{ maxHeight: "12em", maxWidth: "13vw" }}
+                  />
+                </div>
+              ) : totalInfoState[0].completion_path4 !== "null" ? (
+                <div
+                  onClick={() => {
+                    setPath4(totalInfoState[0].completion_path4);
+                    console.log("setPath4", path4);
+                  }}
+                >
+                  <div style={{ transform: "translateY(6vw)" }}>
+                    파일 되돌리기
+                  </div>
+                  <img
+                    className="previousCompleteImg"
+                    src={totalInfoState[0].completion_path4}
+                    alt={totalInfoState[0].completion_path4}
+                    style={{ maxHeight: "12em", maxWidth: "13vw" }}
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+          ) : (
+            <></>
+          )}{" "}
+        </>
+      );
+    }
+  }, [totalInfoState, showPreviousSavePath]);
 
   return (
     <>
@@ -156,7 +427,7 @@ const CompleteRecipe = ({ recipeState }) => {
             </div>
           </div>
         </FlexWrap>
-        {buttonState === 0 ? (
+        {btnClickState === 0 ? (
           <>
             {" "}
             <BtnWrap>
@@ -210,6 +481,8 @@ const CompleteRecipe = ({ recipeState }) => {
             borderRadius: "0.5vw",
           }}
         >
+          {showPreviousSave}
+          {/* {() => showPreviousSave()} */}
           <EditDropZone
             files={files}
             setFiles={setFiles}
@@ -278,6 +551,16 @@ const TotalWrap = styled.div`
   height: fit-content;
   margin: 0 auto;
   font-size: 14px;
+
+  & .toggleImg:hover {
+    cursor: pointer;
+    color: ${colors.color_carrot_orange};
+  }
+
+  & .previousCompleteImg:hover {
+    opacity: 0.3;
+    cursor: pointer;
+  }
 `;
 
 const TempSaveBtn = styled.button`

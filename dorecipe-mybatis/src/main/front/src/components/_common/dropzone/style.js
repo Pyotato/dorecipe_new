@@ -10,14 +10,16 @@ export const EditImgPreview = styled.section`
   /* max-height: 18em;
   min-height: 6em; */
 
-  padding: 3rem;
-  & > .inputBox {
+  /* padding: 3rem; */
+  & .inputBox {
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-bottom: 0.5rem;
+
+    height: 45vh;
 
     & > p {
       font-size: 0.625rem;
@@ -46,16 +48,17 @@ export const EditImgPreviewInner = styled.div`
   }
 
   & > .fileBox {
-    position: relative;
+    /* position: relative; */
     width: 100%;
     height: 100%;
     z-index: 100;
 
-    & > img {
-      max-width: 9em;
-      max-height: 12em;
-      padding: 1em;
+    & img {
+      max-width: 32vw;
+      max-height: 41vh;
+      /* padding: 1em; */
       z-index: 100;
+      /* transform: translateY(50%); */
     }
 
     & > p {
@@ -69,7 +72,7 @@ export const EditImgPreviewInner = styled.div`
       color: ${colors.color_carrot_orange};
       position: absolute;
       transform: translate(-50%, -50%);
-      top: 40%;
+      top: 50%;
       left: 50%;
     }
   }
