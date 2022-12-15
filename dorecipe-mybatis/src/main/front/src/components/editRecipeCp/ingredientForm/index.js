@@ -24,12 +24,12 @@ const IngredientForm = ({
   // console.log("IngredientForm", recipeId.recipeId);
   console.log("btnState", btnState);
   const [ingredients, setIngredients] = useState([
-    // {
-    //   recipe_num: parseInt(recipeId.recipeId),
-    //   ing_num: 1,
-    //   ing_ingredient: "",
-    //   ing_amount: "",
-    // },
+    {
+      recipe_num: parseInt(recipeId.recipeId),
+      ing_num: 1,
+      ing_ingredient: "",
+      ing_amount: "",
+    },
   ]);
 
   const IngreAmountRef = useRef();
@@ -177,100 +177,36 @@ const IngredientForm = ({
       const formData = new FormData();
       formData.append("data", blob);
       //!!!!!!!!!!!!!!!!!!!!!!!!!//수정한 거 백에 보내기
-
-      if (IngredientState.length === 0) {
-        //레시피 배열 수 만큼 append 시켜 주기
-        for (let i = 0; i < data.length; i++) {
-          formData.append(
-            `orderVoList[${i}].recipe_num`,
-            ingredients[0].recipe_num
-          );
-          formData.append(`orderVoList[${i}].ing_num`, data[i].ing_num);
-          formData.append(
-            `orderVoList[${i}].ing_ingredient`,
-            data[i].ing_ingredient
-          );
-          formData.append(`orderVoList[${i}].ing_amount`, data[i].ing_amount);
-        }
-        axios({
-          method: "POST",
-          // url: process.env.REACT_APP_HOST + "/recipe/insertRecipeIngredients",
-          url: "http://localhost:9000/recipe/insertRecipeIngredients",
-          headers: { "Content-Type": "multipart/form-data" },
-          data: formData,
-        })
-          .then((response) => {
-            console.log(response.data);
-          })
-          .catch((e) => console.log(e));
-      } else {
-        //재료를 추가적으로 등록한다면
-        if (IngredientState.length < ingredients.length) {
-          const copyState = ingredients.slice(
-            IngredientState.length,
-            ingredients.length
-          );
-          for (let i = 0; i < copyState.length; i++) {
-            formData.append(
-              `orderVoList[${i}].recipe_num`,
-              copyState[0].recipe_num
-            );
-            formData.append(`orderVoList[${i}].ing_num`, copyState[i].ing_num);
-            formData.append(
-              `orderVoList[${i}].ing_ingredient`,
-              copyState[i].ing_ingredient
-            );
-            formData.append(
-              `orderVoList[${i}].ing_amount`,
-              copyState[i].ing_amount
-            );
-          }
-          axios({
-            method: "POST",
-            // url: process.env.REACT_APP_HOST + "/recipe/insertRecipeIngredients",
-            url: "http://localhost:9000/recipe/insertRecipeIngredients",
-            headers: { "Content-Type": "multipart/form-data" },
-            data: formData,
-          })
-            .then((response) => {
-              console.log(response.data);
-            })
-            .catch((e) => console.log(e));
-        } else {
-          // formData.append(`recipe_num`, ingredients[0].recipe_num);
-          console.log("updateRecipeIngredients", ingredients);
-          for (let i = 0; i < ingredients.length; i++) {
-            formData.append(
-              `orderVoList[${i}].recipe_num`,
-              ingredients[i].recipe_num
-            );
-            formData.append(
-              `orderVoList[${i}].ing_num`,
-              ingredients[i].ing_num
-            );
-            formData.append(
-              `orderVoList[${i}].ing_ingredient`,
-              ingredients[i].ing_ingredient
-            );
-            formData.append(
-              `orderVoList[${i}].ing_amount`,
-              ingredients[i].ing_amount
-            );
-          }
-          axios({
-            method: "POST",
-            // url: process.env.REACT_APP_HOST + "/recipe/insertRecipeIngredients",
-            url: "http://localhost:9000/recipe/updateRecipeIngredients",
-            headers: { "Content-Type": "multipart/form-data" },
-            data: formData,
-          })
-            .then((response) => {
-              console.log(response.data);
-            })
-            .catch((e) => console.log(e));
-        }
+      console.log("updateRecipeIngredients", ingredients);
+      for (let i = 0; i < ingredients.length; i++) {
+        formData.append(
+          `orderVoList[${i}].recipe_num`,
+          ingredients[i].recipe_num
+        );
+        formData.append(`orderVoList[${i}].ing_num`, ingredients[i].ing_num);
+        formData.append(
+          `orderVoList[${i}].ing_ingredient`,
+          ingredients[i].ing_ingredient
+        );
+        formData.append(
+          `orderVoList[${i}].ing_amount`,
+          ingredients[i].ing_amount
+        );
       }
+      axios({
+        method: "POST",
+        // url: process.env.REACT_APP_HOST + "/recipe/insertRecipeIngredients",
+        url: "http://localhost:9000/recipe/updateRecipeIngredients",
+        headers: { "Content-Type": "multipart/form-data" },
+        data: formData,
+      })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((e) => console.log(e));
     },
+    // }
+    // },
     [ingredients]
   );
 
@@ -363,6 +299,7 @@ const IngredientForm = ({
           type="button"
           onClick={onTemporarySave}
           disabled={btnDisabledState}
+          style={{ display: "none" }}
           // style={{ display: btnDisplayState }}
         >
           <FontAwesomeIcon icon={faFloppyDisk} /> <div>임시저장</div>

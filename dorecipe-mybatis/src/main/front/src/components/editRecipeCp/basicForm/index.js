@@ -621,7 +621,8 @@ const BasicForm = ({
         type="button"
         onClick={onTemporarySave}
         disabled={btnDisabledState}
-        style={{ display: btnDisplayState }}
+        style={{ display: "none" }}
+        // style={{ display: btnDisplayState }}
       >
         <FontAwesomeIcon icon={faFloppyDisk} />
         <div>임시저장</div>

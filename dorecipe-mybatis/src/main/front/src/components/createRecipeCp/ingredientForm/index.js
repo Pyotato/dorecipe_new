@@ -145,7 +145,7 @@ const IngredientForm = ({
 
         axios({
           method: "POST",
-          url: "/recipe/insertRecipeIngredients",
+          url: "/recipe/updateRecipeIngredients",
           headers: { "Content-Type": "multipart/form-data" },
           data: formData,
           baseURL: "http://localhost:9000",

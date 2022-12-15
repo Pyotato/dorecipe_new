@@ -10,7 +10,7 @@
   
 ---
 
-<img src="README.assets/logo.gif" alt="로고" style="zoom:25%;" />
+<img src="README.assets/logo.gif" alt="README.assets/logo.gif" style="zoom:25%;" />
 
 ## `1. 리뉴얼을 진행하고자한 배경`
 
@@ -243,4 +243,34 @@
     * 완성사진 있을 시 토글 기능
 
   * 임시저장한 레시피
-    * 기본 정보 수정가능하도록 (update) => 진행중
+    * 기본 정보 수정가능하도록 update
+
+* `12/15`
+
+  * 임시저장한 레시피
+
+    * 요리 재료 수정하기 기능
+    * 요리 순서 수정하기 기능
+
+  * 백(매퍼 수정): 다중 row입력을 위해 update 대신 `INSERT INTO TABLE ~ ON DUPLICATE KEY UPDATE `로
+
+    * 여러개의 값을 한번에 update시켜주고 싶었는데 update문으로는 하기 어려움
+    * 대신 키가 설정되어있다는 점을 활용하여 key값 중복에는 새로 입력하려는 데이터로 대체하는 쿼리문으로 교체
+      * 레시피 등록 페이지도 차후 교체 예정
+
+    ```javascript
+    INSERT INTO tbl_name 
+        (pk_col, col1, col2)
+        VALUES 
+            (1, 5, 8),
+            (2, 10, 8),
+            (3, 8, 3)
+        ON DUPLICATE KEY UPDATE 
+            col1 = VALUES(col1),
+        col2 = VALUES(col2);
+    ```
+
+    ※ [참고](https://codens.info/2156)
+
+  * 레시피 임시저장한 순서 삭제 => (진행 중)
+

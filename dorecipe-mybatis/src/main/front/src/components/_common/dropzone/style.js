@@ -49,7 +49,8 @@ export const EditImgPreviewInner = styled.div`
 
   & > .fileBox {
     /* position: relative; */
-    width: 100%;
+    /* width: 100%; */
+    max-width: 32vw;
     height: 100%;
     z-index: 100;
 
