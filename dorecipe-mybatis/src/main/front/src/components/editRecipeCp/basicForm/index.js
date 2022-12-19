@@ -55,6 +55,7 @@ const BasicForm = ({
 
   const user = useSelector((auth) => auth);
   const [member_id, setMemberId] = useState("");
+
   useEffect(() => {
     // if (user.auth.isLoggedIn) {
     setMemberId(user.auth.user.username);
@@ -185,7 +186,7 @@ const BasicForm = ({
       formData.append("recipe_num", data.recipe_num);
       axios({
         method: "POST",
-        // url: process.env.REACT_APP_HOST + "/recipe/save",
+        // url: process.env.REACT_APP_HOST + "/recipe/update",
         url: "http://localhost:9000/recipe/update",
         headers: {
           "Content-Type": "multipart/form-data",
@@ -219,7 +220,13 @@ const BasicForm = ({
       totalInfoState,
     ]
   );
-
+  //페이지를 벗어난다면 저장해주기
+  recipe_title !== "" &&
+    saveState >= 1 &&
+    window.addEventListener("beforeunload", function (e) {
+      e.preventDefault();
+      onTemporarySave();
+    });
   return (
     <>
       <div style={{ height: "fit-content" }}>

@@ -22,9 +22,9 @@ const CreateRecipeForm = () => {
   const [btnState, setBtnState] = useState(0);
 
   // 임의로 페이지를 나가려고 할때 alert해주기
-  window.onbeforeunload = function () {
-    return "임시저장하지 않고 새로고침 시 정보가 저장되지 않을 수 있습니다.";
-  };
+  // window.onbeforeunload = function () {
+  //   return "임시저장하지 않고 새로고침 시 정보가 저장되지 않을 수 있습니다.";
+  // };
   useEffect(() => {
     window.scrollTo(0, 0);
     if (user.auth.isLoggedIn) {
@@ -75,7 +75,8 @@ const CreateRecipeForm = () => {
             setBtnState={setBtnState}
           />
 
-          <div recipeId={params}>
+          <div>
+            {/* <div recipeId={params}> */}
             <div
               style={{
                 backgroundColor: "#CF702C",

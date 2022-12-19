@@ -7,12 +7,23 @@ import RecordList from "./recipeList";
 import styled from "styled-components";
 import NullRecipe from "../nullRecipeList";
 import { useSelector } from "react-redux";
-import { IncompleteRecipeState } from "../RecipeStates";
+import { editingRecipeState } from "../RecipeStates";
 import { colors } from "../../../theme/theme";
 import BasicSpinner from "../../../components/_common/loading";
+import { useMemo } from "react";
 
-const RecordingRecipeList = ({ currentUser }) => {
-  const [incompleteRecipeState, setIncompleteRecipeState] = useState([
+const RecordingRecipeList = ({
+  currentUser,
+  recipeLength,
+  recipeState,
+  setRecipeState,
+  setRecipeLength,
+  incompleteRecipeState,
+  setIncompleteRecipeState,
+  incompleteRecipeLength,
+  setIncompleteRecipeLength,
+}) => {
+  const [editingRecipeState, setEditingRecipeState] = useState([
     {
       recipe_num: 0,
       recipe_title: "로딩중",
@@ -23,33 +34,29 @@ const RecordingRecipeList = ({ currentUser }) => {
     },
   ]); //미완성레시피 삭제 감지
   const [loadingState, setLoadingState] = useState(true);
-  const [incompleteRecipeLength, setIncompleteRecipeLength] = useState(0); //레시피 삭제 감지
+  // const [incompleteRecipeLength, setIncompleteRecipeLength] = useState(0); //레시피 삭제 감지
 
-  IncompleteRecipeState({
-    currentUser,
-    setIncompleteRecipeState,
-    // incompleteRecipeState,
-    // incompleteRecipeLength,
-    setIncompleteRecipeLength,
-    setLoadingState,
-  });
+  useEffect(() => {
+    if (incompleteRecipeState.length > 0) {
+      setEditingRecipeState(incompleteRecipeState);
+      setIncompleteRecipeLength(incompleteRecipeState.length);
+    } else {
+      setEditingRecipeState("empty");
+    }
+  }, [incompleteRecipeState]);
+  console.log("incompleteRecipeState", incompleteRecipeState);
+  console.log("editingRecipeState", editingRecipeState);
 
-  // const formData = new FormData();
-  // formData.append("member_id", member_id);
-
-  // function Axios() {
-  //   axios({
-  //     url: "/recipe/recordingType0",
-  //     method: "Post",
-  //     data: formData,
-  //     baseURL: "http://localhost:9000",
-  //     // baseURL: process.env.REACT_APP_HOST,
-  //     // baseURL: process.env.REACT_APP_API_URL,
-  //   }).then(function (response) {
-  //     setRecipeState(response.data);
-  //     setRecipeLength(response.data.length);
-  //   });
-  // }
+  useCallback(() => {
+    // useMemo(() => {
+    if (incompleteRecipeLength > 0) {
+      setIncompleteRecipeState(incompleteRecipeState);
+      setIncompleteRecipeLength(incompleteRecipeState.length);
+    } else {
+      setEditingRecipeState(incompleteRecipeState);
+      setIncompleteRecipeLength(0);
+    }
+  }, [incompleteRecipeState, incompleteRecipeLength]);
 
   return (
     <>
@@ -60,11 +67,11 @@ const RecordingRecipeList = ({ currentUser }) => {
             <RecipeWrapItems>
               <Scrollable>
                 <div>
-                  {incompleteRecipeState === "empty" ? (
+                  {editingRecipeState === "empty" ? (
                     <>
                       <NullRecipe />
                     </>
-                  ) : incompleteRecipeState[0].recipe_title === "로딩중" ? (
+                  ) : editingRecipeState[0].recipe_title === "로딩중" ? (
                     <>
                       <BasicSpinner />
                     </>
@@ -73,152 +80,26 @@ const RecordingRecipeList = ({ currentUser }) => {
                       <RecordList
                         // loadingState={loadingState}
                         key={e.recipe_num}
-                        incompleteRecipeState={e}
+                        incompleteRecipeState={incompleteRecipeState}
+                        editingRecipeState={e}
                         incompleteRecipeLength={incompleteRecipeLength}
+                        setEditingRecipeState={setEditingRecipeState}
                         setIncompleteRecipeState={setIncompleteRecipeState}
                         setIncompleteRecipeLength={setIncompleteRecipeLength}
                       />
                     ))
                   )}
-                  {/* {!loadingState && recipeLength === 0 && <BasicSpinner />} */}
-                  {/* {!loadingState && recipeLength === 0 ? (
-                  <BasicSpinner />
-                ) : loadingState ? (
-                  <NullRecipe />
-                ) : (
-                  <></>
-                )} */}
-                  {/* {recipeLength > 0 &&
-                  recipeState.map((e) => (
-                    <CompleteList
-                      loadingState={loadingState}
-                      key={e.recipe_num}
-                      completedRecipeState={e}
-                      recipeLength={recipeLength}
-                      setRecipeLength={setRecipeLength}
-                    />
-                  ))} */}
-                  {/* {recipeState ? (
-                  recipeState.map((e) => (
-                    <CompleteList
-                      loadingState={loadingState}
-                      key={e.recipe_num}
-                      completedRecipeState={e}
-                      recipeLength={recipeLength}
-                      setRecipeLength={setRecipeLength}
-                    />
-                  ))
-                ) : (
-                  <NullRecipe />
-                )} */}
-                  {/* {loadingState ? (
-                  <div>로딩중</div>
-                ) : recipeState.recipe_title !== "" ? (
-                  recipeState.map((e) => (
-                    <CompleteList
-                      loadingState={loadingState}
-                      key={e.recipe_num}
-                      completedRecipeState={e}
-                      recipeLength={recipeLength}
-                      setRecipeLength={setRecipeLength}
-                    />
-                  ))
-                ) : (
-                  <NullRecipe />
-                )} */}
-                  {/* {loadingState ? (
-                  <div>로딩중</div>
-                ) : recipeState.length !== 0 ? (
-                  recipeState.map((e) => (
-                    <CompleteList
-                      key={e.recipe_num}
-                      completedRecipeState={e}
-                      recipeLength={recipeLength}
-                      setRecipeLength={setRecipeLength}
-                    />
-                  ))
-                ) : (
-                  <NullRecipe />
-                )} */}
                 </div>
               </Scrollable>
             </RecipeWrapItems>
           </div>
         </div>
       </BasicFormSection>
-
-      {/* 작성중인 레시피
-      <div className="container-sm myPage-box4">
-        <div>
-          <SectionTitle>
-            작성중인 레시피
-            <span className="likeRecipeTotal" style={totalRecipe}>
-              {" "}
-              총 {incompleteRecipeState.length}개
-            </span>
-          </SectionTitle>
-          <Scrollable>
-            <div>
-              {incompleteRecipeState.length !== 0 ? (
-                incompleteRecipeState.map((e) => (
-                  <RecordList
-                    key={e.recipe_num}
-                    recipeState={e}
-                    recipeLength={recipeLength}
-                    setRecipeLength={setRecipeLength}
-                  />
-                ))
-              ) : (
-                <NullRecipe />
-              )}
-            </div>
-          </Scrollable>
-        </div>
-      </div> */}
     </>
   );
 };
 export default RecordingRecipeList;
-// const SectionTitle = styled.div`
-//   background-color: #8d3232;
-//   display: inline-block;
-//   width: 90%;
-//   margin: 1em 3em;
-//   color: #fffdf5;
-//   height: 2.4em;
-//   font-size: 21px;
-//   font-weight: 700;
-//   padding: 0.5em 0;
-//   padding-left: 0.5em;
-//   text-align: center;
-// `;
 
-// const Scrollable = styled.section`
-//   width: 100%;
-//   margin: 1em auto;
-
-//   & > div {
-//     padding: 2rem;
-//     height: 30em;
-//     overflow-y: auto;
-//     margin: 0 auto;
-
-//     ::-webkit-scrollbar {
-//       width: 0.5rem;
-//     }
-//     ::-webkit-scrollbar-thumb {
-//       height: 30%;
-//       background-color: #463635;
-//     }
-//     ::-webkit-scrollbar-track {
-//       background-color: #fffdf5;
-//       border: 1px solid #463635;
-//     }
-//   }
-// `;
-// let totalRecipe = {
-//   fontSize: "15px",
-// };
 const Scrollable = styled.section`
   clear: both;
   width: 95%;

@@ -64,8 +64,6 @@ const BasicForm = ({
     onChangeRecipeThumbnail(e);
   };
 
-  useMemo(() => {}, []);
-
   const onTemporarySave = useCallback(
     (e) => {
       e.preventDefault();
@@ -110,7 +108,7 @@ const BasicForm = ({
             information_time: `${information_time}`,
             information_level: `${information_level}`,
             recipe_creDate: "",
-            member_id: `${member_id}`, //로그인한 멤버 정보 들어갈 자리
+            member_id: `${member_id}`,
           };
 
           console.log("data", data);
@@ -145,29 +143,50 @@ const BasicForm = ({
           formData.append("recipe_creDate", data.recipe_creDate);
           formData.append("member_id", user.auth.user.username);
 
+          //처음 임시저장할떄
+          btnState === 0
+            ? axios({
+                method: "POST",
+                // url: process.env.REACT_APP_HOST + "/recipe/save",
+                url: "http://localhost:9000/recipe/save",
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+                data: formData,
+              })
+                .then(() => {
+                  setSaveState(1);
+                  setBtnDisplayState("none");
+                  setBtnState(1);
+                  setBtnDisabledState(true);
+                })
+                .then((response) => {
+                  for (let value of formData.values()) {
+                    console.log("value", value);
+                  }
+                })
+                .catch((err) => {
+                  console.log(err);
+                })
+            : formData.append("recipe_num", recipeState);
           axios({
             method: "POST",
-            // url: process.env.REACT_APP_HOST + "/recipe/save",
-            url: "http://localhost:9000/recipe/save",
+
+            url: "http://localhost:9000/recipe/update",
             headers: {
               "Content-Type": "multipart/form-data",
             },
             data: formData,
           })
-            .then(() => {
-              setSaveState(1);
-              setBtnDisplayState("none");
-              setBtnState(1);
-              setBtnDisabledState(true);
-            })
             .then((response) => {
               for (let value of formData.values()) {
-                console.log("value", value);
+                console.log(value);
               }
+              console.log("성공?");
+              setBtnState(1);
+              setBtnDisplayState("none");
             })
-            .catch((err) => {
-              console.log(err);
-            });
+            .catch((e) => console.log(e));
         } else {
           alert("임시저장실패하셨습니다.");
         }
@@ -176,7 +195,8 @@ const BasicForm = ({
       }
     },
     [
-      // btnState,
+      btnState,
+      recipeState,
       recipe_title,
       recipe_introduce,
       recipe_url,
@@ -197,7 +217,6 @@ const BasicForm = ({
       <div style={{ height: "fit-content" }}>
         <BasicFormWrap
           style={{
-            // backgroundColor: "green",
             clear: "both",
             display: "block",
             margin: "0 auto",
@@ -598,10 +617,8 @@ const BasicFormWrap = styled.div`
   & .recipeLeftWrap {
     width: 50%;
     height: 100%;
-    /* background-color: red; */
   }
   & .recipeRightWrap {
-    /* height: 100%; */
     height: 50vh;
     justify-content: center;
     width: 45%;
@@ -609,7 +626,6 @@ const BasicFormWrap = styled.div`
 
     background-color: ${colors.color_white};
     border-radius: 1vw;
-    /* background-color: yellow; */
   }
 
   & select {
@@ -631,8 +647,7 @@ const TempSaveBtn = styled.button`
   position: fixed;
   right: 1.5vw;
   bottom: 3vh;
-  /* background-color: ${colors.color_beige_brown}; */
-  background-color: green;
+  background-color: ${colors.color_milktea_brown};
   border: 1px solid transparent;
 
   &:hover {

@@ -94,7 +94,7 @@ const RecipeDetailModal = () => {
             })
             .catch((e) => setDataErrorState(true));
         })
-        .catch((e) => console.log("데이터 불러오기 실패!"));
+        .catch((e) => setDataErrorState(true));
       axios
         .get("http://localhost:9000/recipe/getIngredientList/" + recipeId)
         .then(function (response) {
@@ -161,7 +161,7 @@ const RecipeDetailModal = () => {
   }, [heartState, recipe_likes, recipeId]);
 
   const onLikeHandler = () => {
-    const params = params.recipeId;
+    const params = recipeId;
 
     if (loginState) {
       if (heartState === 1) {

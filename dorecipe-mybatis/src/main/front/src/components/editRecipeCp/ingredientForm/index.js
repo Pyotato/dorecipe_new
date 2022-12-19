@@ -165,10 +165,9 @@ const IngredientForm = ({
   // );
 
   const onTemporarySave = useCallback(
-    (e) => {
-      e.preventDefault();
+    () => {
+      // e.preventDefault();
       console.log("ingredients", ingredients);
-      let ingreCopy = [...ingredients];
       const data = ingredients;
       const blob = new Blob([JSON.stringify(data)], {
         type: "application.json",
@@ -209,6 +208,13 @@ const IngredientForm = ({
     // },
     [ingredients]
   );
+
+  //페이지를 벗어난다면 저장해주기
+  ingredients[0].ing_ingredient !== "" &&
+    window.addEventListener("beforeunload", function (e) {
+      e.preventDefault();
+      onTemporarySave();
+    });
 
   useMemo(() => {
     // useEffect(() => {

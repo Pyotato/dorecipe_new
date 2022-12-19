@@ -1,4 +1,7 @@
 import axios from "axios";
+import { useEffect } from "react";
+import { useMemo } from "react";
+import { useCallback } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -11,6 +14,11 @@ const CompleteList = ({
   recipeLength,
   setRecipeLength,
   loadingState,
+  setRecipeState,
+  recipeState,
+  setLoadingState,
+  setIncompleteRecipeLength,
+  incompleteRecipeLength,
 }) => {
   const navigate = useNavigate();
   const [hoverBinState, setHoverBinState] = useState(0);
@@ -19,6 +27,7 @@ const CompleteList = ({
   };
 
   const deleteRecipe = () => {
+    // const deleteRecipe = useCallback(() => {
     axios
       .get(
         "http://localhost:9000/recipe/delete/" + completedRecipeState.recipe_num
@@ -26,9 +35,33 @@ const CompleteList = ({
       .then((result) => {
         console.log("result", result);
         setRecipeLength(recipeLength - 1);
+        const filtered = recipeState.filter(
+          (e) => e.recipe_num !== completedRecipeState.recipe_num
+        );
+        setRecipeState(filtered);
       })
       .catch(() => {
         console.log("삭제실패");
+      });
+  };
+
+  const setRecipeEdit = () => {
+    axios
+      .get(
+        "http://localhost:9000/recipe/updateRecipeSaveTypeTo1/" +
+          completedRecipeState.recipe_num
+      )
+      .then((result) => {
+        console.log("result", result);
+        const filtered = recipeState.filter(
+          (e) => e.recipe_num !== completedRecipeState.recipe_num
+        );
+        setRecipeState(filtered);
+        setRecipeLength(filtered.length);
+        setIncompleteRecipeLength(incompleteRecipeLength + 1);
+      })
+      .catch((err) => {
+        console.log("err", err);
       });
   };
 
@@ -38,45 +71,59 @@ const CompleteList = ({
 
       <RecipeWrap>
         <div>
-          <div className="binWrap">
+          <div>
             {hoverBinState === 0 ? (
-              <div className="binWrap">
-                <RubbishBin
-                  onMouseOver={() => {
-                    setHoverBinState(1);
-                  }}
-                  className="deleteRecipe"
-                  onClick={() => deleteRecipe()}
-                />
-              </div>
+              <>
+                <div className="binWrap">
+                  <div className="deleteRecipe" onClick={setRecipeEdit}>
+                    수정
+                  </div>
+                  <RubbishBin
+                    onMouseOver={() => {
+                      setHoverBinState(1);
+                    }}
+                    className="deleteRecipe"
+                    onClick={() => deleteRecipe()}
+                  />
+                </div>
+              </>
             ) : (
-              <div
-                // className="binWrap"
-                className="binWrap deleteRecipe"
-                onMouseLeave={() => {
-                  setHoverBinState(0);
-                }}
-                onClick={() => deleteRecipe()}
-                style={{
-                  transform: "translateY(-30%)",
-                  margin: "1em 0 0.1em",
-                }}
-              >
-                | 삭제 |
-              </div>
+              <>
+                <div className="binWrap">
+                  <div
+                    className="deleteRecipe"
+                    onClick={() => {
+                      setRecipeEdit();
+                      setIncompleteRecipeLength(incompleteRecipeLength + 1);
+                    }}
+                  >
+                    수정
+                  </div>
+                  <div
+                    className="deleteRecipe"
+                    onMouseLeave={() => {
+                      setHoverBinState(0);
+                    }}
+                    onClick={() => deleteRecipe()}
+                  >
+                    | 삭제 |
+                  </div>
+                </div>
+              </>
             )}
           </div>
+
           <ItemWrap onClick={() => onClickRecipeDetails()}>
             <div>
               <div>
-                {loadingState ? (
+                {/* {loadingState ? (
                   <BasicSpinner />
-                ) : (
-                  <img
-                    src={completedRecipeState.recipe_rpath}
-                    alt={completedRecipeState.recipe_rpath}
-                  />
-                )}
+                ) : ( */}
+                <img
+                  src={completedRecipeState.recipe_rpath}
+                  alt={completedRecipeState.recipe_rpath}
+                />
+                {/* )} */}
               </div>
             </div>
             <div className="titleWrap">
@@ -117,12 +164,15 @@ const RecipeWrap = styled.div`
 
   & .deleteRecipe {
     fill: ${colors.color_black_brown};
-    height: 24px;
+    /* height: 24px; */
+    margin-bottom: 0.6em;
   }
   & .binWrap {
-    display: block;
+    display: inline-flex;
     width: 100%;
     text-align: right;
+    justify-content: space-between;
+    align-items: center;
     /* transform: translateX(5%); */
     fill: ${colors.color_black_brown};
   }

@@ -13,29 +13,33 @@ const RecordList = ({
   incompleteRecipeLength,
   setIncompleteRecipeLength,
   loadingState,
+  editingRecipeState,
   setIncompleteRecipeState,
 }) => {
   const user = useSelector((auth) => auth);
   const navigate = useNavigate();
+
+  // console.log("editingRecipeState", editingRecipeState);
+
   const goToDraftRecipe = () => {
     console.log("goToDraftRecipe", user);
-    navigate("/recipe/update/" + incompleteRecipeState.recipe_num);
+    navigate("/recipe/update/" + editingRecipeState.recipe_num);
   };
   const deleteRecipe = () => {
     console.log("삭제~", incompleteRecipeState);
 
     axios
       .get(
-        "http://localhost:9000/recipe/delete/" +
-          incompleteRecipeState.recipe_num
+        "http://localhost:9000/recipe/delete/" + editingRecipeState.recipe_num
       )
       .then((result) => {
         console.log("result", result);
-        // const removeState = incompleteRecipeState.filter(
-        //   (item) =>
-        //     item.recipe_num !== parseInt(incompleteRecipeState.recipe_num)
-        // );
-        // console.log("incompleteRecipeState", incompleteRecipeState);
+        const removeState = incompleteRecipeState.filter(
+          (item) => item.recipe_num !== parseInt(editingRecipeState.recipe_num)
+        );
+        console.log("removeState", removeState);
+        setIncompleteRecipeState(removeState);
+        // setIncompleteRecipeLength()
         setIncompleteRecipeLength(incompleteRecipeLength - 1);
       })
       .catch((e) => {
@@ -49,32 +53,43 @@ const RecordList = ({
 
       <RecipeWrap>
         <div>
-          <div className="binWrap">
+          <div style={{ height: "20px", marginBottom: "1em" }}>
             {hoverBinState === 0 ? (
               <div className="binWrap">
-                <RubbishBin
-                  onMouseOver={() => {
-                    setHoverBinState(1);
-                  }}
-                  className="deleteRecipe"
-                  onClick={deleteRecipe}
-                  // onClick={() => deleteRecipe()}
-                />
+                <div style={{ height: "1em" }}>
+                  <RubbishBin
+                    onMouseOver={() => {
+                      setHoverBinState(1);
+                    }}
+                    className="deleteRecipe"
+                    onClick={deleteRecipe}
+                  />
+                </div>
               </div>
             ) : (
-              <div
-                // className="binWrap"
-                className="binWrap deleteRecipe"
-                onMouseLeave={() => {
-                  setHoverBinState(0);
-                }}
-                onClick={deleteRecipe}
-                style={{
-                  transform: "translateY(-30%)",
-                  margin: "1em 0 0.1em",
-                }}
-              >
-                | 삭제 |
+              <div style={{ height: "20px" }}>
+                <div>
+                  <div className="binWrap">
+                    <div
+                      onMouseLeave={() => {
+                        setHoverBinState(0);
+                      }}
+                      onClick={deleteRecipe}
+                    >
+                      <span
+                        className="deleteRecipe"
+                        style={{
+                          display: "inline-block",
+
+                          width: "100%",
+                          padding: "4px 0",
+                        }}
+                      >
+                        | 삭제 |
+                      </span>
+                    </div>
+                  </div>{" "}
+                </div>
               </div>
             )}
           </div>
@@ -85,65 +100,31 @@ const RecordList = ({
                   <BasicSpinner />
                 ) : (
                   <img
-                    src={incompleteRecipeState.recipe_rpath}
-                    alt={incompleteRecipeState.recipe_rpath}
+                    src={editingRecipeState.recipe_rpath}
+                    alt={editingRecipeState.recipe_rpath}
                   />
                 )}
               </div>
             </div>
             <div className="titleWrap">
-              {incompleteRecipeState.recipe_title.length < 35 ? (
-                <>{incompleteRecipeState.recipe_title}</>
+              {editingRecipeState.recipe_title.length < 35 ? (
+                <>{editingRecipeState.recipe_title}</>
               ) : (
-                <>
-                  {incompleteRecipeState.recipe_title.substring(0, 35) + "..."}
-                </>
+                <>{editingRecipeState.recipe_title.substring(0, 35) + "..."}</>
               )}
             </div>
             <div className="flexBox">
               <div className="infoWrap">
                 {" "}
-                {incompleteRecipeState.information_level}
+                {editingRecipeState.information_level}
               </div>
               <div className="infoTimeWrap">
-                {incompleteRecipeState.information_time}
+                {editingRecipeState.information_time}
               </div>
             </div>
           </ItemWrap>
         </div>
       </RecipeWrap>
-
-      {/* <RecipeWrap>
-        <li className="card recipe-box center wrap">
-          <div>
-            <FontAwesomeIcon
-              className="createRecipeIcon"
-              icon={faXmarkCircle}
-              onClick={deleteRecipe}
-            />
-          </div>
-          {/* <div className="card recipe-box center"> *
-          <img
-            className="card-img-top card-img-size Rcard"
-            src={incompleteRecipeState.recipe_rpath}
-            alt="profileImage"
-          />
-          <div
-            onClick={goToDraftRecipe}
-            className="card-title"
-            style={{ cursor: "pointer" }}
-          >
-            {/* {recipeState.recipe_title} 
-            {incompleteRecipeState.recipe_title.length < 12
-              ? incompleteRecipeState.recipe_title
-              : incompleteRecipeState.recipe_title.slice(0, 11) + "..."}
-          </div>
-          {incompleteRecipeState.information_level}
-          &nbsp;&nbsp;&nbsp;
-          {incompleteRecipeState.information_time}
-          {/* </div> 
-        </li>
-      </RecipeWrap> */}
     </>
   );
 };
@@ -161,13 +142,14 @@ const RecipeWrap = styled.div`
 
   & .deleteRecipe {
     fill: ${colors.color_black_brown};
-    height: 24px;
+
+    height: 20px;
   }
   & .binWrap {
-    display: block;
+    height: 20px;
+
     width: 100%;
     text-align: right;
-    /* transform: translateX(5%); */
     fill: ${colors.color_black_brown};
   }
   & .deleteRecipe:hover {
@@ -223,7 +205,7 @@ const ItemWrap = styled.div`
     border: 1px solid ${colors.color_black};
     width: 50%;
     height: 4vh;
-    /* padding: 1vh; */
+
     padding-bottom: 1em;
     padding: 0.5vh 1vw;
     border-radius: 0 1vw 1vw 0;

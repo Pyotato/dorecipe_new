@@ -89,11 +89,6 @@ const RecipeOrderDrag = ({
       order_path: "",
     },
   ]);
-  // useEffect(() => {
-  //   if (userState) {
-  //     navigate("/login");
-  //   }
-  // }, []);
 
   const [order_pathChangeState, setorder_pathChangeState] = useState(0);
   const onChangeorder_path = () => {
@@ -112,19 +107,21 @@ const RecipeOrderDrag = ({
 
         const tempStates = [];
         orderState.map((e) => {
-          return tempStates.push({
-            recipe_num: orderState[0].recipe_num,
-            order_num: e.order_num,
-            order_explain: e.order_explain,
-            // order_path: e.order_path,
-            order_path:
-              e.order_path === null
-                ? ""
-                : e.order_path.slice(
-                    e.order_path.lastIndexOf("/img"),
-                    e.order_path.length
-                  ),
-          });
+          if (e.order_explain !== null) {
+            return tempStates.push({
+              recipe_num: orderState[0].recipe_num,
+              order_num: e.order_num,
+              order_explain: e.order_explain,
+              // order_path: e.order_path,
+              order_path:
+                e.order_path === null || e.order_path === ""
+                  ? ""
+                  : e.order_path.slice(
+                      e.order_path.lastIndexOf("/img"),
+                      e.order_path.length
+                    ),
+            });
+          } else return;
         });
         setStep(tempStates);
 
@@ -302,138 +299,6 @@ const RecipeOrderDrag = ({
     },
     [stepState]
   );
-  // const fileDropHandler = (index, files, setFiles) => {
-  //   return (
-  //     <>
-  //       {files.length > 0 &&
-  //       stepState.length > 0 &&
-  //       typeof stepState[index].order_path.preview != String ? (
-  //         // &&  orderState[index].order_path.slice(
-  //         //     orderState[index].order_path.lastIndexOf("/img"),
-  //         //     orderState[index].order_path.length
-  //         //   ) !== stepState[index].order_path
-  //         // const copyState = [...stepState];
-  //         // copyState[index].order_path = orderState[
-  //         //   index
-  //         // ].order_path.slice(
-  //         //   orderState[index].order_path.lastIndexOf(
-  //         //     "/img"
-  //         //   ),
-  //         //   orderState[index].order_path.length
-  //         // );
-  //         <>
-  //           <div
-  //             className="fileBox"
-  //             style={{
-  //               border: "1px solid black",
-  //               height: "18vh",
-  //               borderRadius: "0 0.5vw 0.5vw 0",
-  //               margin: "0",
-  //             }}
-  //           >
-  //             <p
-  //               onClick={() => {
-  //                 setFiles("");
-  //                 const copyState = [...stepState];
-  //                 copyState[index].order_path = "";
-  //                 setStep(copyState);
-  //               }}
-  //               // onClick={() => setFiles("")}
-  //               style={{ zIndex: "600" }}
-  //               className="removeFile"
-  //             >
-  //               이미지 삭제
-  //             </p>
-  //             <img
-  //               onClick={() => {
-  //                 setFiles("");
-  //                 const copyState = [...stepState];
-  //                 copyState[index].order_path = "";
-  //                 setStep(copyState);
-  //               }}
-  //               style={{
-  //                 width: "90px",
-  //                 transform: "translateX(100%)",
-  //                 padding: "0.6vw",
-  //                 display: "inline-block",
-  //               }}
-  //               src={stepState[index].order_path.preview}
-  //               alt={stepState[index].order_path.preview}
-  //             />
-  //           </div>
-  //         </>
-  //       ) : (
-  //         <>
-  //           <Dropzone
-  //             className="dropZoneWrap"
-  //             onDrop={(acceptedFiles) => {
-  //               setFiles(
-  //                 acceptedFiles.map((file) =>
-  //                   Object.assign(file, {
-  //                     preview: URL.createObjectURL(file),
-  //                   })
-  //                 )
-  //               );
-
-  //               acceptedFiles.forEach((file) => {
-  //                 const reader = new FileReader();
-  //                 reader.readAsDataURL(file);
-  //                 const copyState = [...stepState];
-  //                 copyState[index].order_path = file;
-  //                 setStep(copyState);
-  //               });
-  //             }}
-  //             name="stepImages"
-  //             multiple={false}
-  //           >
-  //             {({ getRootProps, getInputProps }) => (
-  //               <div
-  //                 style={{
-  //                   border: "1px solid black",
-  //                   borderRadius: "0 0.5vw 0.5vw 0",
-  //                   borderLeft: "none",
-  //                   width: "9vw",
-  //                   height: "18vh",
-  //                   paddingTop: "5vh",
-  //                   textAlign: "center",
-  //                 }}
-  //                 {...getRootProps({
-  //                   className: "dropzone",
-  //                 })}
-  //               >
-  //                 <div
-  //                   style={{
-  //                     fontSize: "2px",
-  //                     textAlign: "center",
-  //                   }}
-  //                 >
-  //                   <Camera />
-  //                 </div>
-  //                 <input {...getInputProps()} />
-  //                 {/* {stepState[index].order_path.length === 0 && (
-  //                   <span style={{ fontSize: " .8vw" }}>이미지 등록</span>
-  //                 )} */}
-  //                 {/* {stepState[index].order_path.name === undefined && (
-  //                   <span style={{ fontSize: " .8vw" }}>이미지 변경</span>
-  //                 )} */}
-  //                 {stepState[index].order_path === "" ? (
-  //                   <span style={{ fontSize: " .8vw" }}>이미지 등록</span>
-  //                 ) : (
-  //                   <span style={{ fontSize: " .8vw" }}>이미지 변경</span>
-  //                 )}
-  //                 {/* {stepState[index].order_path.name === undefined ? (
-  //                   <span style={{ fontSize: " .8vw" }}>이미지 변경</span>
-  //                 ) : (
-  //                   <span style={{ fontSize: " .8vw" }}>이미지 등록</span>
-  //                 )} */}
-  //               </div>
-  //             )}
-  //           </Dropzone>
-  //         </>
-  //       )}
-  //     </>
-  //   );
-  // };
 
   //임시등록버튼 2번째로 클릭했을때는 update하도록
   // const [btnState, setBtnState] = useState(0);
@@ -521,74 +386,56 @@ const RecipeOrderDrag = ({
     }
   };
 
-  // for (let i = 0; i < stepState.length; i++) {
-  //   console.log(`stepState[${i}].order_path`, typeof stepState[i].order_path);
-  // }
-
-  const previousSave = useCallback(() => {
-    // if (orderState.length > 0) {
-    orderState.map((item, i) => {
-      return (
-        <>
-          {/* {index === i && ( */}
-          <div
-            style={{
-              border: "1px solid black",
-              padding: "0.3vw",
-              height: "18vh",
-            }}
-          >
-            <img
-              onClick={() => onChangeorder_path(1)}
-              style={{ width: "9.8vw", maxHeight: "16vh" }}
-              src={item.order_path}
-              alt={item.order_path}
-            />
-          </div>
-          {/* )} */}
-        </>
-      );
-    });
-    // }
-  }, [orderState]);
-
   //임시 저장 ==> 2번째에는 업데이트문 들어가도록하기
-  const onTemporarySave = useCallback(
-    (e) => {
-      e.preventDefault();
-      console.log("ingredients", stepState);
-      // // let ingreCopy = [...stepState];
-      const data = stepState;
-      const blob = new Blob([JSON.stringify(data)], {
-        type: "application.json",
-      });
-      // // console.log("data", data);
-      const formData = new FormData();
-      formData.append("data", blob);
-      // //!!!!!!!!!!!!!!!!!!!!!!!!!//수정한 거 백에 보내기
-      for (let i = 0; i < stepState.length; i++) {
+  const onTemporarySave = useCallback(() => {
+    // e.preventDefault();
+    console.log("ingredients", stepState);
+    // // let ingreCopy = [...stepState];
+    const data = stepState;
+    const blob = new Blob([JSON.stringify(data)], {
+      type: "application.json",
+    });
+    // // console.log("data", data);
+    const formData = new FormData();
+    formData.append("data", blob);
+    // //!!!!!!!!!!!!!!!!!!!!!!!!!//수정한 거 백에 보내기
+    for (let i = 0; i < stepState.length; i++) {
+      formData.append(
+        `orderVoList[${i}].recipe_num`,
+        parseInt(recipeId.recipeId)
+      );
+      formData.append(`orderVoList[${i}].order_num`, stepState[i].order_num);
+      formData.append(
+        `orderVoList[${i}].order_explain`,
+        stepState[i].order_explain
+      );
+      //파일이라면 (새로운 거 등록)
+      if (typeof stepState[i].order_path !== "string") {
         formData.append(
-          `orderVoList[${i}].recipe_num`,
-          stepState[i].recipe_num
+          `orderVoList[${i}].order_path`,
+          stepState[i].order_path.name
         );
-        formData.append(`orderVoList[${i}].order_num`, stepState[i].order_num);
-        formData.append(
-          `orderVoList[${i}].order_explain`,
-          stepState[i].order_explain
-        );
-        //파일이라면 (새로운 거 등록)
-        if (typeof stepState[i].order_path !== "string") {
+        formData.append(`recipe_imgs_steps`, stepState[i].order_path);
+      } else {
+        // //원래 등록했던 이미지를 그대로 업로드하려면
+        if (
+          stepState[i].order_path != null &&
+          stepState[i].order_path.length > 0 &&
+          stepState[i].order_path === orderState[i].order_path
+        ) {
+          // if (stepState[i].order_path.contains("/img")) {
+          // i &&
           formData.append(
             `orderVoList[${i}].order_path`,
-            stepState[i].order_path.name
+            orderState[i].order_path.slice(
+              orderState[i].order_path.lastIndexOf("/img"),
+              orderState[i].order_path.length
+            )
           );
-          formData.append(`recipe_imgs_steps`, stepState[i].order_path);
+          // }
         } else {
-          // //원래 등록했던 이미지를 그대로 업로드하려면
-
           formData.append(
             `orderVoList[${i}].order_path`,
-
             orderState[i].order_path.slice(
               orderState[i].order_path.lastIndexOf("/img"),
               orderState[i].order_path.length
@@ -596,24 +443,48 @@ const RecipeOrderDrag = ({
           );
         }
       }
+    }
 
-      axios({
-        method: "POST",
-        // url: process.env.REACT_APP_HOST + "/recipe/insertRecipeIngredients",
-        url: "http://localhost:9000/recipe/updateRecipeInstructions",
-        headers: { "Content-Type": "multipart/form-data" },
-        data: formData,
+    //임시저장한 순서 중에서 삭제한 순서가 있는 경우
+    if (orderState.length > stepState.length) {
+      for (let i = stepState.length; i < orderState.length; i++) {
+        formData.append(
+          `orderVoList[${i}].recipe_num`,
+          orderState[i].recipe_num
+        );
+        formData.append(`orderVoList[${i}].order_num`, orderState[i].order_num);
+      }
+    }
+
+    axios({
+      method: "POST",
+      // url: process.env.REACT_APP_HOST + "/recipe/insertRecipeIngredients",
+      url: "http://localhost:9000/recipe/updateRecipeInstructions",
+      headers: { "Content-Type": "multipart/form-data" },
+      data: formData,
+    })
+      .then((response) => {
+        console.log("순서 업데이트 성공");
+        console.log(response.data);
       })
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
+      .catch((e) => {
+        console.log("순서 업데이트 실패ㅜㅜㅜㅜ");
 
-    [stepState]
-  );
+        console.log(e);
+      });
+  }, [stepState, orderState]);
+  // window.onbeforeunload = function () {
+  //   onTemporarySave();
+  // };
+  //페이지를 벗어난다면 저장해주기
+  // useMemo(() => {
+
+  stepState[0].order_explain !== "" &&
+    window.addEventListener("beforeunload", function (e) {
+      e.preventDefault();
+      onTemporarySave();
+    });
+  // }, [stepState]);
 
   return (
     <>
@@ -624,7 +495,8 @@ const RecipeOrderDrag = ({
           onClick={onTemporarySave}
           // btnState={btnState}
           // disabled={btnDisabledState}
-          style={{ display: "block" }}
+          style={{ display: "none" }}
+          // style={{ display: "block" }}
           // style={{ display: btnDisplayState }}
         >
           <FontAwesomeIcon icon={faFloppyDisk} />
@@ -718,71 +590,75 @@ const RecipeOrderDrag = ({
 
                       {orderState.length > 0 && index < orderState.length && (
                         <>
-                          <div
-                            style={{
-                              border: "1px solid black",
-                              padding: "0.3vw",
-                              height: "18vh",
-                            }}
-                          >
-                            <img
-                              onClick={() => {
-                                onChangeorder_path(1);
-                                const copyState = [...stepState];
-                                copyState[index].order_path = orderState[
-                                  index
-                                ].order_path.slice(
-                                  orderState[index].order_path.lastIndexOf(
-                                    "/img"
-                                  ),
-                                  orderState[index].order_path.length
-                                );
-                                setStep(copyState);
-                              }}
-                              style={{
-                                width: "9.8vw",
-                                maxWidth: "9.8vw",
-                                maxHeight: "16vh",
-                                minWidth: "8em",
-                              }}
-                              src={orderState[index].order_path.slice(
-                                orderState[index].order_path.lastIndexOf(
-                                  "/img"
-                                ),
-                                orderState[index].order_path.length
-                              )}
-                              alt={orderState[index].order_path.slice(
-                                orderState[index].order_path.lastIndexOf(
-                                  "/img"
-                                ),
-                                orderState[index].order_path.length
-                              )}
-                              className="previousImgHover"
-                              // src={item.order_path}
-                              // alt={item.order_path}
-                            />
-                            <div
-                              style={{
-                                transform: "translateY(-10vh)",
-                                textAlign: "center",
-                                color: "red",
-                              }}
-                              onClick={() => {
-                                const copyState = [...stepState];
-                                copyState[index].order_path = orderState[
-                                  index
-                                ].order_path.slice(
-                                  orderState[index].order_path.lastIndexOf(
-                                    "/img"
-                                  ),
-                                  orderState[index].order_path.length
-                                );
-                                setStep(copyState);
-                              }}
-                            >
-                              이미지 되돌리기
-                            </div>
-                          </div>
+                          {orderState[index].order_path != null &&
+                            orderState[index].order_path !== "" && (
+                              <>
+                                {" "}
+                                <div
+                                  style={{
+                                    border: "1px solid black",
+                                    padding: "0.3vw",
+                                    height: "18vh",
+                                  }}
+                                >
+                                  <img
+                                    onClick={() => {
+                                      onChangeorder_path(1);
+                                      const copyState = [...orderState];
+                                      copyState[index].order_path = orderState[
+                                        index
+                                      ].order_path.slice(
+                                        orderState[
+                                          index
+                                        ].order_path.lastIndexOf("/img"),
+                                        orderState[index].order_path.length
+                                      );
+                                      setStep(copyState);
+                                    }}
+                                    style={{
+                                      width: "9.8vw",
+                                      maxWidth: "9.8vw",
+                                      maxHeight: "16vh",
+                                      minWidth: "8em",
+                                    }}
+                                    src={orderState[index].order_path.slice(
+                                      orderState[index].order_path.lastIndexOf(
+                                        "/img"
+                                      ),
+                                      orderState[index].order_path.length
+                                    )}
+                                    alt={orderState[index].order_path.slice(
+                                      orderState[index].order_path.lastIndexOf(
+                                        "/img"
+                                      ),
+                                      orderState[index].order_path.length
+                                    )}
+                                    className="previousImgHover"
+                                  />
+                                  <div
+                                    style={{
+                                      transform: "translateY(-10vh)",
+                                      textAlign: "center",
+                                      color: "red",
+                                    }}
+                                    onClick={() => {
+                                      const copyState = [...stepState];
+                                      copyState[index].order_path = orderState[
+                                        index
+                                      ].order_path.slice(
+                                        orderState[
+                                          index
+                                        ].order_path.lastIndexOf("/img"),
+                                        orderState[index].order_path.length
+                                      );
+                                      setStep(copyState);
+                                    }}
+                                  >
+                                    이미지 되돌리기
+                                  </div>
+                                </div>
+                              </>
+                            )}
                         </>
                       )}
 

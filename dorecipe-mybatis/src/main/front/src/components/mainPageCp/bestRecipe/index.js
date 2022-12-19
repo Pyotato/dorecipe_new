@@ -4,14 +4,21 @@ import { useNavigate } from "react-router-dom";
 import "../../_common/bannerLayout/style.css";
 import axios from "axios";
 import { colors } from "../../../theme/theme";
-import { ReactComponent as ArrowRight } from "../../../assets/ArrowRight.svg";
 import BasicSpinner from "../../_common/loading";
 
 const BestRecipe = () => {
-  const [state, setState] = useState([]);
+  const [state, setState] = useState([
+    {
+      recipe_rank: 1,
+      recipe_num: 0,
+      recipe_rpath: "",
+      recipe_title: "",
+      information_level: "",
+      information_time: "",
+    },
+  ]);
   const navigate = useNavigate();
   const [recipeArrayState, setRecipeArrayState] = useState([]);
-  const bestRecipes = [{}];
   const [loadingState, setLoadingState] = useState(1);
 
   useEffect(() => {
@@ -22,109 +29,78 @@ const BestRecipe = () => {
           recipeArrayState.push(result.data[i].recipe_num);
         }
         setRecipeArrayState(recipeArrayState);
+        setState(result.data);
+        console.log("getBestRecipes", result.data);
       })
       .then(() => {
-        console.log("recipeArray", recipeArrayState);
-        for (let i = 0; i < recipeArrayState.length; i++) {
-          axios
-            .get(
-              `http://localhost:9000/recipe/getBestLikedRecipes/${recipeArrayState[i]}`
-            )
-            .then((result) => {
-              bestRecipes.push({
-                recipe_rank: i + 1,
-                recipe_num: result.data[0].recipe_num,
-                recipe_rpath: result.data[0].recipe_rpath,
-                recipe_title: result.data[0].recipe_title,
-                information_level: result.data[0].information_level,
-                information_time: result.data[0].information_time,
-              });
-              // setState(bestRecipes);
-              // setLoadingState(0);
-            })
-            .then(() => {
-              setState(bestRecipes);
-            })
-            .then(() => {
-              setLoadingState(0);
-              // alert(loadingState);
-            })
-            .catch((e) => {
-              console.log(e);
-            });
-        }
+        setLoadingState(0);
       })
       .catch((e) => {
         console.log(e);
       });
   }, []);
-  // }, [/]);
 
   return (
     <>
       <BestRecipeWrap>
         <TotalWrap className="top">
-          {state.map((e) => {
-            return (
+          {state.map((e, index) => {
+            return loadingState === 1 ? (
+              <BasicSpinner />
+            ) : (
               <>
-                {
-                  //  loadingState === 1 ? (
-                  //   <BasicSpinner />
-                  // ) : (
-                  e.recipe_rank < 6 && (
-                    <>
-                      <div className="itemWrap" key={e}>
-                        {loadingState === 1 ? (
-                          <BasicSpinner />
-                        ) : (
-                          <>
-                            <div
-                              className="flexItem"
-                              onClick={() => {
-                                navigate(
-                                  `/recipe/search/details/${e.recipe_num}`
-                                );
-                              }}
-                            >
-                              {" "}
-                              <RecipeRank key={e.recipe_rank}>
-                                {e.recipe_rank}
-                              </RecipeRank>
-                              <RecipeImg>
-                                <img
-                                  className="bannerimg"
-                                  src={e.recipe_rpath}
-                                  key={e.recipe_rpath}
-                                  alt="bannerimg"
-                                ></img>
-                              </RecipeImg>
-                              <div className="recipeName">{e.recipe_title}</div>
-                              <div>
-                                <span className="floatLeft">
-                                  {e.information_level}
-                                </span>
-                                <span className="floatRight">
-                                  {e.information_time}
-                                </span>
-                              </div>
+                {index < 5 && (
+                  <>
+                    <div className="itemWrap" key={e}>
+                      {loadingState === 1 ? (
+                        <BasicSpinner />
+                      ) : (
+                        <>
+                          <div
+                            className="flexItem"
+                            onClick={() => {
+                              navigate(
+                                `/recipe/search/details/${e.recipe_num}`
+                              );
+                            }}
+                          >
+                            {" "}
+                            <RecipeRank key={index}>{index + 1}</RecipeRank>
+                            <RecipeImg>
+                              <img
+                                className="bannerimg"
+                                src={e.recipe_rpath}
+                                key={e.recipe_rpath}
+                                alt="bannerimg"
+                              ></img>
+                            </RecipeImg>
+                            <div className="recipeName">{e.recipe_title}</div>
+                            <div>
+                              <span className="floatLeft">
+                                {e.information_level}
+                              </span>
+                              <span className="floatRight">
+                                {e.information_time}
+                              </span>
                             </div>
-                          </>
-                        )}
-                      </div>
-                    </>
-                  )
-                  // )
-                }
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </>
+                )}
               </>
             );
           })}
         </TotalWrap>
 
         <TotalWrap>
-          {state.map((e) => {
-            return (
+          {state.map((e, index) => {
+            return loadingState === 1 ? (
+              <BasicSpinner />
+            ) : (
               <>
-                {e.recipe_rank > 5 && e.recipe_rank < 11 && (
+                {index > 4 && (
                   <>
                     <div className="itemWrap" key={e}>
                       <div
@@ -134,9 +110,7 @@ const BestRecipe = () => {
                         }}
                       >
                         {" "}
-                        <RecipeRank key={e.recipe_rank}>
-                          {e.recipe_rank}
-                        </RecipeRank>
+                        <RecipeRank key={index}>{index + 1}</RecipeRank>
                         <RecipeImg>
                           <img
                             className="bannerimg"
@@ -160,7 +134,6 @@ const BestRecipe = () => {
                             e.recipe_title
                           )}
                         </div>
-                        {/* <div className="recipeName">{e.recipe_title}</div> */}
                         <div>
                           <span className="floatLeft">
                             {e.information_level}
@@ -196,7 +169,8 @@ const TotalWrap = styled.div`
   margin-top: 3em;
   & > .itemWrap {
     width: 13vw;
-    height: 50vh;
+    height: 40vh;
+
     background-color: ${colors.color_greyish_white};
     border-radius: 1vw;
     overflow-x: hidden;
@@ -207,14 +181,14 @@ const TotalWrap = styled.div`
     display: inline-flex;
     flex-direction: column;
     width: 13vw;
-    /* height: 100%; */
+    height: 40vh;
   }
   & .flexItem:hover {
     cursor: pointer;
   }
 
   & .recipeName {
-    height: 7em;
+    height: 4em;
     padding: 1em;
     font-weight: 700;
     text-align: justify;
@@ -231,10 +205,13 @@ const TotalWrap = styled.div`
 
   & .floatLeft {
     float: left;
+
     padding-left: 1em;
+    padding-bottom: 1em;
   }
   & .floatRight {
     float: right;
+    padding-bottom: 1em;
     padding-right: 1em;
   }
 `;
@@ -258,7 +235,6 @@ const RecipeImg = styled.div`
 const RecipeRank = styled.div`
   position: absolute;
   z-index: 700;
-  /* float: right; */
   color: ${colors.color_carrot_orange};
   width: 3em;
   height: 3em;

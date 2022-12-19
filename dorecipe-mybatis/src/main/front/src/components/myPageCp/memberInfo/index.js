@@ -19,7 +19,16 @@ import { ReactComponent as IncompleteRecipes } from "../../../assets/IncompleteR
 import { ReactComponent as ProfileCircle } from "../../../assets/ProfileCircle.svg";
 import { ReactComponent as Phone } from "../../../assets/Phone.svg";
 
-const MemberInfoForm = ({ recipeLength, incompleteRecipeLength }) => {
+const MemberInfoForm = ({
+  recipeLength,
+  incompleteRecipeState,
+  incompleteRecipeLength,
+  likedRecipeState,
+  recipeState,
+  receivedLikesRecipes,
+  receivedLikesRecipesLength,
+  likedRecipeStateLength,
+}) => {
   // const userMsg = useSelector((state) => state.message);
   const user = useSelector((auth) => auth);
   // const [userState, setUserState] = useState();
@@ -29,6 +38,7 @@ const MemberInfoForm = ({ recipeLength, incompleteRecipeLength }) => {
   const [currentRole, setRole] = useState();
   const navigate = useNavigate();
 
+  console.log("recipeLength  MemberInfoForm", recipeLength);
   useEffect(() => {
     if (user.auth.isLoggedIn) {
       setCurrentUserId(user.auth.user.id);
@@ -37,13 +47,13 @@ const MemberInfoForm = ({ recipeLength, incompleteRecipeLength }) => {
       if (user.auth.user.roles.includes("ROLE_ADMIN")) {
         setRole("admin");
       }
-      // console.log("currentUserName", user.auth.user.username);
       axios
         .get(
           `http://localhost:9000/member/getMember/${user.auth.user.username}`
         )
         .then(function (response) {
           console.log("response", response);
+          //010 - 9999 - 9999 형식
           setMemberPhone(
             `${response.data.member_phone.substring(
               0,
@@ -55,8 +65,9 @@ const MemberInfoForm = ({ recipeLength, incompleteRecipeLength }) => {
               7,
               response.data.member_phone.length
             )}`
-          ); //010 - 9999 - 9999 형식
-          setMemberBday(response.data.member_birth.substring(0, 10)); //1999-12-10형식으로
+          );
+          //1999-12-10형식으로
+          setMemberBday(response.data.member_birth.substring(0, 10));
           setMemberGender(response.data.member_gender);
           setMemberName(response.data.member_name);
           setMemberNickName(response.data.member_nickname);
@@ -72,7 +83,6 @@ const MemberInfoForm = ({ recipeLength, incompleteRecipeLength }) => {
   }, []);
 
   // 수정 useInput
-  let [member_email, setMemberEmail] = useState("");
   let [member_phone, setMemberPhone] = useState("");
   let [member_birth, setMemberBday] = useState("");
   let [member_gender, setMemberGender] = useState("");
@@ -166,24 +176,43 @@ const MemberInfoForm = ({ recipeLength, incompleteRecipeLength }) => {
                 </div>
                 <div style={{ width: "50%" }}>
                   <div className="items">
+                    {/* 개수가 길어질 거 대비해서 ~10000이면 그대로 표시,  
+                    10000이상부터=> 10k ++,100,000이면 1m ++  등으로 표시될도록 */}
                     <CompletedRecipes className="accented svgStrokes" />
                     <div className="inlineRight">
-                      작성 완료한 레시피: {recipeLength} 개
+                      작성 완료한 레시피:{" "}
+                      {recipeState === "empty" ? 0 : recipeState.length} 개
                     </div>
                   </div>
                   <div className="items">
                     <IncompleteRecipes className="accented svgStrokes" />
                     <div className="inlineRight">
-                      작성중인 레시피: {incompleteRecipeLength} 개
+                      작성중인 레시피:{" "}
+                      {incompleteRecipeState === "empty"
+                        ? 0
+                        : incompleteRecipeLength}{" "}
+                      개
                     </div>
                   </div>
                   <div className="items">
                     <GivenHearts className="accented svgStrokes" />
-                    <div className="inlineRight">좋아한 레시피: 개</div>
+                    <div className="inlineRight">
+                      좋아하는 레시피:{" "}
+                      {likedRecipeState === "empty"
+                        ? 0
+                        : likedRecipeState.length}{" "}
+                      개
+                    </div>
                   </div>
                   <div className="items">
                     <ReceivedHearts className="accented svgStrokes" />
-                    <div className="inlineRight">좋아요 받은 레시피: 개</div>
+                    <div className="inlineRight">
+                      좋아요 받은 레시피:{" "}
+                      {receivedLikesRecipesLength === "empty"
+                        ? 0
+                        : receivedLikesRecipes.length}{" "}
+                      개
+                    </div>
                   </div>
                 </div>
               </div>
@@ -227,13 +256,9 @@ const BasicFormSection = styled.div`
   }
 
   & .sectionInfo {
-    /* margin-top: 12vh; */
-    /* margin-bottom: 3em; */
     display: inline-block;
     margin-left: 0.5em;
     width: fit-content;
-
-    /* font-size: 1.2vw; */
   }
 `;
 const SectionTitle = styled.div`

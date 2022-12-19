@@ -11,13 +11,22 @@ import { useSelector } from "react-redux";
 import { useMemo } from "react";
 import BasicSpinner from "../../_common/loading";
 import { colors } from "../../../theme/theme";
+import { useCallback } from "react";
 
-const ReceivedLikesRecipeList = ({ currentUser }) => {
+const ReceivedLikesRecipeList = ({
+  currentUser,
+  receivedLikesRecipes,
+  setReceivedLikesRecipesLength,
+}) => {
   // let { memberId } = useParams();
 
   // 작성중 레시피
+
   const navigate = useNavigate();
-  const [receivedLikesRecipes, setReceivedLikesRecipes] = useState([
+  // 랜더링시 데이터값을 불러오지 않았거나
+  // 데이터길이가 0일떄
+  // 랜더링 시 .recipe_title 값이 undefined거나 map을 하려할떄 에러 발생 방지
+  const [receivedLikesRecipesFront, setReceivedLikesRecipesFront] = useState([
     // "로딩중", // {
     //   recipe_num: 0,
     //   recipe_title: "",
@@ -36,21 +45,26 @@ const ReceivedLikesRecipeList = ({ currentUser }) => {
       information_time: "로딩중",
     },
   ]);
-  // const currentUser = useSelector((user) => user.auth.user.username);
+
   useEffect(() => {
-    axios
-      .get("http://localhost:9000/recipe/getMyRecipesLikes", {
-        params: { param1: currentUser.toString() },
-      })
-      .then((res) => {
-        console.log("getMyRecipesLikes", res.data);
-        setReceivedLikesRecipes(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    // }
-  }, []);
+    if (receivedLikesRecipes.length > 0) {
+      setReceivedLikesRecipesFront(receivedLikesRecipes);
+      console.log("receivedLikesRecipes", receivedLikesRecipes);
+      setReceivedLikesRecipesLength(receivedLikesRecipes.length);
+    } else {
+      setReceivedLikesRecipesFront("empty");
+    }
+  }, [receivedLikesRecipes]);
+
+  // useCallback(() => {
+  //   // useMemo(() => {
+  //   if (receivedLikesRecipes.length > 0) {
+  //     setReceivedLikesRecipesFront(receivedLikesRecipes);
+  //     setReceivedLikesRecipesLength(receivedLikesRecipes.length);
+  //   } else {
+  //     setReceivedLikesRecipesLength(0);
+  //   }
+  // }, [receivedLikesRecipes]);
 
   return (
     <>
@@ -58,15 +72,16 @@ const ReceivedLikesRecipeList = ({ currentUser }) => {
       <RecipeWrapItems>
         <Scrollable>
           <div>
-            {receivedLikesRecipes === "empty" ? (
+            {receivedLikesRecipesFront === "empty" ? (
               <>
                 <NullRecipe />
               </>
-            ) : receivedLikesRecipes[0].recipe_title === "로딩중" ? (
+            ) : receivedLikesRecipesFront[0].recipe_title === "로딩중" ? (
               <>
                 <BasicSpinner />
               </>
             ) : (
+              receivedLikesRecipes.length > 0 &&
               receivedLikesRecipes.map((e) => (
                 <RecipeWrap>
                   <div>
@@ -77,7 +92,8 @@ const ReceivedLikesRecipeList = ({ currentUser }) => {
                     >
                       <div>
                         <div>
-                          {receivedLikesRecipes[0].recipe_title === "로딩중" ? (
+                          {receivedLikesRecipesFront[0].recipe_title ===
+                          "로딩중" ? (
                             <BasicSpinner />
                           ) : (
                             <img src={e.recipe_rpath} alt={e.recipe_rpath} />

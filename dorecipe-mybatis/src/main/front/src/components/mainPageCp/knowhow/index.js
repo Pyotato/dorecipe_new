@@ -69,7 +69,6 @@ const KnowhowMain = () => {
                         ></img>
                       </KnowhowImg>
                     </KnowhowWrap>
-                    {/* </Link> */}
                   </SwiperSlide>
                 </>
               );

@@ -11,7 +11,7 @@ import NullRecipe from "../nullRecipeList";
 import BasicSpinner from "../../_common/loading";
 import { colors } from "../../../theme/theme";
 
-const LikeRecipeList = ({ currentUser }) => {
+const LikeRecipeList = ({ currentUser, likedRecipeState, setLikeState }) => {
   // let { memberId } = useParams();
 
   // 작성중 레시피
@@ -20,7 +20,7 @@ const LikeRecipeList = ({ currentUser }) => {
 
   const [recipeLength, setRecipeLength] = useState(0); //레시피 삭제 감지
 
-  const [likeState, setLikeState] = useState([
+  const [likeStateFront, setLikeStateFront] = useState([
     {
       recipe_num: 0,
       recipe_title: "로딩중",
@@ -31,6 +31,16 @@ const LikeRecipeList = ({ currentUser }) => {
     },
   ]);
   const [hoverBinState, setHoverBinState] = useState(0);
+
+  useEffect(() => {
+    if (likedRecipeState.length > 0) {
+      setLikeState(likedRecipeState);
+      setLikeStateFront(likedRecipeState);
+    } else {
+      // setLikeState("empty");
+      setLikeStateFront("empty");
+    }
+  }, [likedRecipeState]);
   // const currentUser = useSelector((user) => user.auth.user.username);
   // useMemo(() => {
   //   axios
@@ -47,19 +57,19 @@ const LikeRecipeList = ({ currentUser }) => {
   //   // }
   // }, [likeState]);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:9000/recipe/getLikedRecipes", {
-        params: { param1: currentUser.toString() },
-      })
-      .then((res) => {
-        console.log("getLikedRecipes", res.data);
-        setLikeState(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:9000/recipe/getLikedRecipes", {
+  //       params: { param1: currentUser.toString() },
+  //     })
+  //     .then((res) => {
+  //       console.log("getLikedRecipes", res.data);
+  //       setLikeState(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
   return (
     <>
@@ -69,16 +79,16 @@ const LikeRecipeList = ({ currentUser }) => {
       <RecipeWrapItems>
         <Scrollable>
           <div>
-            {likeState === "empty" ? (
+            {likeStateFront === "empty" ? (
               <>
                 <NullRecipe />
               </>
-            ) : likeState[0].recipe_title === "로딩중" ? (
+            ) : likeStateFront[0].recipe_title === "로딩중" ? (
               <>
                 <BasicSpinner />
               </>
             ) : (
-              likeState.map((e) => (
+              likeStateFront.map((e) => (
                 <RecipeWrap>
                   <div>
                     <ItemWrap
@@ -88,7 +98,7 @@ const LikeRecipeList = ({ currentUser }) => {
                     >
                       <div>
                         <div>
-                          {likeState[0].recipe_title === "로딩중" ? (
+                          {likeStateFront[0].recipe_title === "로딩중" ? (
                             <BasicSpinner />
                           ) : (
                             <img src={e.recipe_rpath} alt={e.recipe_rpath} />

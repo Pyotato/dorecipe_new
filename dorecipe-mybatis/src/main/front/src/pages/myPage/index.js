@@ -18,11 +18,13 @@ import { useEffect } from "react";
 import {
   CompleteRecipeState,
   IncompleteRecipeState,
+  MyFavouriteRecipeState,
+  ReceivedLikesRecipes,
 } from "../../components/myPageCp/RecipeStates";
 import { useCallback } from "react";
 
 const MyPage = (user) => {
-  console.log("MyPage", user);
+  // console.log("MyPage", user);
 
   const currentUser = useSelector((user) => user.auth.user.username);
 
@@ -43,6 +45,7 @@ const MyPage = (user) => {
 
   const [recipeLength, setRecipeLength] = useState(0); //레시피 삭제 감지
 
+  //미완성레시피 삭제 감지
   const [incompleteRecipeState, setIncompleteRecipeState] = useState({
     recipe_num: 0,
     recipe_title: "로딩중",
@@ -50,24 +53,82 @@ const MyPage = (user) => {
     recipe_savetype: 0,
     information_level: "로딩중",
     information_time: "로딩중",
-  }); //미완성레시피 삭제 감지
-  const [incompleteRecipeLength, setIncompleteRecipeLength] = useState(0); //미완성레시피 삭제 감지
-  CompleteRecipeState({
-    currentUser,
-    setRecipeState,
-    setRecipeLength,
-    setLoadingState,
-    recipeLength,
   });
+  const [incompleteRecipeLength, setIncompleteRecipeLength] = useState(0); //미완성레시피 길이
+  const [likedRecipeState, setLikeState] = useState([]); //내가 좋아하는 레시피들
+  const [likedRecipeStateLength, setRecipeStateLength] = useState([]); //내가 좋아하는 레시피들
 
-  IncompleteRecipeState({
-    currentUser,
-    setIncompleteRecipeState,
-    setIncompleteRecipeLength,
-    setLoadingState,
-    incompleteRecipeState,
-    incompleteRecipeLength,
-  });
+  const [receivedLikesRecipes, setReceivedLikesRecipes] = useState([]); //내가 받은 좋아요 레시피들
+  //좋아요 받은 레시피 길이
+  const [receivedLikesRecipesLength, setReceivedLikesRecipesLength] =
+    useState(0);
+
+  //완성한 레시피들 가져오기
+  useEffect(() => {
+    CompleteRecipeState({
+      currentUser,
+      setRecipeState,
+      setRecipeLength,
+      setLoadingState,
+      recipeLength,
+    });
+  }, []);
+
+  //좋아요받은 내 레시피들 가져오기
+  useEffect(() => {
+    ReceivedLikesRecipes({
+      currentUser,
+      setReceivedLikesRecipes,
+    });
+  }, []);
+
+  useEffect(() => {
+    IncompleteRecipeState({
+      currentUser,
+      setIncompleteRecipeState,
+      setIncompleteRecipeLength,
+      setLoadingState,
+      incompleteRecipeState,
+      incompleteRecipeLength,
+    });
+  }, []);
+
+  useMemo(() => {
+    ReceivedLikesRecipes({
+      currentUser,
+      setReceivedLikesRecipes,
+      receivedLikesRecipesLength,
+      setReceivedLikesRecipesLength,
+    });
+    console.log("루핑도는 중..");
+  }, [recipeLength]);
+
+  //등록했던 레시피를 임시저장으로 바꿀때 리스트 & 개수 리랜더링
+  useMemo(() => {
+    // useCallback(() => {
+    IncompleteRecipeState({
+      currentUser,
+      setIncompleteRecipeState,
+      setIncompleteRecipeLength,
+      setLoadingState,
+      incompleteRecipeState,
+      incompleteRecipeLength,
+    });
+    console.log("루핑도는 중..");
+  }, [recipeLength]);
+
+  useEffect(() => {
+    MyFavouriteRecipeState({
+      currentUser,
+      setLikeState,
+      likedRecipeStateLength,
+      setRecipeStateLength,
+    });
+  }, []);
+
+  useEffect(() => {
+    ReceivedLikesRecipes({ currentUser, setLikeState });
+  }, []);
 
   useEffect(() => {
     setNavTabState(0);
@@ -110,19 +171,51 @@ const MyPage = (user) => {
     <>
       <MainLayout>
         <MemberInfoForm
-          recipeLength={recipeLength}
-          incompleteRecipeLength={incompleteRecipeLength}
+          recipeLength={recipeState.length}
+          recipeState={recipeState}
+          incompleteRecipeState={incompleteRecipeState}
+          incompleteRecipeLength={incompleteRecipeState.length}
+          likedRecipeState={likedRecipeState}
+          likedRecipeStateLength={likedRecipeState.length}
+          receivedLikesRecipes={receivedLikesRecipes}
+          receivedLikesRecipesLength={receivedLikesRecipes}
         />
 
-        <CompleteRecipeList currentUser={currentUser} />
+        <CompleteRecipeList
+          currentUser={currentUser}
+          recipeLength={recipeLength}
+          recipeState={recipeState}
+          incompleteRecipeLength={incompleteRecipeState.length}
+          setIncompleteRecipeLength={setIncompleteRecipeLength}
+          incompleteRecipeState={incompleteRecipeState}
+          setRecipeState={setRecipeState}
+          setRecipeLength={setRecipeLength}
+        />
 
-        <RecordingRecipeList currentUser={currentUser} />
+        <RecordingRecipeList
+          currentUser={currentUser}
+          recipeLength={recipeLength}
+          recipeState={recipeState}
+          setRecipeState={setRecipeState}
+          setRecipeLength={setRecipeLength}
+          setIncompleteRecipeState={setIncompleteRecipeState}
+          incompleteRecipeState={incompleteRecipeState}
+          setIncompleteRecipeLength={setIncompleteRecipeLength}
+        />
 
         <BasicFormSection>
-          <LikeRecipeList currentUser={currentUser} />
+          <LikeRecipeList
+            likedRecipeState={likedRecipeState}
+            setLikeState={setLikeState}
+            currentUser={currentUser}
+          />
         </BasicFormSection>
         <BasicFormSection>
-          <ReceivedLikesRecipeList currentUser={currentUser} />
+          <ReceivedLikesRecipeList
+            currentUser={currentUser}
+            receivedLikesRecipes={receivedLikesRecipes}
+            setReceivedLikesRecipesLength={setReceivedLikesRecipesLength}
+          />
         </BasicFormSection>
         {!showTabState ? (
           <>

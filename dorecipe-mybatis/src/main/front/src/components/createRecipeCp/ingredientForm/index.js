@@ -47,7 +47,7 @@ const IngredientForm = ({
   }, [recipeState]);
 
   useMemo(() => {
-    if (btnState === 1) {
+    if (btnState >= 1) {
       setBtnDisabledState(false);
       setBtnDisplayState("block");
     } else {
@@ -119,7 +119,7 @@ const IngredientForm = ({
   const onTemporarySave = useCallback(
     (e) => {
       e.preventDefault();
-      if (btnState === 1) {
+      if (btnState >= 1) {
         const data = ingredients;
         const blob = new Blob([JSON.stringify(data)], {
           type: "application.json",
@@ -146,6 +146,7 @@ const IngredientForm = ({
         axios({
           method: "POST",
           url: "/recipe/updateRecipeIngredients",
+          // url: "/recipe/updateRecipeIngredients",
           headers: { "Content-Type": "multipart/form-data" },
           data: formData,
           baseURL: "http://localhost:9000",
@@ -466,7 +467,7 @@ const TempSaveBtn = styled.button`
   padding: 0.5em;
   position: fixed;
   right: 1.5vw;
-  bottom: 3vh;
+  bottom: 15vh;
   /* background-color: ${colors.color_beige_brown}; */
   background-color: blue;
   border: 1px solid transparent;

@@ -32,149 +32,35 @@ const EditRecipeForm = () => {
   const [saveState, setSaveState] = useState(0);
   const [recipeState, setRecipeState] = useState([]);
   const [btnState, setBtnState] = useState(0);
-  // const [recipeState, setRecipeState] = useState();
 
   useEffect(() => {
     if (user.auth.isLoggedIn) {
       setMemberId(user.auth.user.username);
       setRecipeNumState(recipeId);
-      console.log(recipeId);
 
       axios
         .get("http://localhost:9000/recipe/temporary/" + recipeId)
         .then((response) => {
-          // console.log("/recipe/temporary/", response.data);
           setRecipeState(response.data);
         })
         .catch((e) => console.log(e));
       axios
         .get("http://localhost:9000/recipe/getIngredientList/" + recipeId)
         .then((response) => {
-          // console.log("recipe/getIngredientList/", response.data);
           setIngredientState(response.data);
         })
         .catch((e) => console.log(e));
       axios
         .get("http://localhost:9000/recipe/temporary/getOrder/" + recipeId)
         .then((response) => {
-          // console.log("recipe/getOrder/", response.data);
           setOrderState(response.data);
         })
         .catch((e) => console.log(e));
     }
   }, []);
-  //     axios
-  //       .get(
-  //         // process.env.REACT_APP_HOST +
-  //         "http://localhost:9000/recipe/temporary/" + recipeId
-  //         // historylocation.pathname.substring(
-  //         //   historylocation.pathname.lastIndexOf("/") + 1, //현재위치
-  //         //   historylocation.pathname.length
-  //         // )
-  //       )
-  //       .then((response) => {
-  //         console.log("/recipe/temporary/", response.data);
-  //       })
-  //       .catch((e) => console.log(e));
-  //     axios
-  //       .get(
-  //         // process.env.REACT_APP_HOST +
-  //         "http://localhost:9000/recipe/temporary/" + recipeId
-  //         // historylocation.pathname.substring(
-  //         //   historylocation.pathname.lastIndexOf("/") + 1, //현재위치
-  //         //   historylocation.pathname.length
-  //         // )
-  //       )
-  //       .then((response) => {
-  //         console.log("response", response.data);
-  //       })
-  //       .catch((e) => console.log(e));
-  //     axios
-  //       .get(
-  //         "http://localhost:9000/recipe/getIngredientList/" +
-  //           //   historylocation.pathname.substring(
-  //           //     historylocation.pathname.lastIndexOf("/") + 1, //현재위치
-  //           //     historylocation.pathname.length
-  //           //   )
-  //           recipeId
-  //         // parseInt(
-  //         //   historylocation.pathname.substring(
-  //         //     historylocation.pathname.lastIndexOf("/") + 1, //현재위치
-  //         //     historylocation.pathname.length
-  //         //   )
-  //         // )
-  //       )
-  //       .then((response) => {
-  //         console.log("recipeId!!!!!!!!!!!!", recipeId);
-  //         console.log("getIngredientList!!!!!!!!!!!!", response.data);
-  //       })
-  //       .catch((e) => console.log(e));
-  //     // axios
-  //     //   .get(
-  //     //     // process.env.REACT_APP_HOST + "/recipe/update/" + recipeId
-  //     //     "http://localhost:9000/recipe/update/" + recipeId
-  //     //     // historylocation.pathname.substring(
-  //     //     //   historylocation.pathname.lastIndexOf("/") + 1, //현재위치
-  //     //     //   historylocation.pathname.length
-  //     //     // )
-  //     //   )
-  //     //   .then((response) => {
-  //     //     console.log("response", response.data);
-  //     //   })
-  //     //   .catch((e) => console.log(e));
 
   return (
     <>
-      {/* <FlexWrap>
-        <Swiper
-          modules={[Navigation, Pagination, A11y]}
-          slidesPerView={1}
-          loop={false}
-          navigation
-          spaceBetween={120}
-          pagination={{ clickable: false }}
-          onSlideChange={() => {
-            // if (!recipeNumState) {
-            //   axios({
-            //     method: "POST",
-            //     url: "http://localhost:9000/recipe/getRecipeNum",
-            //     headers: { "Content-Type": "multipart/form-data" },
-            //     data: { member_id: user.auth.user.username, recipe_num: 0 },
-            //   }).then((response) => {
-            //     console.log(response.data);
-            //     setRecipeState(response.data);
-            //   });
-            // }
-          }}
-        >
-          <form encType="multipart/form-data">
-            <SwiperSlide className="slide" recipeId={recipeState}>
-              <SectionTitle>레시피 등록</SectionTitle>
-              <BasicForm />
-            </SwiperSlide>
-            <SwiperSlide className="slide" recipeId={recipeState}>
-              <SectionTitle>재료 등록</SectionTitle>
-              <IngredientForm recipeState={recipeState} />
-            </SwiperSlide>
-            <SwiperSlide className="slide">
-              <SectionTitle recipeId={recipeState}>요리 순서</SectionTitle>
-              <div>
-                <RecipeOrderDrag
-                  recipeId={recipeState}
-                  recipeState={recipeState}
-                />
-              </div>
-            </SwiperSlide>
-            <SwiperSlide className="slide" recipeId={recipeState}>
-              <SectionTitle>요리 완성</SectionTitle>
-              <CompleteRecipe
-                recipeState={recipeState}
-                recipeId={recipeState}
-              />
-            </SwiperSlide>
-          </form>
-        </Swiper>
-      </FlexWrap> */}
       <TotalWrap>
         <form encType="multipart/form-data" style={{ height: "fit-content" }}>
           <BasicFormSection>
@@ -335,28 +221,7 @@ const EditRecipeForm = () => {
   );
 };
 export default EditRecipeForm;
-// const FlexWrap = styled.div`
-//   max-width: 100%;
-//   min-width: 50%;
 
-//   height: 100vh;
-//   display: inline-flex;
-//   flex-wrap: wrap;
-//   justify-content: space-evenly;
-//   margin: -6em 0;
-// `;
-// const SectionTitle = styled.div`
-//   background-color: #8d3232;
-//   display: inline-block;
-//   width: 90%;
-//   margin: 1em 3em;
-//   color: #fffdf5;
-//   height: 2.4em;
-//   font-size: 21px;
-//   font-weight: 700;
-//   padding: 0.5em 0;
-//   padding-left: 0.5em;
-// `;
 const TotalWrap = styled.div`
   font-style: "mainFont";
   padding-bottom: 12vh;
@@ -372,25 +237,4 @@ const BasicFormSection = styled.div`
   height: fit-content;
   z-index: saveState==0 && 700;
   background-color: ${colors.color_beige_brown};
-`;
-
-const ContentTextarea = styled.textarea`
-  font-family: "mainFont";
-  resize: none;
-  width: 80%;
-  margin: auto 8.3vw;
-  height: 24vh;
-  margin-bottom: 1vh;
-  line-height: 1.5;
-  padding: 10px;
-  background-color: ${colors.color_white};
-  border: 1px solid transparent;
-  border-radius: 0.5em;
-  ::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const BtnWrap = styled.div`
-  display: flex;
 `;

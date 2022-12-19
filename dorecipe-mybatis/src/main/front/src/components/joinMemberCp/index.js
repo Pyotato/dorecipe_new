@@ -3,15 +3,13 @@ import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { useInput } from "../../hooks/useInput";
 import axios from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register, login } from "../../reduxRefresh/actions/auth";
-import { colors } from "../../theme/theme";
 import Dropzone from "react-dropzone";
 import { ReactComponent as AddProfileImg } from "../../../src/assets/AddProfileImg.svg";
 import { ReactComponent as Close } from "../../../src/assets/Close.svg";
-
+import { TotalWrap, WarningMsg, SubmitBtn } from "./style.js";
 const SignUpTemplate = () => {
   /** input state설정해주기 */
   const dispatch = useDispatch();
@@ -47,26 +45,10 @@ const SignUpTemplate = () => {
         reader.onabort = () => console.log("파일 읽기 취소");
         reader.onerror = () => console.log("파일 읽기 실패");
         reader.readAsDataURL(file);
-        console.log("readAsDataURL", file); //files
-        // console.log("readAsDataURL", file.name);  //member_imagePath
+        // console.log("readAsDataURL", file); //files
         setMemberImagePath(file.name);
         setFiles(file);
-        // setFiles(
-        //   Object.assign(filestate, {
-        //     preview: URL.createObjectURL(file),
-        //   })
-        // );
       });
-
-      // setFiles(
-      //   files.map((file) =>
-      //     Object.assign(filestate, {
-      //       preview: URL.createObjectURL(file),
-      //     })
-      //   )
-      // );
-
-      // previewstate, setPreviewState
       setPreviewState(
         files.map((file) =>
           Object.assign(previewstate, {
@@ -87,11 +69,11 @@ const SignUpTemplate = () => {
   // preview delete
   const onPreviewDelete = useCallback(
     (preview) => {
-      const deleteFiles = filestate.filter((v) => v.preview !== preview);
-      setFiles(deleteFiles);
+      // const deleteFiles = filestate.filter((v) => v.preview !== preview);
+      setFiles("");
       // previewstate, setPreviewState
-      setPreviewState(deleteFiles);
-      setMemberImagePath(deleteFiles);
+      setPreviewState("");
+      setMemberImagePath("");
     },
     [filestate]
   );
@@ -183,7 +165,6 @@ const SignUpTemplate = () => {
             member_imagePath: `${member_imagePath}`,
           };
           const blob = new Blob([JSON.stringify(data)], {
-            // type: "application/json",
             type: "multipart/form-data",
           });
 
@@ -196,9 +177,7 @@ const SignUpTemplate = () => {
           submitData.append("member_birth", data.member_birth);
           submitData.append("member_phone", data.member_phone);
           submitData.append("member_imagePath", data.member_imagePath);
-          // submitData.append("member_profile", member_imagePath);
           submitData.append("profile_image", filestate);
-          // console.log("submitData files", files);
           axios({
             method: "POST",
             // url: process.env.REACT_APP_HOST + "/member/join/new",
@@ -207,23 +186,23 @@ const SignUpTemplate = () => {
               "Content-Type": "multipart/form-data",
             },
             data: submitData,
-          }).then((response) => {
-            console.log("response", response);
-          });
-        })
-        .then(() => {
-          dispatch(login(member_id, member_pwd)).then(() => {
-            alert("회원가입 성공!");
-            navigate("/");
-          });
+          })
+            .then((response) => {
+              console.log("response", response);
+            })
+            .then(() => {
+              dispatch(login(member_id, member_pwd)).then(() => {
+                alert("회원가입을 축하드립니다.");
+                navigate("/");
+              });
+            });
         })
         .catch((e) => {
           console.log("userMsg_loginFail", userMsg.message);
-          if (userMsg.message === "Error: Username is already taken!") {
+          if (userMsg.message.includes("Username is already taken!")) {
             alert("이미 사용중인 아이디입니다.");
             setMemId("");
-          }
-          if (userMsg.message === "Error: Email is already in use!") {
+          } else if (userMsg.message.includes("Email is already in use!")) {
             alert("이미 사용중인 이메일입니다.");
             setEmail("");
           } else {
@@ -246,427 +225,325 @@ const SignUpTemplate = () => {
   return (
     <>
       <TotalWrap>
-        <div>
-          <h1>회원가입</h1>
-
-          <div className="formWrap">
-            <div>
-              <form className="form">
-                <div>
-                  {/* <Dropzone onDrop={onDropHandler} index={index}> */}
-                  <Dropzone onDrop={onDropHandler}>
-                    {({ getRootProps, getInputProps }) => (
-                      <>
-                        {previewstate.length > 0 ? (
-                          <>
-                            <div>
-                              <Close
-                                className="removeFile"
+        <h1>회원가입</h1>
+        <div className="formWrap">
+          <div>
+            <form className="form">
+              <div>
+                <Dropzone onDrop={onDropHandler}>
+                  {({ getRootProps, getInputProps }) => (
+                    <>
+                      {previewstate.length > 0 ? (
+                        <>
+                          <div>
+                            <div className="previewWrap">
+                              <div
                                 style={{
-                                  transform:
-                                    "translateX(-50%) translateY(100%) ",
-                                  position: "absolute",
-                                  top: "34vh",
+                                  transform: "translateY(3em)",
                                 }}
-                                onClick={
-                                  () =>
-                                    // onPreviewDelete(filestate[0].preview)
+                              >
+                                <Close
+                                  className="removeFile"
+                                  onClick={() =>
                                     onPreviewDelete(previewstate[0].preview)
-                                  // previewstate, setPreviewState
-                                }
-                              ></Close>
+                                  }
+                                ></Close>
+                              </div>
                               <img
                                 onClick={() =>
                                   onPreviewDelete(previewstate[0].preview)
                                 }
                                 src={previewstate[0].preview}
-                                style={{
-                                  width: "9%",
-                                  height: "10vh",
-                                  // width: "6vw",
-                                  // height: "6vh",
-                                  borderRadius: "100%",
-                                  margin: "2vh 45.5%",
-                                }}
                                 alt="프로필 이미지"
                                 className="profileImg"
                               />
                             </div>
-                          </>
-                        ) : (
-                          <div className="inputBox" {...getRootProps()}>
-                            <input
-                              {...getInputProps()}
-                              id="file"
-                              type="file"
-                              accept="image/*"
-                              onChange={onLoadImgFile}
-                            />{" "}
-                            <AddProfileImg
-                              className="hover"
-                              style={{
-                                width: "24%",
-                                height: "12vh",
-                                margin: "2vh 38%",
-                              }}
-                            ></AddProfileImg>{" "}
                           </div>
-                        )}
-                      </>
-                    )}
-                  </Dropzone>
-                </div>
-                <div className="flexitems">
-                  <div>
-                    <div className="flexFormItems">
-                      <span className="formLabels">아이디</span>
-                      <div className="floatRight">
-                        {member_id.length === 0 ? (
-                          <WarningMsg>
-                            필수 <FontAwesomeIcon icon={faExclamationCircle} />
-                          </WarningMsg>
-                        ) : (
-                          <></>
-                        )}
-                        <input
-                          type="text"
-                          name="member_id"
-                          required
-                          autoSave="false"
-                          placeholder="영문 또는 숫자포함 6 ~20자"
-                          value={member_id}
-                          onChange={onChangeMemId}
-                        />{" "}
-                      </div>
-                    </div>
-                    <div className="flexFormItems">
-                      <span className="formLabels">비밀번호</span>
-                      <div className="floatRight">
-                        {" "}
-                        {member_pwd.length === 0 && (
-                          <WarningMsg>
-                            필수 <FontAwesomeIcon icon={faExclamationCircle} />
-                          </WarningMsg>
-                        )}
-                        <input
-                          className="member_pwd"
-                          type="password"
-                          required
-                          maxLength={18}
-                          autoComplete="off"
-                          value={member_pwd}
-                          onChange={onChangePwd}
-                          placeholder="대소문자 특수문자($ ! % @) 포함 9 ~ 18"
-                        />{" "}
-                      </div>
-                    </div>
-                    <div className="flexFormItems">
-                      <span className="formLabels">이름</span>{" "}
-                      <div className="floatRight">
-                        {" "}
-                        {member_name.length === 0 && (
-                          <WarningMsg>
-                            필수 <FontAwesomeIcon icon={faExclamationCircle} />
-                          </WarningMsg>
-                        )}
-                        <input
-                          className="member_name"
-                          type="text"
-                          required
-                          value={member_name}
-                          onChange={onChangeName}
-                          placeholder="이름을 입력해주세요."
-                        />{" "}
-                      </div>
-                    </div>
-                    <div className="flexFormItems">
-                      <span className="formLabels">이메일 </span>
-                      <div className="floatRight">
-                        {member_email.length === 0 && (
-                          <WarningMsg>
-                            필수 <FontAwesomeIcon icon={faExclamationCircle} />
-                          </WarningMsg>
-                        )}
-                        <input
-                          type="email"
-                          name="member_email"
-                          className="email"
-                          value={member_email}
-                          onChange={onChangeEmail}
-                          placeholder="이메일을 입력해주세요."
-                          autoComplete="off"
-                          required
-                        />{" "}
-                      </div>
-                    </div>
-                    <div className="flexFormItems">
-                      <span className="formLabels">생년월일</span>{" "}
-                      <div className="floatRight">
-                        {" "}
-                        {(birthYear.length === 0 ||
-                          birthMonth.length === 0 ||
-                          birthdate.length === 0) && (
-                          <WarningMsg>
-                            필수 <FontAwesomeIcon icon={faExclamationCircle} />
-                          </WarningMsg>
-                        )}
-                        <input
-                          type="text"
-                          style={{
-                            display: "inline-block",
-                            width: "60px",
-                            height: "3vh",
-                            padding: "0.2vh 0.2vw",
-                            marginRight: "0.5em ",
-                          }}
-                          placeholder="YYYY"
-                          value={birthYear}
-                          maxLength={4}
-                          onChange={onChangeYear}
-                        />
-                        년
-                        <select
-                          name="months"
-                          // id="months"
-                          style={{
-                            display: "inline-block",
-                            width: "40px",
-                            height: "3vh",
-                            padding: "0.2vh 0.2vw",
-                            margin: "0 0.5em ",
-                          }}
-                          value={birthMonth}
-                          onChange={onChangeMonth}
-                        >
-                          <option value="">월</option>
-                          <option value="01">1</option>
-                          <option value="02">2</option>
-                          <option value="03">3</option>
-                          <option value="04">4</option>
-                          <option value="05">5</option>
-                          <option value="06">6</option>
-                          <option value="07">7</option>
-                          <option value="08">8</option>
-                          <option value="09">9</option>
-                          <option value="10">10</option>
-                          <option value="11">11</option>
-                          <option value="12">12</option>
-                        </select>
-                        월
-                        <input
-                          type="text"
-                          style={{
-                            display: "inline-block",
-                            width: "30px",
-                            height: "3vh",
-                            padding: "0.2vh 0.2vw",
-                            marginRight: "0.5em ",
-                            marginLeft: "0.5em",
-                          }}
-                          placeholder="DD"
-                          value={birthdate}
-                          maxLength={2}
-                          onChange={onChangeBday}
-                        />
-                        일{" "}
-                      </div>
+                        </>
+                      ) : (
+                        <div className="inputBox">
+                          <input
+                            {...getInputProps()}
+                            id="file"
+                            type="file"
+                            accept="image/*"
+                            onChange={onLoadImgFile}
+                          />{" "}
+                          <AddProfileImg
+                            {...getRootProps()}
+                            className="hover"
+                            style={{
+                              width: "24%",
+                              height: "6em",
+                              margin: "2vh 38%",
+                            }}
+                          ></AddProfileImg>{" "}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </Dropzone>
+              </div>
+              <div className="flexitems fontSize1vw">
+                <div className="flexLeft">
+                  <div className="flexFormItems">
+                    <div className="formLabels">아이디</div>
+                    <div className="floatRight">
+                      {member_id.length === 0 ? (
+                        <WarningMsg>
+                          필수 <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      ) : (
+                        <></>
+                      )}
+                      <input
+                        type="text"
+                        name="member_id"
+                        required
+                        className="fontSize0_5vw"
+                        autoSave="false"
+                        placeholder="영문 또는 숫자포함 6 ~20자"
+                        value={member_id}
+                        onChange={onChangeMemId}
+                      />
                     </div>
                   </div>
+                  <div className="flexFormItems">
+                    <div className="formLabels">비밀번호</div>
 
-                  <div>
-                    <div className="flexFormItems">
-                      <span className="formLabels">닉네임</span>
-                      <div className="floatRight">
-                        {member_nickname.length === 0 ? (
-                          <WarningMsg>
-                            필수 <FontAwesomeIcon icon={faExclamationCircle} />
-                          </WarningMsg>
-                        ) : (
-                          <></>
-                        )}{" "}
-                        <input
-                          type="text"
-                          name="member_value"
-                          required
-                          placeholder="공백없이 지어주세요."
-                          onChange={onChangeNickname}
-                        />
-                      </div>
+                    <div className="floatRight">
+                      {member_pwd.length === 0 ? (
+                        <WarningMsg>
+                          필수 <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      ) : (
+                        <WarningMsg style={{ visibility: "hidden" }}>
+                          필수 <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      )}
+                      <input
+                        className="member_pwd fontSize0_5vw"
+                        type="password"
+                        required
+                        maxLength={18}
+                        autoComplete="off"
+                        value={member_pwd}
+                        onChange={onChangePwd}
+                        placeholder="대소문자 특수문자($ ! % @) 포함 9 ~ 18"
+                      />{" "}
                     </div>
-                    <div className="flexFormItems">
-                      <span className="formLabels">비밀번호 확인</span>
-                      <div className="floatRight">
-                        {error && (
-                          <WarningMsg>
-                            불일치
-                            <FontAwesomeIcon icon={faExclamationCircle} />
-                          </WarningMsg>
-                        )}
-                        <input
-                          className="passwordCheck"
-                          type="password"
-                          required
-                          value={confirm_pwd}
-                          onChange={onChangeConfirm}
-                          maxLength={18}
-                          autoComplete="off"
-                          placeholder="비밀번호를 다시 입력해주세요"
-                        />
-                      </div>
+                  </div>
+                  <div className="flexFormItems">
+                    <div className="formLabels">이름</div>{" "}
+                    <div className="floatRight">
+                      {member_name.length === 0 ? (
+                        <WarningMsg>
+                          필수 <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      ) : (
+                        <WarningMsg style={{ visibility: "hidden" }}>
+                          필수 <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      )}
+                      <input
+                        className="member_name fontSize0_5vw"
+                        type="text"
+                        required
+                        value={member_name}
+                        onChange={onChangeName}
+                        placeholder="이름을 입력해주세요."
+                      />{" "}
                     </div>
-                    <div className="flexFormItems">
-                      <span className="formLabels">휴대전화 </span>{" "}
-                      <div className="floatRight">
-                        {" "}
-                        {member_email.length === 0 && (
-                          <WarningMsg>
-                            필수 <FontAwesomeIcon icon={faExclamationCircle} />
-                          </WarningMsg>
-                        )}
-                        <input
-                          className="phoneNum"
-                          type="phoneNum"
-                          name="member_phone"
-                          required
-                          placeholder="휴대전화"
-                          maxLength={11}
-                          value={member_phone.replace("-", "")}
-                          onChange={onChangePh}
-                        />
-                      </div>
+                  </div>
+                  <div className="flexFormItems">
+                    <div className="formLabels">이메일 </div>
+                    <div className="floatRight">
+                      {member_email.length === 0 ? (
+                        <WarningMsg>
+                          필수 <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      ) : (
+                        <WarningMsg style={{ visibility: "hidden" }}>
+                          필수 <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      )}
+                      <input
+                        type="email"
+                        name="member_email"
+                        className="email fontSize0_5vw"
+                        value={member_email}
+                        onChange={onChangeEmail}
+                        placeholder="이메일을 입력해주세요."
+                        autoComplete="off"
+                        required
+                      />{" "}
                     </div>
-                    <div className="flexFormItems">
-                      <span className="formLabels">성별</span>{" "}
-                      <div className="floatRight">
-                        {member_gender === "" && (
-                          <WarningMsg>
-                            필수 <FontAwesomeIcon icon={faExclamationCircle} />
-                          </WarningMsg>
-                        )}
-                        <select
-                          name="member_gender"
-                          value={member_gender}
-                          onChange={onChangeGender}
-                          required
-                        >
-                          <option value="">성별</option>
-                          <option value="남자">남자</option>
-                          <option value="여자">여자</option>
-                          <option value="선택안함">선택안함</option>
-                        </select>{" "}
-                      </div>
-                    </div>{" "}
+                  </div>
+                  <div className="flexFormItems">
+                    <div className="formLabels">생년월일</div>{" "}
+                    <div className="floatRight">
+                      {" "}
+                      {birthYear.length === 0 ||
+                      birthMonth.length === 0 ||
+                      birthdate.length === 0 ? (
+                        <WarningMsg>
+                          필수 <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      ) : (
+                        <WarningMsg style={{ visibility: "hidden" }}>
+                          필수 <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      )}
+                      <input
+                        type="text"
+                        className="inputYr fontSize0_5vw"
+                        placeholder="YYYY"
+                        value={birthYear}
+                        maxLength={4}
+                        onChange={onChangeYear}
+                      />
+                      년
+                      <select
+                        name="months"
+                        className="selectMnth fontSize0_5vw"
+                        value={birthMonth}
+                        onChange={onChangeMonth}
+                      >
+                        <option value="">월</option>
+                        <option value="01">1</option>
+                        <option value="02">2</option>
+                        <option value="03">3</option>
+                        <option value="04">4</option>
+                        <option value="05">5</option>
+                        <option value="06">6</option>
+                        <option value="07">7</option>
+                        <option value="08">8</option>
+                        <option value="09">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                      </select>
+                      월
+                      <input
+                        type="text"
+                        className="dayInput fontSize0_5vw"
+                        placeholder="DD"
+                        value={birthdate}
+                        maxLength={2}
+                        onChange={onChangeBday}
+                      />
+                      일{" "}
+                    </div>
                   </div>
                 </div>
-              </form>
-            </div>
+
+                <div className="flexRight">
+                  <div className="flexFormItems">
+                    <div className="formLabels ">닉네임</div>
+                    <div className="floatRight">
+                      {member_nickname.length === 0 ? (
+                        <WarningMsg>
+                          필수 <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      ) : (
+                        <WarningMsg style={{ visibility: "hidden" }}>
+                          필수 <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      )}
+                      <input
+                        type="text"
+                        name="member_value"
+                        required
+                        className="fontSize0_5vw"
+                        placeholder="공백없이 지어주세요."
+                        onChange={onChangeNickname}
+                      />
+                    </div>
+                  </div>
+                  <div className="flexFormItems">
+                    <div className="formLabels labelsRight">비밀번호 확인</div>
+                    <div className="floatRight">
+                      {error ? (
+                        <WarningMsg>
+                          불일치
+                          <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      ) : (
+                        <WarningMsg style={{ visibility: "hidden" }}>
+                          불일치
+                          <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      )}
+                      <input
+                        className="passwordCheck fontSize0_5vw"
+                        type="password"
+                        required
+                        value={confirm_pwd}
+                        onChange={onChangeConfirm}
+                        maxLength={18}
+                        autoComplete="off"
+                        placeholder="비밀번호를 다시 입력해주세요"
+                      />
+                    </div>
+                  </div>
+                  <div className="flexFormItems inputWraps">
+                    <div className="formLabels ">휴대전화</div>{" "}
+                    <div className="floatRight">
+                      {member_email.length === 0 ? (
+                        <WarningMsg>
+                          필수 <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      ) : (
+                        <WarningMsg style={{ visibility: "hidden" }}>
+                          필수 <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      )}
+                      <input
+                        className="phoneNum fontSize0_5vw"
+                        type="phoneNum"
+                        name="member_phone"
+                        required
+                        placeholder="휴대전화"
+                        maxLength={11}
+                        value={member_phone.replace("-", "")}
+                        onChange={onChangePh}
+                      />
+                    </div>
+                  </div>
+                  <div className="flexFormItems">
+                    <div className="formLabels ">성별</div>{" "}
+                    <div className="floatRight">
+                      {member_gender === "" ? (
+                        <WarningMsg>
+                          필수 <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      ) : (
+                        <WarningMsg style={{ visibility: "hidden" }}>
+                          필수 <FontAwesomeIcon icon={faExclamationCircle} />
+                        </WarningMsg>
+                      )}
+                      <select
+                        name="member_gender"
+                        value={member_gender}
+                        onChange={onChangeGender}
+                        required
+                        className="selectSex fontSize0_5vw"
+                      >
+                        <option value="">성별</option>
+                        <option value="남자">남자</option>
+                        <option value="여자">여자</option>
+                        <option value="선택안함">선택안함</option>
+                      </select>{" "}
+                    </div>
+                  </div>{" "}
+                </div>
+              </div>
+            </form>
           </div>
-          <SubmitBtn onClick={onJoinMemberHandler}>회원가입 하기</SubmitBtn>
         </div>
+        <SubmitBtn onClick={onJoinMemberHandler}>회원가입 하기</SubmitBtn>
       </TotalWrap>
     </>
   );
 };
 export default SignUpTemplate;
-
-const TotalWrap = styled.div`
-  height: 100vh;
-  background-image: url("/img/joinBackgroundImg.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-
-  font-family: "mainFont";
-
-  & h1 {
-    text-align: center;
-    padding: 10vh 3vw;
-    color: ${colors.color_white};
-  }
-
-  & .profileImg:hover {
-    opacity: 30%;
-    cursor: pointer;
-  }
-
-  & .removeFile {
-    fill: ${colors.color_carrot_orange};
-    /* transform: translateY(-1vh); */
-    /* margin: 0 auto; */
-  }
-  & .removeFile:hover {
-    cursor: pointer;
-  }
-  & .form {
-    height: fit-content;
-  }
-
-  & .formWrap {
-    background-color: ${colors.color_white};
-    width: 65vw;
-    padding-bottom: 3vh;
-    margin: 0 auto;
-  }
-
-  & .flexitems {
-    font-size: 1vw;
-    display: inline-flex;
-    width: 100%;
-    padding: 0 8vh;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-  & select {
-    font-family: "mainFont";
-    font-size: 0.5vw;
-    padding: 0.2vw;
-    width: 50px;
-    margin-left: 1vw;
-  }
-
-  & input {
-    font-family: "mainFont";
-    font-size: 0.5vw;
-    /* width: 9vw; */
-    width: 198px;
-    padding: 0.2vw;
-    margin-left: 1vw;
-  }
-
-  & .formLabels {
-    padding-right: 1vw;
-  }
-
-  & .flexFormItems {
-    padding: 1vh 0;
-  }
-  & .floatRight {
-    float: right;
-  }
-
-  & .hover:hover {
-    cursor: pointer;
-  }
-`;
-const SubmitBtn = styled.div`
-  width: 65vw;
-  margin: 0 auto;
-  background-color: ${colors.color_beige_brown};
-  height: 6vh;
-  text-align: center;
-  padding: 2vh 0;
-
-  &:hover {
-    cursor: pointer;
-    background-color: ${colors.color_carrot_orange};
-    color: ${colors.color_beige_white};
-  }
-`;
-const WarningMsg = styled.div`
-  display: inline-block;
-  /* padding-right: 1vw; */
-  color: ${colors.color_gray_red3};
-  font-size: smaller;
-  font-weight: 400;
-`;

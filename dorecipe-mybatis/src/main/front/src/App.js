@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, useParams } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import NoticePage from "./pages/noticePage/noticeListPage";
 import NoticeDetailPage from "./pages/noticePage/noticeDetailPage";
@@ -35,11 +35,10 @@ import { history } from "./reduxRefresh/helpers/history";
 import EventBus from "./reduxRefresh/common";
 
 import { ThemeProvider } from "styled-components";
-import { theme } from "./style/theme";
+import { theme } from "./theme/theme";
 import "./App.css";
 
 import ModifyRecipePage from "./pages/modifyRecipePage";
-import { useMemo } from "react";
 
 function App() {
   const userMsg = useSelector((state) => state.message);
@@ -49,7 +48,6 @@ function App() {
   console.log("user", user);
   console.log("userMsg", userMsg);
   const [userState, setCurrentUser] = useState(user);
-  // const recipeID = useParams();
 
   useEffect(() => {
     user.state = {
@@ -94,7 +92,6 @@ function App() {
       currentUser: undefined,
     });
     user.state = userState;
-    // console.log("logOut", user);
   };
 
   const { currentUser } = user;
@@ -135,16 +132,10 @@ function App() {
         ) : (
           <Route path={"/"} element={<MainPage />} />
         )}
-        {/* {user.auth.user.roles.includes("ROLE_ADMIN") ? (
-          <Route path={"/admin"} element={<AdminPostMng />} auth={user} />
-        ) : (
-          // <Route path={"/member/info/:memberId"} element={<MyPage />} />
-          <Route path={"/"} element={<MainPage />} />
-        )} */}
+
         {currentUser ? (
           <Route path={"/member/info"} element={<MyPage />} />
         ) : (
-          // <Route path={"/member/info/:memberId"} element={<MyPage />} />
           <Route path={"/"} element={<MainPage />} />
         )}
         <Route path={"/member/info"} element={<MyPage />} />
@@ -158,12 +149,7 @@ function App() {
         ) : (
           <Route path={"/"} element={<MainPage />} />
         )}
-        {/* {currentUser &&  (
-          <Route
-            path={"/recipe/create/:recipeId"}
-            element={<CreateRecipePage />}
-          />
-        )} */}
+
         <Route path={"/recipes/search"} element={<DetailSearchPage />} />
         <Route
           path={"/recipe/search/details/:recipeId"}

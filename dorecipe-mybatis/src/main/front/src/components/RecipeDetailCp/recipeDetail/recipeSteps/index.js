@@ -9,15 +9,16 @@ const StepRecipe = ({ detailState }) => {
       <RecipeStepWrap>
         <div>
           {detailState.map((e, index) => {
-            return (
-              <>
-                {e.order_explain !== "" ? (
-                  <>
-                    <TotalWrap style={{ padding: "2vh 1vw" }}>
-                      {e.order_path.includes("/undefined") ? (
-                        <div>
-                          <div className="number">{index + 1}</div>
-                          {/* <div
+            if (e.order_path != null || e.order_explain != null) {
+              return (
+                <>
+                  {e.order_explain !== "" ? (
+                    <>
+                      <TotalWrap style={{ padding: "2vh 1vw" }}>
+                        {e.order_path.includes("/undefined") ? (
+                          <div>
+                            <div className="number">{index + 1}</div>
+                            {/* <div
                             style={{
                               width: "16em",
                               height: "30vh",
@@ -32,62 +33,69 @@ const StepRecipe = ({ detailState }) => {
                               fontSize: "0.5vw",
                             }}
                           > */}
-                          <WarningFilled
-                            style={{
-                              width: "16vw",
-                            }}
-                          />
-                          <div
-                            style={{
-                              transform: "translateX(-1vw) translateY(-6vh) ",
-                              // textAlign: "center",
-                              width: "6vw",
-                              margin: "0 auto",
-                              fontSize: "0.5vw",
-                            }}
-                          >
-                            이미지가 없습니다
-                          </div>
-                        </div>
-                      ) : // </div>
-                      // <div>
-                      //   <span className="number">{index + 1}</span>
-                      //   <div
-                      //     style={{ width: "16em", height: "16em" }}
-                      //     alt={e.order_path}
-                      //   />
-                      //   <WarningFilled />
-                      // </div>
-                      e.order_path.includes("https://recipe") ? (
-                        <>
-                          <div>
-                            <div className="number">{index + 1}</div>
-                            <Img src={e.order_path} alt={e.order_path} />
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div>
-                            <div className="number">{index + 1}</div>
-                            <Img
-                              src={e.order_path.slice(29, e.order_path.length)}
-                              alt={e.order_path.slice(29, e.order_path.length)}
+                            <WarningFilled
+                              style={{
+                                width: "16vw",
+                              }}
                             />
+                            <div
+                              style={{
+                                transform: "translateX(-1vw) translateY(-6vh) ",
+                                // textAlign: "center",
+                                width: "6vw",
+                                margin: "0 auto",
+                                fontSize: "0.5vw",
+                              }}
+                            >
+                              이미지가 없습니다
+                            </div>
                           </div>
-                        </>
-                      )}
-                      <ExplanationWrap
-                        style={{ height: "100%", width: "100%" }}
-                      >
-                        {e.order_explain}
-                      </ExplanationWrap>
-                    </TotalWrap>{" "}
-                  </>
-                ) : (
-                  <></>
-                )}
-              </>
-            );
+                        ) : // </div>
+                        // <div>
+                        //   <span className="number">{index + 1}</span>
+                        //   <div
+                        //     style={{ width: "16em", height: "16em" }}
+                        //     alt={e.order_path}
+                        //   />
+                        //   <WarningFilled />
+                        // </div>
+                        e.order_path.includes("https://recipe") ? (
+                          <>
+                            <div>
+                              <div className="number">{index + 1}</div>
+                              <Img src={e.order_path} alt={e.order_path} />
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div>
+                              <div className="number">{index + 1}</div>
+                              <Img
+                                src={e.order_path.slice(
+                                  e.order_path.lastIndexOf("/img"),
+                                  e.order_path.length
+                                )}
+                                alt={e.order_path.slice(
+                                  e.order_path.lastIndexOf("/img"),
+                                  e.order_path.length
+                                )}
+                              />
+                            </div>
+                          </>
+                        )}
+                        <ExplanationWrap
+                          style={{ height: "100%", width: "100%" }}
+                        >
+                          {e.order_explain}
+                        </ExplanationWrap>
+                      </TotalWrap>{" "}
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              );
+            }
           })}
         </div>{" "}
       </RecipeStepWrap>

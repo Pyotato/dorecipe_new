@@ -20,6 +20,7 @@ export const colors = {
   color_milky_white: "#FAF3E7",
   color_beige_white: "#ECE5D3",
   color_carrot_orange: "#CF702C",
+  color_pinkish_beige: "#FFF9F3",
 
   color_gray_1: "#111111",
   color_gray_2: "#151515",
@@ -30,6 +31,7 @@ export const colors = {
   color_beige_brown: "#FAF3E7",
   color_milktea_brown: "#C2B196",
   color_black_brown: "#292D32",
+  color_greyish_beige_brown: "#ECE2D6",
 
   color_gray_red: "#796763",
   color_gray_red2: "#A07667",
@@ -38,6 +40,9 @@ export const colors = {
   color_green_1: "#badcb47f",
   color_green_2: "#779a71",
   color_pink_1: "#f0e0dac4",
+
+  color_yellow_brown: "#af875c",
+  color_yellow_beige_shadow: "#fce5b0",
 };
 
 export const borderRadii = {
@@ -45,6 +50,7 @@ export const borderRadii = {
   radius_medium: "45vw",
   radius_large: "60vw",
   radius_xlarge: "90vw",
+  radius_circle: "100%",
 };
 
 export const fontSizes = {
@@ -61,6 +67,22 @@ export const fontSizes = {
   fontSize_titleSize: calcRem(50),
   fontSize_xlTitleSize: calcRem(70),
   fontSize_xxlTitleSize: calcRem(120),
+};
+
+export const inputSizes = {
+  inputSize_xxTiny: calcRem(10),
+  inputSize_xTiny: calcRem(30),
+  inputSize_tiny: calcRem(50),
+  inputSize_small: calcRem(70),
+  inputSize_base: calcRem(100),
+  inputSize_lg: calcRem(120),
+  inputSize_xl: calcRem(160),
+  inputSize_xxl: calcRem(200),
+  inputSize_xxxl: calcRem(240),
+  inputSize_ul: calcRem(280),
+  inputSize_titleSize: calcRem(320),
+  inputSize_xlTitleSize: calcRem(360),
+  inputSize_xxlTitleSize: calcRem(420),
 };
 
 export const fontWeights = {
@@ -113,11 +135,6 @@ export const deviceSizes = {
   deviceSize_mobileL: 450,
   deviceSize_tablet: 768,
   deviceSizes: 1024,
-  // deviceSize_mobileS: "320px",
-  // deviceSize_mobileM: "375px",
-  // deviceSize_mobileL: "450px",
-  // deviceSize_tablet: "768px",
-  // deviceSizes: "1024px",
 };
 
 export const device = {
@@ -132,6 +149,19 @@ export const fontStyles = {
   default_font: "mainFont",
 };
 
+export const imgSizes = {
+  img_size_base: calcRem(10),
+  img_size_small: calcRem(8),
+  img_size_lg: calcRem(100),
+  img_size_xl: calcRem(120),
+  img_size_xxl: calcRem(140),
+  img_size_xxxl: calcRem(160),
+  img_size_ul: calcRem(200),
+  img_size_uul: calcRem(240),
+  img_size_uuul: calcRem(300),
+  img_size_uuuul: calcRem(360),
+};
+
 export const theme = {
   fontSizes,
   colors,
@@ -144,4 +174,6 @@ export const theme = {
   interval,
   verticalInterval,
   fontWeights,
+  inputSizes,
+  imgSizes,
 };

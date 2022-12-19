@@ -237,30 +237,22 @@ const CompleteRecipe = ({
     formData.append("data", blob);
     formData.append("member_id", data.member_id);
 
-    recipe_thumbnail[0] !== undefined
-      ? formData.append("recipe_imgs_completed", recipe_thumbnail[0])
-      : formData.append("recipe_imgs_completed", null); /////파일 업로드
-    recipe_thumbnail[1] !== undefined
-      ? formData.append("recipe_imgs_completed", recipe_thumbnail[1])
-      : formData.append("recipe_imgs_completed", null); /////파일 업로드
-    recipe_thumbnail[2] !== undefined
-      ? formData.append("recipe_imgs_completed", recipe_thumbnail[2])
-      : formData.append("recipe_imgs_completed", null); /////파일 업로드
-    recipe_thumbnail[3] !== undefined
-      ? formData.append("recipe_imgs_completed", recipe_thumbnail[3])
-      : formData.append("recipe_imgs_completed", null); /////파일 업로드
-    recipe_thumbnail[0] !== undefined
-      ? formData.append("completion_path1", data.completion_path1)
-      : formData.append("completion_path1", null);
-    recipe_thumbnail[1] !== undefined
-      ? formData.append("completion_path2", data.completion_path2)
-      : formData.append("completion_path2", null);
-    recipe_thumbnail[2] !== undefined
-      ? formData.append("completion_path3", data.completion_path3)
-      : formData.append("completion_path3", null);
-    recipe_thumbnail[3] !== undefined
-      ? formData.append("completion_path4", data.completion_path4)
-      : formData.append("completion_path4", null);
+    for (let i = 0; i < recipe_thumbnail.length; i++) {
+      formData.append("recipe_imgs_completed", recipe_thumbnail[i]);
+      i === 0 &&
+        (data.completion_path1 !== "" || data.completion_path1 !== null) &&
+        formData.append(`completion_path${i}`, data.completion_path1);
+      i === 1 &&
+        (data.completion_path2 !== "" || data.completion_path2 !== null) &&
+        formData.append(`completion_path${i}`, data.completion_path2);
+      i === 2 &&
+        (data.completion_path3 !== "" || data.completion_path3 !== null) &&
+        formData.append(`completion_path${i}`, data.completion_path3);
+      i === 3 &&
+        (data.completion_path4 !== "" || data.completion_path4 !== null) &&
+        formData.append(`completion_path${i}`, data.completion_path4);
+    }
+
     formData.append("completion_tip", data.completion_tip);
     formData.append("recipe_num", data.recipe_num);
 

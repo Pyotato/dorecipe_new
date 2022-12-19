@@ -1,6 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import BasicSpinner from "../../../components/_common/loading";
 import CompleteList from "./recipeList";
 
@@ -8,11 +6,20 @@ import styled from "styled-components";
 import NullRecipe from "../nullRecipeList";
 
 import { colors } from "../../../theme/theme";
-import { CompleteRecipeState } from "../RecipeStates";
+import { useMemo } from "react";
+import { useCallback } from "react";
 
-const CompleteRecipeList = ({ currentUser }) => {
+const CompleteRecipeList = ({
+  currentUser,
+  recipeLength,
+  recipeState,
+  setRecipeState,
+  setRecipeLength,
+  incompleteRecipeLength,
+  setIncompleteRecipeLength,
+}) => {
   // 작성한 레시피
-  const [recipeState, setRecipeState] = useState([
+  const [completedRecipeState, setCompletedRecipeState] = useState([
     {
       recipe_num: 0,
       recipe_title: "로딩중",
@@ -23,38 +30,39 @@ const CompleteRecipeList = ({ currentUser }) => {
     },
   ]);
 
+  useEffect(() => {
+    if (recipeLength > 0) {
+      setCompletedRecipeState(recipeState);
+    } else {
+      setCompletedRecipeState("empty");
+    }
+  }, [recipeState]);
+
+  useCallback(() => {
+    // useMemo(() => {
+    if (recipeLength === 0) {
+      setCompletedRecipeState("empty");
+    } else {
+      setCompletedRecipeState(recipeState);
+    }
+  }, [recipeState]);
+
   const [loadingState, setLoadingState] = useState(true);
-
-  const [recipeLength, setRecipeLength] = useState(0); //레시피 삭제 감지
-
-  CompleteRecipeState({
-    currentUser,
-    setRecipeState,
-    setRecipeLength,
-    setLoadingState,
-    recipeLength,
-  });
-
+  console.log("completedRecipeState", completedRecipeState);
   return (
     <>
       <BasicFormSection>
         <div className="totalWrap">
           <div>
-            <SectionTitle>
-              작성 완료한 레시피
-              {/* <span className="likeRecipeTotal" style={totalRecipe}>
-                {" "}
-                총 {recipeState.length}개
-              </span> */}
-            </SectionTitle>
+            <SectionTitle>작성 완료한 레시피</SectionTitle>
             <RecipeWrapItems>
               <Scrollable>
                 <div>
-                  {recipeState === "empty" ? (
+                  {completedRecipeState === "empty" && recipeLength === 0 ? (
                     <>
                       <NullRecipe />
                     </>
-                  ) : recipeState[0].recipe_title === "로딩중" ? (
+                  ) : completedRecipeState[0].recipe_title === "로딩중" ? (
                     <>
                       <BasicSpinner />
                     </>
@@ -62,73 +70,18 @@ const CompleteRecipeList = ({ currentUser }) => {
                     recipeState.map((e) => (
                       <CompleteList
                         loadingState={loadingState}
+                        setLoadingState={setLoadingState}
                         key={e.recipe_num}
+                        setRecipeState={setRecipeState}
                         completedRecipeState={e}
+                        recipeState={recipeState}
                         recipeLength={recipeLength}
+                        setIncompleteRecipeLength={setIncompleteRecipeLength}
+                        incompleteRecipeLength={incompleteRecipeLength}
                         setRecipeLength={setRecipeLength}
                       />
                     ))
                   )}
-                  {/* {!loadingState && recipeLength === 0 && <BasicSpinner />} */}
-                  {/* {!loadingState && recipeLength === 0 ? (
-                  <BasicSpinner />
-                ) : loadingState ? (
-                  <NullRecipe />
-                ) : (
-                  <></>
-                )} */}
-                  {/* {recipeLength > 0 &&
-                  recipeState.map((e) => (
-                    <CompleteList
-                      loadingState={loadingState}
-                      key={e.recipe_num}
-                      completedRecipeState={e}
-                      recipeLength={recipeLength}
-                      setRecipeLength={setRecipeLength}
-                    />
-                  ))} */}
-                  {/* {recipeState ? (
-                  recipeState.map((e) => (
-                    <CompleteList
-                      loadingState={loadingState}
-                      key={e.recipe_num}
-                      completedRecipeState={e}
-                      recipeLength={recipeLength}
-                      setRecipeLength={setRecipeLength}
-                    />
-                  ))
-                ) : (
-                  <NullRecipe />
-                )} */}
-                  {/* {loadingState ? (
-                  <div>로딩중</div>
-                ) : recipeState.recipe_title !== "" ? (
-                  recipeState.map((e) => (
-                    <CompleteList
-                      loadingState={loadingState}
-                      key={e.recipe_num}
-                      completedRecipeState={e}
-                      recipeLength={recipeLength}
-                      setRecipeLength={setRecipeLength}
-                    />
-                  ))
-                ) : (
-                  <NullRecipe />
-                )} */}
-                  {/* {loadingState ? (
-                  <div>로딩중</div>
-                ) : recipeState.length !== 0 ? (
-                  recipeState.map((e) => (
-                    <CompleteList
-                      key={e.recipe_num}
-                      completedRecipeState={e}
-                      recipeLength={recipeLength}
-                      setRecipeLength={setRecipeLength}
-                    />
-                  ))
-                ) : (
-                  <NullRecipe />
-                )} */}
                 </div>
               </Scrollable>
             </RecipeWrapItems>
