@@ -95,7 +95,7 @@ const StepRecipe = ({ detailState }) => {
                   )}
                 </>
               );
-            }
+            } else return <></>;
           })}
         </div>{" "}
       </RecipeStepWrap>
@@ -148,7 +148,7 @@ const TotalWrap = styled.div`
     color: ${colors.color_brown};
     width: 3em;
     height: 3em;
-    padding: 0.3em;
+    padding: 0.7em;
     border-radius: 0.5vw 0 0 0;
     text-align: center;
     transform: translateY(100%);

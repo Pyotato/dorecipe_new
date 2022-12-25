@@ -1,8 +1,6 @@
 import { useCallback } from "react";
-import Dropzone, { useDropzone } from "react-dropzone";
+import Dropzone from "react-dropzone";
 import { ReactComponent as Camera } from "../../../assets/Camera.svg";
-
-import styled from "styled-components";
 import {
   EditImgPreview,
   EditImgPreviewForm,
@@ -148,9 +146,6 @@ export const DropZone = ({
       !deleteFiles[1] && setPath2("");
       !deleteFiles[2] && setPath3("");
       !deleteFiles[3] && setPath4("");
-      // setPath2(deleteFiles);
-      // setPath3(deleteFiles);
-      // setPath4(deleteFiles);
       setRecipeImgFiles(deleteFiles);
       console.log("deleted", deleteFiles);
     },
@@ -160,7 +155,6 @@ export const DropZone = ({
   return (
     <Dropzone onDrop={onDropHandler} index={index}>
       {({ getRootProps, getInputProps }) => (
-        // <EditImgPreview style={{ height: "100%" }}>
         <EditImgPreview>
           {files.length > 0 ? (
             <EditImgPreviewForm>
@@ -172,7 +166,7 @@ export const DropZone = ({
                       onClick={() => onPreviewDelete(v.preview)}
                     >
                       <img src={v.preview} alt={v.preview} />
-                      <p>파일 삭제</p>
+                      <p className="fileDeleteText">파일 삭제</p>
                     </div>
                   </EditImgPreviewInner>
                 ) : (
@@ -201,11 +195,7 @@ export const DropZone = ({
           ) : completionDropState === "completionDropState" &&
             files.length < 4 ? (
             <>
-              <div
-                className="inputBox"
-                {...getRootProps()}
-                // style={{ height: "60vh" }}
-              >
+              <div className="inputBox" {...getRootProps()}>
                 <input
                   {...getInputProps()}
                   id="file"

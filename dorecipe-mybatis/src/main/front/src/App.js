@@ -95,7 +95,12 @@ function App() {
   };
 
   const { currentUser } = user;
-
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
   return (
     <ThemeProvider theme={theme}>
       <Routes history={history}>

@@ -12,29 +12,21 @@ import { useMemo } from "react";
 import BasicSpinner from "../../_common/loading";
 import { colors } from "../../../theme/theme";
 import { useCallback } from "react";
+import { CompleteRecipeState } from "../RecipeStates";
 
 const ReceivedLikesRecipeList = ({
   currentUser,
   receivedLikesRecipes,
   setReceivedLikesRecipesLength,
 }) => {
-  // let { memberId } = useParams();
-
+  /** 100k 식으로 간단히 표기 */
+  const likeFormat = Intl.NumberFormat(undefined, { notation: "compact" });
   // 작성중 레시피
-
   const navigate = useNavigate();
   // 랜더링시 데이터값을 불러오지 않았거나
   // 데이터길이가 0일떄
   // 랜더링 시 .recipe_title 값이 undefined거나 map을 하려할떄 에러 발생 방지
   const [receivedLikesRecipesFront, setReceivedLikesRecipesFront] = useState([
-    // "로딩중", // {
-    //   recipe_num: 0,
-    //   recipe_title: "",
-    //   recipe_rpath: "",
-    //   recipe_savetype: 0,
-    //   information_level: "",
-    //   information_time: "",
-    // },
     {
       recipe_num: 0,
       recipe_title: "로딩중",
@@ -49,22 +41,12 @@ const ReceivedLikesRecipeList = ({
   useEffect(() => {
     if (receivedLikesRecipes.length > 0) {
       setReceivedLikesRecipesFront(receivedLikesRecipes);
-      console.log("receivedLikesRecipes", receivedLikesRecipes);
+
       setReceivedLikesRecipesLength(receivedLikesRecipes.length);
     } else {
       setReceivedLikesRecipesFront("empty");
     }
   }, [receivedLikesRecipes]);
-
-  // useCallback(() => {
-  //   // useMemo(() => {
-  //   if (receivedLikesRecipes.length > 0) {
-  //     setReceivedLikesRecipesFront(receivedLikesRecipes);
-  //     setReceivedLikesRecipesLength(receivedLikesRecipes.length);
-  //   } else {
-  //     setReceivedLikesRecipesLength(0);
-  //   }
-  // }, [receivedLikesRecipes]);
 
   return (
     <>
@@ -82,8 +64,8 @@ const ReceivedLikesRecipeList = ({
               </>
             ) : (
               receivedLikesRecipes.length > 0 &&
-              receivedLikesRecipes.map((e) => (
-                <RecipeWrap>
+              receivedLikesRecipes.map((e, index) => (
+                <RecipeWrap key={index}>
                   <div>
                     <ItemWrap
                       onClick={() =>
@@ -101,7 +83,10 @@ const ReceivedLikesRecipeList = ({
                         </div>{" "}
                       </div>
                       <div>
-                        <div className="heart">{e.likes_count}</div>
+                        <div className="heart">
+                          {likeFormat.format(e.likes_count)}
+                        </div>
+                        {/* <div className="heart">{e.likes_count}</div> */}
                         <FontAwesomeIcon
                           icon={faHeart}
                           className="heart faHeart"
@@ -127,116 +112,11 @@ const ReceivedLikesRecipeList = ({
           </div>
         </Scrollable>
       </RecipeWrapItems>
-
-      {/* <div>좋아요를 받은 {currentUser}님의 레시피들</div>
-      {receivedLikesRecipes[0] === "로딩중" ? (
-        <>
-          <BasicSpinner />
-        </>
-      ) : (
-        <>
-          {receivedLikesRecipes.map((e) => (
-            <>
-              <div
-                key={e.recipe_num}
-                onClick={() => {
-                  navigate(`/recipe/search/details/${e.recipe_num}`);
-                }}
-              >
-                <div>{e.recipe_title}</div>
-                <div>{e.likes_count}</div>
-                <div>{e.recipe_num}</div>
-                <div>{e.information_level}</div>
-                <div>{e.information_time}</div>
-                <div>
-                  <img
-                    style={{ width: "9em" }}
-                    src={e.recipe_rpath}
-                    alt={e.recipe_rpath}
-                  />
-                </div>
-              </div>
-            </>
-          ))}
-        </>
-      )} */}
-
-      {/* 좋아요한 레시피 */}
-      {/* <div className="container-sm myPage-box2 center">
-        <div>
-          <SectionTitle>
-            좋아요한 레시피
-            <span className="likeRecipeTotal"> */}
-      {/* <FontAwesomeIcon icon={faHeart} className="heart" />총{" "} */}
-      {/* {likeState.length}개
-            </span>
-          </SectionTitle>
-          <Scrollable>
-            <div>
-              {likeState.length > 1 ? (
-                likeState.map((e) => (
-                  <LikeRecipeList key={e.recipe_num} likeState={e} />
-                ))
-              ) : (
-                <NullRecipe />
-              )}
-            </div>
-          </Scrollable>
-          {
-                    likeState.length !== 0
-                    ?
-                    likeState.map((e) => (
-                        <LikeRecipeList
-                            likeState={e}
-                        />
-                    ))
-                    :
-                    <NullRecipe />
-                }
-        </div>
-      </div> */}
     </>
   );
 };
 
 export default ReceivedLikesRecipeList;
-// const SectionTitle = styled.div`
-//   background-color: #8d3232;
-//   display: inline-block;
-//   width: 90%;
-//   margin: 1em 3em;
-//   color: #fffdf5;
-//   height: 2.4em;
-//   font-size: 21px;
-//   font-weight: 700;
-//   padding: 0.5em 0;
-//   padding-left: 0.5em;
-//   text-align: center;
-// `;
-
-// const Scrollable = styled.section`
-//   width: 100%;
-//   margin: 1em auto;
-
-//   & > div {
-//     padding: 2rem;
-//     height: 27em;
-//     overflow-y: auto;
-//     margin: 0 auto;
-
-//     ::-webkit-scrollbar {
-//       width: 0.5rem;
-//     }
-//     ::-webkit-scrollbar-thumb {
-//       height: 30%;
-//       background-color: #463635;
-//     }
-//     ::-webkit-scrollbar-track {
-//       background-color: #fffdf5;
-//       border: 1px solid #463635;
-//     }
-//   }
-// `;
 
 const Scrollable = styled.section`
   clear: both;

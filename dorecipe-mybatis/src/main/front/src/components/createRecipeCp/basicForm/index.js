@@ -67,108 +67,126 @@ const BasicForm = ({
   const onTemporarySave = useCallback(
     (e) => {
       e.preventDefault();
+
+      if (recipe_url.length > 0) {
+        if (recipe_url.includes("/embed/")) {
+          if (recipe_url.includes("youtube")) {
+            //유튜브영상일 경우
+            setRecipeUrl(
+              recipe_url.slice(
+                recipe_url.indexOf("https"),
+                recipe_url.indexOf('" title')
+              )
+            );
+          } else if (recipe_url.includes("naver")) {
+            //네이버 영상일 경우
+            setRecipeUrl(
+              recipe_url.slice(
+                recipe_url.indexOf("https"),
+                recipe_url.indexOf(" 'frameborder")
+              )
+            );
+          }
+        } else {
+          setRecipeUrl("");
+          alert("영상 형식이 잘못되었습니다.");
+        }
+      }
+
+      const data = {
+        recipe_title: `${recipe_title}`,
+        recipe_savetype: 1, //임시저장
+        recipe_introduce: `${recipe_introduce}`,
+        recipe_url: `${recipe_url}`,
+        recipe_rpath: `${recipe_rpath}`,
+        category_kind: `${category_kind}`,
+        category_theme: `${category_theme}`,
+        category_way: `${category_way}`,
+        category_ing: `${category_ing}`,
+        information_person: `${information_person}`,
+        information_time: `${information_time}`,
+        information_level: `${information_level}`,
+        recipe_creDate: "",
+        member_id: `${member_id}`,
+      };
+
+      console.log("data", data);
+      const blob = new Blob([JSON.stringify(data)], {
+        type: "multipart/form-data",
+      });
+
+      const formData = new FormData();
+      formData.append("data", blob);
+      formData.append("recipe_title", data.recipe_title);
+      formData.append("recipe_savetype", data.recipe_savetype);
+      formData.append("recipe_introduce", data.recipe_introduce);
+      formData.append("recipe_url", data.recipe_url);
+      formData.append("recipe_rpath", data.recipe_rpath);
+      formData.append("recipe_thumbnail", recipe_thumbnail);
+      //기본값을 전체로 들어가게끔
+      formData.append("category_kind", data.category_kind);
+      formData.append("category_theme", data.category_theme);
+      formData.append("category_ing", data.category_ing);
+      formData.append("category_way", data.category_way);
+      formData.append("information_person", data.information_person);
+      formData.append("information_level", data.information_level);
+      formData.append("information_time", data.information_time);
+      formData.append("recipe_creDate", data.recipe_creDate);
+      formData.append("member_id", user.auth.user.username);
       if (recipe_title.length > 0) {
         if (tempSaveState === 0) {
-          if (recipe_url.length > 0) {
-            if (recipe_url.includes("/embed/")) {
-              if (recipe_url.includes("youtube")) {
-                //유튜브영상일 경우
-                setRecipeUrl(
-                  recipe_url.slice(
-                    recipe_url.indexOf("https"),
-                    recipe_url.indexOf('" title')
-                  )
-                );
-              } else if (recipe_url.includes("naver")) {
-                //네이버 영상일 경우
-                setRecipeUrl(
-                  recipe_url.slice(
-                    recipe_url.indexOf("https"),
-                    recipe_url.indexOf(" 'frameborder")
-                  )
-                );
-              }
-            } else {
-              setRecipeUrl("");
-              alert("영상 형식이 잘못되었습니다.");
-            }
-          }
-
-          const data = {
-            recipe_title: `${recipe_title}`,
-            recipe_savetype: 1, //임시저장
-            recipe_introduce: `${recipe_introduce}`,
-            recipe_url: `${recipe_url}`,
-            recipe_rpath: `${recipe_rpath}`,
-            category_kind: `${category_kind}`,
-            category_theme: `${category_theme}`,
-            category_way: `${category_way}`,
-            category_ing: `${category_ing}`,
-            information_person: `${information_person}`,
-            information_time: `${information_time}`,
-            information_level: `${information_level}`,
-            recipe_creDate: "",
-            member_id: `${member_id}`,
-          };
-
-          console.log("data", data);
-          const blob = new Blob([JSON.stringify(data)], {
-            type: "multipart/form-data",
-          });
-
-          const formData = new FormData();
-          formData.append("data", blob);
-          formData.append("recipe_title", data.recipe_title);
-          formData.append("recipe_savetype", data.recipe_savetype);
-          formData.append("recipe_introduce", data.recipe_introduce);
-          formData.append("recipe_url", data.recipe_url);
-          formData.append("recipe_rpath", data.recipe_rpath);
-          formData.append("recipe_thumbnail", recipe_thumbnail);
-          //기본값을 전체로 들어가게끔
-          data.category_kind !== ""
-            ? formData.append("category_kind", data.category_kind)
-            : formData.append("category_kind", "전체");
-          data.category_theme !== ""
-            ? formData.append("category_theme", data.category_theme)
-            : formData.append("category_theme", "전체");
-          data.category_way !== ""
-            ? formData.append("category_way", data.category_way)
-            : formData.append("category_way", "전체");
-          data.category_ing !== ""
-            ? formData.append("category_ing", data.category_ing)
-            : formData.append("category_ing", "전체");
-          formData.append("information_person", data.information_person);
-          formData.append("information_level", data.information_level);
-          formData.append("information_time", data.information_time);
-          formData.append("recipe_creDate", data.recipe_creDate);
-          formData.append("member_id", user.auth.user.username);
-
           //처음 임시저장할떄
-          btnState === 0
-            ? axios({
-                method: "POST",
-                // url: process.env.REACT_APP_HOST + "/recipe/save",
-                url: "http://localhost:9000/recipe/save",
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-                data: formData,
+          if (btnState === 0) {
+            axios({
+              method: "POST",
+              // url: process.env.REACT_APP_HOST + "/recipe/save",
+              url: "http://localhost:9000/recipe/save",
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+              data: formData,
+            })
+              .then(() => {
+                setSaveState(1);
+                setBtnDisplayState("none");
+                setBtnState(1);
+                setBtnDisabledState(true);
+                setRecipeState(recipeState);
               })
-                .then(() => {
-                  setSaveState(1);
-                  setBtnDisplayState("none");
-                  setBtnState(1);
-                  setBtnDisabledState(true);
-                })
-                .then((response) => {
-                  for (let value of formData.values()) {
-                    console.log("value", value);
-                  }
-                })
-                .catch((err) => {
-                  console.log(err);
-                })
-            : formData.append("recipe_num", recipeState);
+              .then((response) => {
+                if (btnState === 1 && setSaveState === 1) {
+                  formData.append("recipe_num", recipeState);
+                  axios({
+                    method: "POST",
+
+                    url: "http://localhost:9000/recipe/update",
+                    headers: {
+                      "Content-Type": "multipart/form-data",
+                    },
+                    data: formData,
+                  })
+                    .then((response) => {
+                      // for (let value of formData.values()) {
+                      //   console.log(value);
+                      // }
+                      // console.log("성공?");
+                      setBtnState(1);
+                      setBtnDisplayState("none");
+                    })
+                    .catch((e) => console.log(e));
+                } else {
+                  console.log("업데이트는 실패");
+                }
+                // for (let value of formData.values()) {
+                //   console.log("value", value);
+                // }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+        } else {
+          formData.append("recipe_num", recipeState);
           axios({
             method: "POST",
 
@@ -187,9 +205,11 @@ const BasicForm = ({
               setBtnDisplayState("none");
             })
             .catch((e) => console.log(e));
-        } else {
-          alert("임시저장실패하셨습니다.");
         }
+
+        // else {
+        //   alert("임시저장실패하셨습니다.");
+        // }
       } else {
         alert("제목을 입력해주세요.");
       }
@@ -211,6 +231,185 @@ const BasicForm = ({
       files,
     ]
   );
+
+  // const onTemporarySave = useCallback(
+  //   (e) => {
+  //     e.preventDefault();
+  //     if (recipe_title.length > 0) {
+  //       if (tempSaveState === 0) {
+  //         if (recipe_url.length > 0) {
+  //           if (recipe_url.includes("/embed/")) {
+  //             if (recipe_url.includes("youtube")) {
+  //               //유튜브영상일 경우
+  //               setRecipeUrl(
+  //                 recipe_url.slice(
+  //                   recipe_url.indexOf("https"),
+  //                   recipe_url.indexOf('" title')
+  //                 )
+  //               );
+  //             } else if (recipe_url.includes("naver")) {
+  //               //네이버 영상일 경우
+  //               setRecipeUrl(
+  //                 recipe_url.slice(
+  //                   recipe_url.indexOf("https"),
+  //                   recipe_url.indexOf(" 'frameborder")
+  //                 )
+  //               );
+  //             }
+  //           } else {
+  //             setRecipeUrl("");
+  //             alert("영상 형식이 잘못되었습니다.");
+  //           }
+  //         }
+
+  //         const data = {
+  //           recipe_title: `${recipe_title}`,
+  //           recipe_savetype: 1, //임시저장
+  //           recipe_introduce: `${recipe_introduce}`,
+  //           recipe_url: `${recipe_url}`,
+  //           recipe_rpath: `${recipe_rpath}`,
+  //           category_kind: `${category_kind}`,
+  //           category_theme: `${category_theme}`,
+  //           category_way: `${category_way}`,
+  //           category_ing: `${category_ing}`,
+  //           information_person: `${information_person}`,
+  //           information_time: `${information_time}`,
+  //           information_level: `${information_level}`,
+  //           recipe_creDate: "",
+  //           member_id: `${member_id}`,
+  //         };
+
+  //         console.log("data", data);
+  //         const blob = new Blob([JSON.stringify(data)], {
+  //           type: "multipart/form-data",
+  //         });
+
+  //         const formData = new FormData();
+  //         formData.append("data", blob);
+  //         formData.append("recipe_title", data.recipe_title);
+  //         formData.append("recipe_savetype", data.recipe_savetype);
+  //         formData.append("recipe_introduce", data.recipe_introduce);
+  //         formData.append("recipe_url", data.recipe_url);
+  //         formData.append("recipe_rpath", data.recipe_rpath);
+  //         formData.append("recipe_thumbnail", recipe_thumbnail);
+  //         //기본값을 전체로 들어가게끔
+  //         formData.append("category_kind", data.category_kind);
+  //         formData.append("category_theme", data.category_theme);
+  //         formData.append("category_ing", data.category_ing);
+  //         formData.append("category_theme", data.category_theme);
+  //         formData.append("category_way", data.category_way);
+  //         // data.category_kind !== "" ||  data.category_kind !== null
+  //         //   ? formData.append("category_kind", data.category_kind)
+  //         //   : formData.append("category_kind", "전체");
+  //         // data.category_theme !== "" ||  data.category_theme !== null
+  //         //   ? formData.append("category_theme", data.category_theme)
+  //         //   : formData.append("category_theme", "전체");
+  //         // data.category_way !== "" ||  data.category_way !== null
+  //         //   ? formData.append("category_way", data.category_way)
+  //         //   : formData.append("category_way", "전체");
+  //         // data.category_ing !== "" ||  data.category_ing !== null
+  //         //   ? formData.append("category_ing", data.category_ing)
+  //         //   : formData.append("category_ing", "전체");
+  //         // data.category_kind !== "" ||  data.category_kind !== null
+  //         //   ? formData.append("category_kind", data.category_kind)
+  //         //   : formData.append("category_kind", "전체");
+  //         // data.category_theme !== "" ||  data.category_theme !== null
+  //         //   ? formData.append("category_theme", data.category_theme)
+  //         //   : formData.append("category_theme", "전체");
+  //         // data.category_way !== "" ||  data.category_way !== null
+  //         //   ? formData.append("category_way", data.category_way)
+  //         //   : formData.append("category_way", "전체");
+  //         // data.category_ing !== "" ||  data.category_ing !== null
+  //         //   ? formData.append("category_ing", data.category_ing)
+  //         //   : formData.append("category_ing", "전체");
+  //         // data.category_kind !== ""
+  //         //   ? formData.append("category_kind", data.category_kind)
+  //         //   : formData.append("category_kind", "전체");
+  //         // data.category_theme !== ""
+  //         //   ? formData.append("category_theme", data.category_theme)
+  //         //   : formData.append("category_theme", "전체");
+  //         // data.category_way !== ""
+  //         //   ? formData.append("category_way", data.category_way)
+  //         //   : formData.append("category_way", "전체");
+  //         // data.category_ing !== ""
+  //         //   ? formData.append("category_ing", data.category_ing)
+  //         //   : formData.append("category_ing", "전체");
+  //         formData.append("information_person", data.information_person);
+  //         formData.append("information_level", data.information_level);
+  //         formData.append("information_time", data.information_time);
+  //         formData.append("recipe_creDate", data.recipe_creDate);
+  //         formData.append("member_id", user.auth.user.username);
+
+  //         //처음 임시저장할떄
+  //         if (btnState === 0) {
+  //           axios({
+  //             method: "POST",
+  //             // url: process.env.REACT_APP_HOST + "/recipe/save",
+  //             url: "http://localhost:9000/recipe/save",
+  //             headers: {
+  //               "Content-Type": "multipart/form-data",
+  //             },
+  //             data: formData,
+  //           })
+  //             .then(() => {
+  //               setSaveState(1);
+  //               setBtnDisplayState("none");
+  //               setBtnState(1);
+  //               setBtnDisabledState(true);
+  //             })
+  //             .then((response) => {
+  //               // for (let value of formData.values()) {
+  //               //   console.log("value", value);
+  //               // }
+  //             })
+  //             .catch((err) => {
+  //               console.log(err);
+  //             });
+  //         } else {
+  //           formData.append("recipe_num", recipeState);
+  //           axios({
+  //             method: "POST",
+
+  //             url: "http://localhost:9000/recipe/update",
+  //             headers: {
+  //               "Content-Type": "multipart/form-data",
+  //             },
+  //             data: formData,
+  //           })
+  //             .then((response) => {
+  //               for (let value of formData.values()) {
+  //                 console.log(value);
+  //               }
+  //               console.log("성공?");
+  //               setBtnState(1);
+  //               setBtnDisplayState("none");
+  //             })
+  //             .catch((e) => console.log(e));
+  //         }
+  //       } else {
+  //         alert("임시저장실패하셨습니다.");
+  //       }
+  //     } else {
+  //       alert("제목을 입력해주세요.");
+  //     }
+  //   },
+  //   [
+  //     btnState,
+  //     recipeState,
+  //     recipe_title,
+  //     recipe_introduce,
+  //     recipe_url,
+  //     recipe_rpath,
+  //     category_kind,
+  //     category_theme,
+  //     category_way,
+  //     category_ing,
+  //     information_person,
+  //     information_time,
+  //     information_level,
+  //     files,
+  //   ]
+  // );
 
   return (
     <>
@@ -406,7 +605,7 @@ const BasicForm = ({
                     onChange={onChangeKind}
                     style={{ width: "22%", margin: "0" }}
                   >
-                    <option>종류별</option>
+                    <option value="">종류별</option>
                     <option value="전체">전체</option>
                     <option value="밑반찬">밑반찬</option>
                     <option value="메인반찬">메인반찬</option>
@@ -434,7 +633,7 @@ const BasicForm = ({
                     // style={{ width: "8vw" }}
                     style={{ width: "25%", margin: "0" }}
                   >
-                    <option>상황•테마별</option>
+                    <option value="">상황•테마별</option>
                     <option value="전체">전체</option>
                     <option value="일상">일상</option>
                     <option value="초스피드">초스피드</option>
@@ -458,7 +657,7 @@ const BasicForm = ({
                     style={{ width: "25%", margin: "0" }}
                     onChange={onChangeIngr}
                   >
-                    <option>재료별</option>
+                    <option value="">재료별</option>
                     <option value="전체">전체</option>
                     <option value="소고기">소고기</option>
                     <option value="돼지고기">돼지고기</option>
@@ -484,7 +683,7 @@ const BasicForm = ({
                     style={{ width: "25%", margin: "0" }}
                     onChange={onChangeWay}
                   >
-                    <option>방법별</option>
+                    <option value="">방법별</option>
                     <option value="전체">전체</option>
                     <option value="볶음">볶음</option>
                     <option value="끓이기">끓이기</option>
@@ -528,7 +727,7 @@ const BasicForm = ({
                     onChange={onChangeServingSize}
                     style={{ margin: "0", width: "30%" }}
                   >
-                    <option>인분</option>
+                    <option value="">인분</option>
                     <option value="1인분">1인분</option>
                     <option value="2인분">2인분</option>
                     <option value="3인분">3인분</option>
@@ -559,7 +758,7 @@ const BasicForm = ({
                     onChange={onChangeLevel}
                     style={{ margin: "0", width: "30%" }}
                   >
-                    <option>난이도</option>
+                    <option value="">난이도</option>
                     <option value="아무나">아무나</option>
                     <option value="초급">초급</option>
                     <option value="중급">중급</option>
@@ -619,7 +818,9 @@ const BasicFormWrap = styled.div`
     height: 100%;
   }
   & .recipeRightWrap {
-    height: 50vh;
+    /* height: 50vh; */
+    height: 100%;
+
     justify-content: center;
     width: 45%;
     align-items: center;

@@ -62,9 +62,6 @@ const UploadNoticeCp = ({ navState, setNavState }) => {
 
         const formData = new FormData();
 
-        //notice_content = `${notice_content}`.replace(/<br>|<br\>|<br \/>)/g, '\n\r');
-        //줄바꿈 - 콘솔에는 줄바꿈되어서 찍힘,db에도 화면에는 줄바꿈 안됨
-
         formData.append("noticeData", noticeBlob);
         formData.append("member_id", noticeData.member_id);
         formData.append("notice_title", noticeData.notice_title);

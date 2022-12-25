@@ -88,8 +88,8 @@ const LikeRecipeList = ({ currentUser, likedRecipeState, setLikeState }) => {
                 <BasicSpinner />
               </>
             ) : (
-              likeStateFront.map((e) => (
-                <RecipeWrap>
+              likeStateFront.map((e, index) => (
+                <RecipeWrap key={index}>
                   <div>
                     <ItemWrap
                       onClick={() =>

@@ -39,7 +39,13 @@ const SearchRecipePage = () => {
   useMemo(() => {
     testAxios();
   }, [search]);
-
+  
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
   return (
     <>
       <MainLayout>

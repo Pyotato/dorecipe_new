@@ -16,8 +16,6 @@ const store = () => {
     {
       reducer: rootReducer,
       middleware: [thunk, logger],
-
-      //   middleware: middleware,
     }
     // applyMiddleware()
   );

@@ -28,7 +28,8 @@
   color: #8d3232;
   text-align: center;
   width: 12em;
-  position: absolute;
+  position: relative;
+  /* position: absolute; */
   transform: translate(-50%, -50%);
   top: 50%;
   left: 50%;

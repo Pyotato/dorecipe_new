@@ -12,6 +12,7 @@ import { ReactComponent as Ranking } from "../../../assets/Ranking.svg";
 import { ReactComponent as Timer } from "../../../assets/Timer.svg";
 import CommentCp from "../../commentCp";
 import NotFoundPage from "../../../pages/errorPage";
+import { colors } from "../../../theme/theme";
 
 const RecipeDetailModal = () => {
   const search = "/";
@@ -226,6 +227,7 @@ const RecipeDetailModal = () => {
           style={{
             height: "fit-content",
             width: "100%",
+            // minWidth: "33em",
             paddingTop: "21vh",
             paddingBottom: "18vh",
             fontSize: "1vw",
@@ -246,6 +248,7 @@ const RecipeDetailModal = () => {
                   width: "50vw",
                   height: "50vh",
                   borderRadius: "2vw 2vw 0 0",
+                  transform: "translateY(0.5em)",
                 }}
                 src={detailState[0].recipe_rpath}
                 alt={detailState[0].recipe_rpath}
@@ -255,12 +258,11 @@ const RecipeDetailModal = () => {
                 style={{
                   width: "50vw",
                   margin: "0 auto",
-                  transform: "translateY(-1vw)",
+
                   backgroundColor: "#C2B196",
                   display: "inline-flex",
                   justifyContent: "space-between",
                   padding: "0.5vw",
-                  // alignItems: "center",
                 }}
               >
                 <div
@@ -306,6 +308,7 @@ const RecipeDetailModal = () => {
                     // width: "50vw",
                     gap: "1vw",
                     marginRight: "1vw",
+
                     // transform: "translateY(-1vw)",
                     // backgroundColor: "#C2B196",
                     display: "inline-flex",
@@ -326,16 +329,18 @@ const RecipeDetailModal = () => {
                   )}
                 </div>
               </div>
-              <div
+              <RecipeIntro
                 style={{
                   width: "50vw",
                   margin: "0 auto",
-                  padding: "3vh 1vw",
-                  lineHeight: "1.6",
+                  backgroundColor: colors.color_beige_tinted_white,
+                  // padding: "3vh 1vw",
+                  // lineHeight: "1.6",
                 }}
               >
+                {/* {detailState[0].recipe_introduce.replace("\n",)} */}
                 {detailState[0].recipe_introduce}
-              </div>
+              </RecipeIntro>
               <div
                 style={{
                   backgroundColor: "#FAF3E7",
@@ -549,9 +554,10 @@ const RecipeDetailModal = () => {
                     {detailState[0].completion_tip ? (
                       <div
                         style={{
-                          textAlign: "center",
-                          padding: "2vw",
-                          lineHeight: "",
+                          textAlign: "justify",
+                          padding: "1vh 2vw",
+                          lineHeight: "2",
+                          whiteSpace: "pre-line",
                         }}
                       >
                         {detailState[0].completion_tip}
@@ -563,8 +569,8 @@ const RecipeDetailModal = () => {
                     )}
                   </div>
                 </div>
-                {detailState[0].recipe_url &&
-                detailState[0].recipe_url.includes("/embed/") ? (
+                {detailState[0].recipe_url !== "" &&
+                detailState[0].recipe_url.includes("embed") ? (
                   <div
                     style={{
                       width: "70%",
@@ -593,17 +599,23 @@ const RecipeDetailModal = () => {
                         allowfullscreen="true"
                         src={
                           detailState[0].recipe_url.includes("naver")
-                            ? detailState[0].recipe_url.slice(
-                                detailState[0].recipe_url.indexOf("https"),
-                                detailState[0].recipe_url.indexOf(
-                                  " 'frameborder"
+                            ? detailState[0].recipe_url.includes(
+                                " 'frameborder"
+                              )
+                              ? detailState[0].recipe_url.slice(
+                                  detailState[0].recipe_url.indexOf("https"),
+                                  detailState[0].recipe_url.indexOf(
+                                    " 'frameborder"
+                                  )
                                 )
-                              )
+                              : detailState[0].recipe_url
                             : detailState[0].recipe_url.includes("youtube")
-                            ? detailState[0].recipe_url.slice(
-                                detailState[0].recipe_url.indexOf("https"),
-                                detailState[0].recipe_url.indexOf('" title')
-                              )
+                            ? detailState[0].recipe_url.includes('" title')
+                              ? detailState[0].recipe_url.slice(
+                                  detailState[0].recipe_url.indexOf("https"),
+                                  detailState[0].recipe_url.indexOf('" title')
+                                )
+                              : detailState[0].recipe_url
                             : "null"
                         }
                         title={detailState[0].recipe_url}
@@ -636,4 +648,12 @@ const Img = styled.img`
   overflow-x: hidden;
   padding: 1vw;
 `;
+
+const RecipeIntro = styled.div`
+  white-space: pre-line;
+  text-align: justify;
+  padding: 3vh 1em;
+  line-height: 2;
+`;
+
 export default RecipeDetailModal;
