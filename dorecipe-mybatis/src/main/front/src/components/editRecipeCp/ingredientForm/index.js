@@ -10,68 +10,45 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import { colors } from "../../../theme/theme";
 import { ReactComponent as Pin } from "../../../assets/Pin.svg";
-import { useParams } from "react-router-dom";
 
 const IngredientForm = ({
-  btnState,
+  // btnState,
   setBtnState,
   recipeState,
+  recipeNum,
   // setRecipeState,
   setIngredientState,
   IngredientState,
+  ingredients,
+  setIngredients,
 }) => {
-  const recipeId = useParams();
+  // const recipeId = useParams();
   // console.log("IngredientForm", recipeId.recipeId);
-  console.log("btnState", btnState);
-  const [ingredients, setIngredients] = useState([
-    {
-      recipe_num: parseInt(recipeId.recipeId),
-      ing_num: 1,
-      ing_ingredient: "",
-      ing_amount: "",
-    },
-  ]);
+  // console.log("btnState", btnState);
 
   const IngreAmountRef = useRef();
   const inputFocus = useRef();
   const endPointPosition = useRef();
 
-  const [btnDisabledState, setBtnDisabledState] = useState(false);
-  const [btnDisplayState, setBtnDisplayState] = useState("none");
+  // const [btnDisabledState, setBtnDisabledState] = useState(false);
+  // const [btnDisplayState, setBtnDisplayState] = useState("none");
 
   const [loadState, setLoadState] = useState(true);
 
-  useEffect(() => {
-    if (btnState === 1) {
-      setBtnDisplayState("block");
-    }
-  }, []);
-  /**재료 추가 */
-  // const onAddIngredientHandler = useMemo(() => {
-  //   if (
-  //     ingredients[ingredients.length - 1].ing_amount !== "" &&
-  //     ingredients[ingredients.length - 1].ing_amount !== ""
-  //   ) {
-  //     let newIngredients = {
-  //       recipe_num: ingredients[0].recipe_num,
-  //       ingredient_num: ingredients.length + 1,
-  //       ing_ingredient: "",
-  //       ing_amount: "",
-  //     };
-  //     setIngredients([...ingredients, newIngredients]);
-  //     console.log(ingredients);
-  //   } else {
-  //     alert("재료를 입력란을 채우고 추가해주세요.");
+  // useEffect(() => {
+  //   if (btnState === 1) {
+  //     setBtnDisplayState("block");
   //   }
-  // }, [ingredients.length]);
+  // }, []);
+
+  /**재료 추가시 state배열에 추가*/
   const onAddIngredientHandler = () => {
     if (
       ingredients[ingredients.length - 1].ing_amount !== "" &&
       ingredients[ingredients.length - 1].ing_amount !== ""
     ) {
       let newIngredients = {
-        recipe_num: ingredients[0].recipe_num,
-        // recipe_num: IngredientState[0].recipe_num,
+        recipe_num: recipeNum,
         ing_num: ingredients.length + 1,
         ing_ingredient: "",
         ing_amount: "",
@@ -94,80 +71,15 @@ const IngredientForm = ({
     }
   };
 
-  // const handleFormChange = useCallback(
-  //   (index, item, e) => {
-  //     let ingreCopy = [...ingredients];
-
-  //     console.log("handleFormChange", item);
-  //     console.log("handleFormChange e.target.name", e.target.name);
-  //     ingreCopy[index][e.target.name] = e.target.value;
-  //     console.log("ingreCopy", ingreCopy);
-  //     // ingreCopy[index][e.target.name] = e.target.value;
-  //     // ingreCopy[index].item = e.target.value;
-  //     setIngredients(ingreCopy);
-  //   },
-  //   [ingredients]
-  // );
+  /**input 값입력 시 감지 */
   const handleFormChange = (index, item, e) => {
     let ingreCopy = [...ingredients];
-
-    console.log("handleFormChange", item);
-    console.log("handleFormChange e.target.name", e.target.name);
     ingreCopy[index][e.target.name] = e.target.value;
-    console.log("ingreCopy", ingreCopy);
-    // ingreCopy[index][e.target.name] = e.target.value;
-    // ingreCopy[index].item = e.target.value;
     setIngredients(ingreCopy);
   };
 
-  // const onTemporarySave = useCallback(
-  //   (e) => {
-  //     e.preventDefault();
-  //     console.log("ingredients", ingredients);
-  //     let ingreCopy = [...ingredients];
-
-  //     const data = ingredients;
-  //     const blob = new Blob([JSON.stringify(data)], {
-  //       type: "application.json",
-  //     });
-  //     console.log("data", data);
-  //     const formData = new FormData();
-  //     formData.append("data", blob);
-  //     //레시피 배열 수 만큼 append 시켜 주기
-  //     for (let i = 0; i < data.length; i++) {
-  //       formData.append(
-  //         `orderVoList[${i}].recipe_num`,
-  //         ingredients[0].recipe_num
-  //       );
-  //       formData.append(`orderVoList[${i}].ing_num`, data[i].ing_num);
-  //       formData.append(
-  //         `orderVoList[${i}].ing_ingredient`,
-  //         data[i].ing_ingredient
-  //       );
-  //       formData.append(`orderVoList[${i}].ing_amount`, data[i].ing_amount);
-  //     }
-
-  //     //!!!!!!!!!!!!!!!!!!!!!!!!!//수정한 거 백에 보내기
-
-  //     axios({
-  //       method: "POST",
-  //       // url: process.env.REACT_APP_HOST + "/recipe/insertRecipeIngredients",
-  //       url: "http://localhost:9000/recipe/updateRecipeIngredients",
-  //       headers: { "Content-Type": "multipart/form-data" },
-  //       data: formData,
-  //     })
-  //       .then((response) => {
-  //         console.log(response.data);
-  //       })
-  //       .catch((e) => console.log(e));
-  //   },
-  //   [ingredients]
-  // );
-
-  const onTemporarySave = useCallback(
-    () => {
-      // e.preventDefault();
-      console.log("ingredients", ingredients);
+  function temporarySave() {
+    if (ingredients[0].ing_ingredient !== "") {
       const data = ingredients;
       const blob = new Blob([JSON.stringify(data)], {
         type: "application.json",
@@ -176,21 +88,41 @@ const IngredientForm = ({
       const formData = new FormData();
       formData.append("data", blob);
       //!!!!!!!!!!!!!!!!!!!!!!!!!//수정한 거 백에 보내기
-      console.log("updateRecipeIngredients", ingredients);
-      for (let i = 0; i < ingredients.length; i++) {
-        formData.append(
-          `orderVoList[${i}].recipe_num`,
-          ingredients[i].recipe_num
-        );
-        formData.append(`orderVoList[${i}].ing_num`, ingredients[i].ing_num);
-        formData.append(
-          `orderVoList[${i}].ing_ingredient`,
-          ingredients[i].ing_ingredient
-        );
-        formData.append(
-          `orderVoList[${i}].ing_amount`,
-          ingredients[i].ing_amount
-        );
+
+      if (IngredientState.length <= ingredients.length) {
+        for (let i = 0; i < ingredients.length; i++) {
+          formData.append(
+            `orderVoList[${i}].recipe_num`,
+            recipeNum
+            // parseInt(recipeId.recipeId)
+          );
+          formData.append(`orderVoList[${i}].ing_num`, ingredients[i].ing_num);
+          formData.append(
+            `orderVoList[${i}].ing_ingredient`,
+            ingredients[i].ing_ingredient
+          );
+          formData.append(
+            `orderVoList[${i}].ing_amount`,
+            ingredients[i].ing_amount
+          );
+        }
+      }
+      //임시저장했던 재료 수가 더 많았고
+      //임시저장했던 재료를 제거하고 싶다면
+      else if (IngredientState.length > ingredients.length) {
+        for (let i = ingredients.length; i < IngredientState.length; i++) {
+          formData.append(
+            `orderVoList[${i}].recipe_num`,
+            recipeNum
+            // parseInt(recipeId.recipeId)
+          );
+          formData.append(
+            `orderVoList[${i}].ing_num`,
+            IngredientState[i].ing_num
+          );
+          formData.append(`orderVoList[${i}].ing_ingredient`, "");
+          formData.append(`orderVoList[${i}].ing_amount`, "");
+        }
       }
       axios({
         method: "POST",
@@ -200,42 +132,47 @@ const IngredientForm = ({
         data: formData,
       })
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
+          // console.log("재료 업데이트 성공!!!!!!!!!!!!");
         })
         .catch((e) => console.log(e));
-    },
-    // }
-    // },
-    [ingredients]
-  );
+    }
+  }
 
-  //페이지를 벗어난다면 저장해주기
-  ingredients[0].ing_ingredient !== "" &&
-    window.addEventListener("beforeunload", function (e) {
-      e.preventDefault();
-      onTemporarySave();
-    });
+  const onTemporarySave = useCallback(() => {
+    temporarySave();
+  }, [ingredients, IngredientState]);
 
+  if (recipeNum !== undefined) {
+    window.addEventListener("beforeunload", onTemporarySave());
+  }
+
+  //언마운트 시 등록했던 사항 저장
+  useEffect(() => {
+    return () => {
+      temporarySave();
+    };
+  }, [ingredients]);
+
+  //
   useMemo(() => {
-    // useEffect(() => {
-    // useCallback(() => {
     if (IngredientState === undefined || IngredientState.length === 0) {
       setLoadState(true);
     } else {
       if (IngredientState.length > 0) {
-        // if (ingredients === undefined || ingredients.length === 0) {
         const copyState = [];
 
-        // setIngredients(ingredients.push(copyState));
-
         IngredientState.map((e) => {
-          return copyState.push({
-            recipe_num: IngredientState[0].recipe_num,
-            ing_num: e.ing_num,
-            ing_ingredient: e.ing_ingredient,
-            // stepImg: e.order_path,
-            ing_amount: e.ing_amount,
-          });
+          return (
+            e.ing_ingredient !== "" &&
+            copyState.push({
+              recipe_num: IngredientState[0].recipe_num,
+              ing_num: e.ing_num,
+              ing_ingredient: e.ing_ingredient,
+              // stepImg: e.order_path,
+              ing_amount: e.ing_amount,
+            })
+          );
         });
         setIngredients(copyState);
       } else {
@@ -244,59 +181,6 @@ const IngredientForm = ({
     }
     console.log("IngredientState", IngredientState);
   }, [IngredientState]);
-  // }, []);
-  // }, [ingredients, IngredientState]);
-  console.log("ingredients", ingredients);
-
-  // useMemo(() => {
-  //   ingredients.map((v) => {
-  //     return (
-  //       <>
-  //         {ingredients.length <= 10 ? (
-  //           <>
-  //             {v.ingredient_num <= 10 && (
-  //               <div
-  //                 key={v}
-  //                 style={{
-  //                   height: "3vh",
-  //                   margin: "1vh",
-  //                   display: "inline-flex",
-  //                   width: "100%",
-  //                   alignItems: "center",
-  //                   justifyContent: "space-around",
-  //                 }}
-  //               >
-  //                 <Pin style={{ width: "1vw" }} />
-  //                 <div style={{ width: "40%" }}>{v.ing_ingredient}</div>
-  //                 <div style={{ width: "40%" }}>{v.ing_amount}</div>
-  //               </div>
-  //             )}
-  //           </>
-  //         ) : (
-  //           <div style={{ width: "100%", height: "100%" }}>
-  //             {v.ing_num <= ingredients.length / 2 && (
-  //               <div
-  //                 key={v}
-  //                 style={{
-  //                   height: "3vh",
-  //                   margin: "1vh",
-  //                   display: "inline-flex",
-  //                   width: "90%",
-  //                   alignItems: "center",
-  //                   justifyContent: "space-between",
-  //                 }}
-  //               >
-  //                 <Pin style={{ width: "1vw" }} />
-  //                 <div>{v.ing_ingredient}</div>
-  //                 <div>{v.ing_amount}</div>
-  //               </div>
-  //             )}
-  //           </div>
-  //         )}
-  //       </>
-  //     );
-  //   });
-  // }, [ingredients]);
 
   return (
     <>
@@ -304,8 +188,14 @@ const IngredientForm = ({
         <TempSaveBtn
           type="button"
           onClick={onTemporarySave}
-          disabled={btnDisabledState}
+          // onClick={onUpdateRecipeIngredients({
+          //   recipeId,
+          //   ingredients,
+          //   IngredientState,
+          // })}
+          // disabled={btnDisabledState}
           style={{ display: "none" }}
+          // style={{ display: "block" }}
           // style={{ display: btnDisplayState }}
         >
           <FontAwesomeIcon icon={faFloppyDisk} /> <div>임시저장</div>
@@ -343,14 +233,13 @@ const IngredientForm = ({
                 flexDirection: "column",
               }}
             >
-              {ingredients.map((v) => {
+              {ingredients.map((v, index) => {
                 return (
-                  <>
+                  <div key={index}>
                     {ingredients.length <= 10 ? (
                       <>
                         {v.ing_num <= 10 && (
                           <div
-                            key={v}
                             style={{
                               height: "3vh",
                               margin: "1vh",
@@ -390,7 +279,7 @@ const IngredientForm = ({
                         )}
                       </div>
                     )}
-                  </>
+                  </div>
                 );
               })}
             </div>
@@ -405,12 +294,11 @@ const IngredientForm = ({
               >
                 {ingredients.map((v) => {
                   return (
-                    <>
+                    <div key={v.ing_num}>
                       {ingredients.length > 10 && (
                         <>
                           {v.ing_num > ingredients.length / 2 && (
                             <div
-                              key={v}
                               style={{
                                 height: "3vh",
                                 margin: "1vh",
@@ -430,7 +318,7 @@ const IngredientForm = ({
                           )}
                         </>
                       )}
-                    </>
+                    </div>
                   );
                 })}
               </div>
@@ -443,7 +331,7 @@ const IngredientForm = ({
                 <div>
                   {ingredients.map((item, index) => {
                     return (
-                      <>
+                      <div key={index}>
                         <div className="recipeBundleWrap" key={index}>
                           <div className="recipeFlexBundle">
                             <div className="bundleIngredientWrap">
@@ -499,7 +387,7 @@ const IngredientForm = ({
                             </div>
                           </div>
                         </div>
-                      </>
+                      </div>
                     );
                   })}
                 </div>
@@ -711,7 +599,7 @@ const TempSaveBtn = styled.button`
   padding: 0.5em;
   position: fixed;
   right: 1.5vw;
-  bottom: 3vh;
+  bottom: 30vh;
   /* background-color: ${colors.color_beige_brown}; */
   background-color: blue;
   border: 1px solid transparent;

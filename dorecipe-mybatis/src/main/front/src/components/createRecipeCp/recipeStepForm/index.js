@@ -276,6 +276,8 @@ const RecipeOrderDrag = ({
                 height: "18vh",
                 borderRadius: "0 0.5vw 0.5vw 0",
                 margin: "0",
+                overflowX: "hidden",
+                overflowY: "scroll",
               }}
             >
               <p
@@ -286,10 +288,11 @@ const RecipeOrderDrag = ({
                 이미지 삭제
               </p>
               <img
+                className="previewImg"
                 onClick={() => setFiles("")}
                 style={{
-                  width: "90px",
-                  transform: "translateX(100%)",
+                  width: "100%",
+                  // transform: "translateX(100%)",
                   padding: "0.6vw",
                   display: "inline-block",
                 }}
@@ -530,11 +533,14 @@ export default RecipeOrderDrag;
 
 const TotalWrap = styled.div`
   margin: 0 auto;
-  font-family: "mainFont";
 `;
 
 const DraggableWrap = styled.div`
-  font-family: "mainFont";
+  & .fileBox {
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
 `;
 
 const DroppableDiv = styled.div`
@@ -552,7 +558,6 @@ const DroppableDiv = styled.div`
   }
 
   & .textArea {
-    font-family: "mainFont";
     border-radius: 0.5vw;
     height: 18vh;
     width: 30vw;

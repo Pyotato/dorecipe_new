@@ -1,7 +1,6 @@
 import MainLayout from "../../layout/mainLayOut";
 
-import { useNavigate } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import "./style.css";
 import LandingCp1 from "../../components/mainPageCp/landing1Cp";
@@ -32,6 +31,13 @@ const MainPage = () => {
 
   const [topDistance, setTopDistance] = useState(0);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+
+      behavior: "smooth",
+    });
+  }, []);
   // useEffect(() => {
   // useMemo(() => {
   //   if (topTosection1Height > -topTosection2Height / 2) {

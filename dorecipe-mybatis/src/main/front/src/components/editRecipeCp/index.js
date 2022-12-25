@@ -9,55 +9,136 @@ import IngredientForm from "./ingredientForm";
 import CompleteRecipe from "./completeRecipeForm";
 import RecipeOrderDrag from "./recipeStepForm";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { historylocation } from "../../reduxRefresh/helpers/history";
+// import { onUpdateRecipeIngredients } from "./dispatchAxios";
+import {
+  TemporaryRecipeState,
+  // TemporarySaveOrders,
+  UpdateRecipeComplete,
+  UpdateRecipeIngredients,
+} from "./tempRecipeState";
+import { useInput } from "../../hooks/useInput";
 
 const EditRecipeForm = () => {
   const user = useSelector((auth) => auth);
   const [member_id, setMemberId] = useState();
-  const navigate = useNavigate();
-  // const recipeId = useParams();
-  // const recipeId = historylocation.pathname.substring(
-  //   historylocation.pathname.lastIndexOf("/") + 1, //현재위치
-  //   historylocation.pathname.length
-  // );
   const [recipeNumState, setRecipeNumState] = useState(0);
-  const [detailState, setDetailState] = useState([]);
   const { recipeId } = useParams();
+  const recipeNum = parseInt(recipeId);
   const [IngredientState, setIngredientState] = useState([]);
   const [orderState, setOrderState] = useState([]);
-
+  // console.log("recipeNum", typeof recipeNum);
   const [saveState, setSaveState] = useState(0);
   const [recipeState, setRecipeState] = useState([]);
   const [btnState, setBtnState] = useState(0);
+  const [ingredients, setIngredients] = useState([
+    {
+      recipe_num: recipeNum,
+      // recipe_num: parseInt(recipeId.recipeId),
+      ing_num: 1,
+      ing_ingredient: "",
+      ing_amount: "",
+    },
+  ]);
+  const [stepState, setStep] = useState([
+    {
+      recipe_num: recipeNum, //레시피 등록 번호,
+      // recipe_num: parseInt(recipeId.recipeId), //레시피 등록 번호,
+      order_num: 1,
+      order_explain: "",
+      order_path: "",
+    },
+    {
+      recipe_num: recipeNum,
+      order_num: 2,
+      order_explain: "",
+      order_path: "",
+    },
+    {
+      recipe_num: recipeNum,
+      order_num: 3,
+      order_explain: "",
+      order_path: "",
+    },
+  ]);
+
+  const [totalInfoState, setTotalInfoState] = useState(recipeState);
+
+  const [recipe_title, setRecipeTitle] = useState("");
+
+  const [recipe_introduce, onChangeRecipeIntro, setRecipeIntro] = useInput("");
+  const [recipe_url, onChangeRecipeUrl, setRecipeUrl] = useInput("");
+  const [recipe_rpath, onChangeRecipeThumbnail, setRecipeThumbnail] =
+    useInput("");
+  const [category_kind, onChangeKind, setKind] = useInput("");
+  const [category_theme, onChangeTheme, setRecipeTheme] = useInput("");
+  const [category_way, onChangeWay, setRecipeWay] = useInput("");
+  const [category_ing, onChangeIngr, setRecipeIngre] = useInput("");
+  const [information_person, onChangeServingSize, setServingSize] =
+    useInput("");
+  const [information_time, onChangeTime, setTime] = useInput("");
+  const [information_level, onChangeLevel, setLevel] = useInput("");
+
+  const [files, setFiles] = useState("");
+  const [recipe_thumbnail, setRecipeImgFiles] = useState("");
+  const [thumbnailDropState, setThumbnailDropState] = useState("thumbnailDrop");
+
+  //썸네일 변경 버튼
+  const [thumbnailChangeState, setThumbnailChangeState] = useState(0);
+
+  //모달창
+  const [explanationState, setExplanationState] = useState("none");
+
+  //임시저장 버튼
+  const [tempSaveState, setTempSaveState] = useState(0);
+  const [btnDisabledState, setBtnDisabledState] = useState(false);
+  const [btnDisplayState, setBtnDisplayState] = useState("block");
+
+  // 데이터 로드
+  const [loadState, setLoadState] = useState(true);
+
+  // useEffect(() => {
+  //   window.scrollTo({
+  //     top: 0,
+  //     behavior: "smooth",
+  //   });
+  // }, []);
 
   useEffect(() => {
     if (user.auth.isLoggedIn) {
       setMemberId(user.auth.user.username);
-      setRecipeNumState(recipeId);
-
-      axios
-        .get("http://localhost:9000/recipe/temporary/" + recipeId)
-        .then((response) => {
-          setRecipeState(response.data);
-        })
-        .catch((e) => console.log(e));
-      axios
-        .get("http://localhost:9000/recipe/getIngredientList/" + recipeId)
-        .then((response) => {
-          setIngredientState(response.data);
-        })
-        .catch((e) => console.log(e));
-      axios
-        .get("http://localhost:9000/recipe/temporary/getOrder/" + recipeId)
-        .then((response) => {
-          setOrderState(response.data);
-        })
-        .catch((e) => console.log(e));
+      setRecipeNumState(recipeNum);
+      TemporaryRecipeState({
+        setRecipeState,
+        recipeNum,
+        setIngredientState,
+        setOrderState,
+      });
     }
   }, []);
+  useCallback(() => {
+    TemporaryRecipeState({
+      setRecipeState,
+      recipeNum,
+      setIngredientState,
+      setOrderState,
+    });
+  }, [recipeState]);
+
+  useCallback(() => {
+    UpdateRecipeIngredients({
+      ingredients,
+      IngredientState,
+      recipeNum,
+    });
+  }, [ingredients, IngredientState]);
+
+  // useCallback(() => {
+  //   TemporarySaveOrders({ stepState, recipeNum, orderState });
+  // }, [stepState, orderState]);
 
   return (
     <>
@@ -75,22 +156,22 @@ const EditRecipeForm = () => {
                 padding: "1vw 1vh",
                 fontWeight: "700",
               }}
-              recipeId={recipeId}
+              // recipeId={recipeId}
             >
-              레시피 등록
+              레시피 수정
             </div>
 
             <BasicForm
-              recipeId={recipeId}
               setRecipeState={setRecipeState}
               recipeState={recipeState}
               saveState={saveState}
               setSaveState={setSaveState}
               btnState={btnState}
+              recipeNum={recipeNum}
               setBtnState={setBtnState}
             />
 
-            <div recipeId={recipeId}>
+            <div>
               <div
                 style={{
                   backgroundColor: "#CF702C",
@@ -120,13 +201,16 @@ const EditRecipeForm = () => {
                 setRecipeState={setRecipeState}
                 recipeState={recipeState}
                 btnState={btnState}
+                recipeNum={recipeNum}
                 setBtnState={setBtnState}
                 IngredientState={IngredientState}
                 setIngredientState={setIngredientState}
+                ingredients={ingredients}
+                setIngredients={setIngredients}
               />
             </div>
 
-            <div recipeId={recipeId}>
+            <div>
               <div
                 style={{
                   backgroundColor: "#CF702C",
@@ -161,18 +245,20 @@ const EditRecipeForm = () => {
                 </div>
               </div>
               <RecipeOrderDrag
-                recipeId={recipeId}
+                // recipeId={recipeId}
+                recipeNum={recipeNum}
                 recipeState={recipeState}
                 setRecipeState={setRecipeState}
                 btnState={btnState}
                 setBtnState={setBtnState}
                 orderState={orderState}
                 setOrderState={setOrderState}
+                stepState={stepState}
+                setStep={setStep}
               />
             </div>
 
             <div
-              recipeId={recipeId}
               style={{
                 marginBottom: "9vh",
               }}
@@ -206,10 +292,11 @@ const EditRecipeForm = () => {
                 btnState={btnState}
                 setBtnState={setBtnState}
                 setRecipeState={setRecipeState}
+                recipeNum={recipeNum}
               />
             </div>
             <div
-              recipeId={recipeId}
+              // recipeId={recipeId}
               style={{
                 marginBottom: "9vh",
               }}
@@ -229,7 +316,8 @@ const TotalWrap = styled.div`
 `;
 const BasicFormSection = styled.div`
   width: 85%;
-
+  min-width: 33em;
+  /* min-width: 30em; */
   height: fit-content;
   margin: 0 auto;
   border-radius: 2vw;

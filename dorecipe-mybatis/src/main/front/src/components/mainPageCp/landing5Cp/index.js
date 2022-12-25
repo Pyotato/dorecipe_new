@@ -6,6 +6,7 @@ import { ReactComponent as LandingShape4 } from "../../../assets/LandingShape4.s
 import BestRecipe from "../bestRecipe";
 const LandingCp5 = () => {
   const section5 = useRef();
+
   return (
     <>
       <TotalWrap ref={section5}>

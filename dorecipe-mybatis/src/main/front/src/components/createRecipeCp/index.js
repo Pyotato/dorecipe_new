@@ -26,7 +26,13 @@ const CreateRecipeForm = () => {
   //   return "임시저장하지 않고 새로고침 시 정보가 저장되지 않을 수 있습니다.";
   // };
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
+  useEffect(() => {
     if (user.auth.isLoggedIn) {
       axios({
         method: "POST",

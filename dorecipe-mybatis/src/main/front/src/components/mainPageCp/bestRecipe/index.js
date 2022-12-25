@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../_common/bannerLayout/style.css";
+
 import axios from "axios";
 import { colors } from "../../../theme/theme";
 import BasicSpinner from "../../_common/loading";

@@ -1,14 +1,12 @@
 import styled from "styled-components";
 
-import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
-// Import Swiper styles
+import { Autoplay, Navigation, Pagination, A11y } from "swiper";
+import { Swiper } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-
-import "./style.css";
+import { colors } from "../../../theme/theme";
 
 const BannerLayout = ({ children }) => {
   return (
@@ -16,7 +14,6 @@ const BannerLayout = ({ children }) => {
       <div>
         <FlexWrap>
           <Swiper
-            // install Swiper modules
             modules={[Autoplay, Navigation, Pagination, A11y]}
             autoplay={{
               delay: 6500,
@@ -25,11 +22,8 @@ const BannerLayout = ({ children }) => {
             slidesPerView={3}
             loop={true}
             navigation
-            // spaceBetween={0}
             pagination={{ clickable: true }}
             scrollbar={{ draggable: true }}
-            // onSwiper={(swiper) => console.log(swiper)}
-            // onSlideChange={() => console.log("slide change")}
           >
             {children}
           </Swiper>
@@ -45,4 +39,8 @@ const FlexWrap = styled.div`
   display: inline-flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+
+  & .swiper-pagination-bullet-active {
+    background-color: ${colors.color_white};
+  }
 `;

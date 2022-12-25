@@ -60,11 +60,7 @@ const BasicForm = ({
   const [member_id, setMemberId] = useState("");
 
   useEffect(() => {
-    // if (user.auth.isLoggedIn) {
     setMemberId(user.auth.user.username);
-    // console.log(user.auth.user.username);
-    // console.log("현재 로그인 아이디!!!!! : " + member_id);
-
     if (recipeState === undefined) {
       setLoadState(true);
     } else {
@@ -72,14 +68,6 @@ const BasicForm = ({
       setTotalInfoState(copyState);
       setLoadState(false);
     }
-    // setTotalInfoState([...recipeState]);
-    // if (totalInfoState.length >= 1) {
-    // console.log("totalInfoState", totalInfoState);
-    // console.log("recipeState", recipeState);
-    //   // setRecipeTitle(totalInfoState[0].recipe_title);
-    // }
-
-    // }
   }, []);
   // ----------------------------------------------------
 
@@ -91,19 +79,15 @@ const BasicForm = ({
     setThumbnailChangeState(1);
   };
   useMemo(() => {
-    // useCallback(() => {
     if (recipeState === undefined || recipeState.length === 0) {
       setLoadState(true);
     } else {
       if (totalInfoState === undefined || totalInfoState.length === 0) {
-        // const copyState = [...recipeState];
         setTotalInfoState(recipeState);
       } else {
         setLoadState(false);
       }
     }
-    // console.log("totalInfoState", totalInfoState);
-    // console.log("recipeState", recipeState);
   }, [recipeState, totalInfoState]);
 
   useMemo(() => {
@@ -120,18 +104,42 @@ const BasicForm = ({
       setLevel(totalInfoState[0].information_level);
       setTime(totalInfoState[0].information_time);
       setRecipeWay(totalInfoState[0].category_way);
+
       setRecipeImgFiles(totalInfoState[0].recipe_rpath);
-      // setFiles(totalInfoState[0].recipe_rpath);
     }
   }, [totalInfoState]);
 
-  function temporarySave() {
+  function onTemporarySave() {
+    if (recipe_url.length > 0) {
+      if (recipe_url.includes("/embed/")) {
+        if (recipe_url.includes("youtube")) {
+          //유튜브영상일 경우
+          setRecipeUrl(
+            recipe_url.slice(
+              recipe_url.indexOf("https"),
+              recipe_url.indexOf('" title')
+            )
+          );
+        } else if (recipe_url.includes("naver")) {
+          //네이버 영상일 경우
+          setRecipeUrl(
+            recipe_url.slice(
+              recipe_url.indexOf("https"),
+              recipe_url.indexOf(" 'frameborder")
+            )
+          );
+        }
+      } else {
+        setRecipeUrl("");
+        alert("영상 형식이 잘못되었습니다.");
+      }
+    }
+
     const data = {
       recipe_title: `${recipe_title}`,
       recipe_savetype: 1, //임시저장
       recipe_introduce: `${recipe_introduce}`,
       recipe_url: `${recipe_url}`,
-
       recipe_rpath: `${recipe_rpath}`,
       category_kind: `${category_kind}`,
       category_theme: `${category_theme}`,
@@ -142,7 +150,7 @@ const BasicForm = ({
       information_level: `${information_level}`,
       recipe_num: recipeNum,
       recipe_creDate: "",
-
+      // recipe_num: parseInt(recipeId.recipeId),
       member_id: `${member_id}`, //로그인한 멤버 정보 들어갈 자리
     };
 
@@ -157,57 +165,15 @@ const BasicForm = ({
     formData.append("recipe_title", recipe_title);
     formData.append("recipe_savetype", 1);
     formData.append("recipe_introduce", recipe_introduce);
-    // if (data.recipe_url.includes("/embed/")) {
-    //   formData.append("recipe_url", data.recipe_url);
-    // } else {
-    //   alert("영상 형식이 잘못되었습니다.");
-    //   setRecipeUrl("");
-    // }
-    formData.append("recipe_url", data.recipe_url);
-    // if (recipe_url.length > 0) {
-    //   if (recipe_url.includes("/embed/")) {
-    //     if (recipe_url.includes("youtube")) {
-    //       //유튜브영상일 경우
-    //       // setRecipeUrl(
-    //       //   recipe_url.slice(
-    //       //     recipe_url.indexOf("https"),
-    //       //     recipe_url.indexOf('" title')
-    //       //   )
-    //       // );
-    //       formData.append(
-    //         "recipe_url",
-    //         recipe_url.slice(
-    //           recipe_url.indexOf("https"),
-    //           recipe_url.indexOf('" title')
-    //         )
-    //       );
-    //     } else if (recipe_url.includes("naver")) {
-    //       //네이버 영상일 경우
-    //       // setRecipeUrl(
-    //       //   recipe_url.slice(
-    //       //     recipe_url.indexOf("https"),
-    //       //     recipe_url.indexOf(" 'frameborder")
-    //       //   )
-    //       // );
-    //       formData.append(
-    //         "recipe_url",
-    //         recipe_url.slice(
-    //           recipe_url.indexOf("https"),
-    //           recipe_url.indexOf(" 'frameborder")
-    //         )
-    //       );
-    //     }
-    //   } else {
-    //     alert("영상 형식이 잘못되었습니다.");
-    //     setRecipeUrl("");
-    //   }
-    // }
+    formData.append("recipe_url", recipe_url);
 
     //만약 썸네일 이미지 변경하지 않는다면
-    if (recipe_thumbnail !== null) {
+    if (totalInfoState !== undefined) {
+      formData.append("recipe_rpath", data.recipe_rpath);
+    } else {
       formData.append("recipe_thumbnail", recipe_thumbnail);
+      formData.append("recipe_rpath", data.recipe_rpath);
     }
-    formData.append("recipe_rpath", data.recipe_rpath);
 
     formData.append("category_kind", data.category_kind);
     formData.append("category_theme", data.category_theme);
@@ -242,11 +208,11 @@ const BasicForm = ({
       .catch((e) => console.log(e));
   }
 
-  // const onTemporarySave = useCallback(() => {
-
-  //   temporarySave();
+  // useCallback(() => {
+  //   if (recipe_title !== "") {
+  //     onTemporarySave();
+  //   }
   // }, [
-  //   recipeNum,
   //   recipe_title,
   //   recipe_introduce,
   //   recipe_url,
@@ -258,46 +224,18 @@ const BasicForm = ({
   //   information_person,
   //   information_time,
   //   information_level,
-  //   files,
   //   recipe_thumbnail,
-  //   totalInfoState,
   // ]);
+
   //페이지를 벗어난다면 저장해주기
-  // if (recipe_title !== "" && recipeNum !== undefined) {
-  //   window.addEventListener("beforeunload", function () {
-  //     // console.log("beforeunload 저장..");
-  //     onTemporarySave();
-  //   });
-  // }
-  //언마운트 전 임시저장
-  useEffect(() => {
-    return () => {
-      if (recipeNum !== undefined && recipe_title !== "") {
-        temporarySave();
-      }
-    };
-  }, [
-    recipe_title,
-    recipe_introduce,
-    recipe_url,
-    recipe_rpath,
-    category_kind,
-    category_theme,
-    category_way,
-    category_ing,
-    information_person,
-    information_time,
-    information_level,
-    files,
-    recipe_thumbnail,
-    totalInfoState,
-  ]);
+  if (recipeNum !== undefined) {
+    window.addEventListener("beforeunload", onTemporarySave());
+  }
+
+  //언마운트 시 임시저장
   // useEffect(() => {
   //   return () => {
-  //     console.log("언마운트 전 임시저장됨...");
-  //     if (recipeNum !== undefined) {
-  //       temporarySave();
-  //     }
+  //     onTemporarySave();
   //   };
   // }, [
   //   recipe_title,
@@ -311,36 +249,9 @@ const BasicForm = ({
   //   information_person,
   //   information_time,
   //   information_level,
-  //   files,
   //   recipe_thumbnail,
-  //   totalInfoState,
+  //   recipeNum,
   // ]);
-  // useCallback(() => {
-  //   if (recipe_url.length > 0) {
-  //     if (recipe_url.includes("/embed/")) {
-  //       if (recipe_url.includes("youtube")) {
-  //         //유튜브영상일 경우
-  //         setRecipeUrl(
-  //           recipe_url.slice(
-  //             recipe_url.indexOf("https"),
-  //             recipe_url.indexOf('" title')
-  //           )
-  //         );
-  //       } else if (recipe_url.includes("naver")) {
-  //         //네이버 영상일 경우
-  //         setRecipeUrl(
-  //           recipe_url.slice(
-  //             recipe_url.indexOf("https"),
-  //             recipe_url.indexOf(" 'frameborder")
-  //           )
-  //         );
-  //       }
-  //     } else {
-  //       setRecipeUrl("");
-  //       alert("영상 형식이 잘못되었습니다.");
-  //     }
-  //   }
-  // }, [recipe_url]);
   return (
     <>
       <div style={{ height: "fit-content" }}>
@@ -410,22 +321,17 @@ const BasicForm = ({
                   flexWrap: "wrap",
                 }}
               >
-                <Labels
-                  htmlFor="recipeVid"
-                  style={{ width: "15%" }}
-                  className="hoverEffect"
-                  onClick={() => {
-                    explanationState === "block"
-                      ? setExplanationState("none")
-                      : setExplanationState("block");
-                  }}
-                >
+                <Labels htmlFor="recipeVid" style={{ width: "15%" }}>
                   동영상
                   <Help
-                    // onMouseEnter={() => {
-                    //   setExplanationState("block");
-                    // }}
-
+                    onMouseEnter={() => {
+                      setExplanationState("block");
+                    }}
+                    onClick={() => {
+                      explanationState === "block"
+                        ? setExplanationState("none")
+                        : setExplanationState("block");
+                    }}
                     style={{
                       width: "1vw",
                       display: "inline-block",
@@ -497,7 +403,6 @@ const BasicForm = ({
                     onClick={() => {
                       setExplanationState("none");
                     }}
-                    className="hoverEffect"
                     style={{ textAlign: "center", fontWeight: 600 }}
                   >
                     [ 닫기 ]
@@ -746,7 +651,7 @@ const BasicForm = ({
       </div>
       <TempSaveBtn
         type="button"
-        // onClick={onTemporarySave}
+        onClick={onTemporarySave}
         disabled={btnDisabledState}
         style={{ display: "none" }}
         // style={{ display: btnDisplayState }}
@@ -811,11 +716,6 @@ const BasicFormWrap = styled.div`
     padding: 0.3vw 0;
     margin: 0;
     font-size: 1vw;
-  }
-  & .hoverEffect:hover {
-    color: ${colors.color_carrot_orange};
-    cursor: pointer;
-    stroke: ${colors.color_carrot_orange};
   }
 `;
 

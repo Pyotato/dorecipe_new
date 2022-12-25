@@ -528,8 +528,6 @@ const DetailSearch = () => {
   );
 };
 
-export default DetailSearch;
-
 const TotalWrap = styled.div`
   width: 100%;
   font-family: "mainFont";
@@ -624,3 +622,4 @@ const StyledLink = styled.div`
     cursor: pointer;
   }
 `;
+export default DetailSearch;
