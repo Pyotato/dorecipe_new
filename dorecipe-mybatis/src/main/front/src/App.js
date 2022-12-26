@@ -22,7 +22,7 @@ import CreateRecipePage from "./pages/createRecipePage";
 import LoginPage from "./pages/loginPage";
 import SearchRecipePage from "./pages/searchRecipePage";
 
-import DetailSearchPage from "./pages/detailSearchPage";
+import SearchByCategoryPage from "./pages/detailSearchPage";
 import DetailRecipePage from "./pages/recipeDetailsPage";
 
 import NotFoundPage from "./pages/errorPage";
@@ -41,6 +41,12 @@ import "./App.css";
 import ModifyRecipePage from "./pages/modifyRecipePage";
 
 function App() {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
   const userMsg = useSelector((state) => state.message);
   const user = useSelector((auth) => auth);
   const dispatch = useDispatch();
@@ -95,12 +101,7 @@ function App() {
   };
 
   const { currentUser } = user;
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <Routes history={history}>
@@ -155,7 +156,7 @@ function App() {
           <Route path={"/"} element={<MainPage />} />
         )}
 
-        <Route path={"/recipes/search"} element={<DetailSearchPage />} />
+        <Route path={"/recipes/search"} element={<SearchByCategoryPage />} />
         <Route
           path={"/recipe/search/details/:recipeId"}
           element={<DetailRecipePage />}

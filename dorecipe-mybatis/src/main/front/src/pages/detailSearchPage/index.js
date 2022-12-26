@@ -1,13 +1,15 @@
 import MainLayout from "../../layout/mainLayOut";
-import DetailSearch from "../../components/RecipeDetailCp";
+import SearchByCategory from "../../components/RecipeDetailCp";
+// import SearchByCategory from "../../components/searchByRecipeCategoryCp";
 
-const DetailSearchPage = () => {
+const SearchByCategoryPage = () => {
   return (
     <>
       <MainLayout>
-        <DetailSearch />
+        :)
+        <SearchByCategory />
       </MainLayout>
     </>
   );
 };
-export default DetailSearchPage;
+export default SearchByCategoryPage;

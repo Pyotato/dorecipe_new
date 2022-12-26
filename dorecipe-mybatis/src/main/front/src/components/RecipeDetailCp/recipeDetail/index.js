@@ -29,6 +29,10 @@ const RecipeDetailModal = () => {
   const [loginState, setLoginState] = useState(user.auth.isLoggedIn);
   const [userState, setUserState] = useState(user.auth);
   // const params = params.recipeId;
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
   const [dataErrorState, setDataErrorState] = useState();
   const [detailState, setDetailState] = useState([
     {

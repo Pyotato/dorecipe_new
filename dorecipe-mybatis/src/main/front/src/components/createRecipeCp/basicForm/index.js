@@ -124,10 +124,18 @@ const BasicForm = ({
       formData.append("recipe_rpath", data.recipe_rpath);
       formData.append("recipe_thumbnail", recipe_thumbnail);
       //기본값을 전체로 들어가게끔
-      formData.append("category_kind", data.category_kind);
-      formData.append("category_theme", data.category_theme);
-      formData.append("category_ing", data.category_ing);
-      formData.append("category_way", data.category_way);
+      data.category_kind === ""
+        ? formData.append("category_kind", "전체")
+        : formData.append("category_kind", data.category_kind);
+      data.category_theme === ""
+        ? formData.append("category_theme", "전체")
+        : formData.append("category_theme", data.category_theme);
+      data.category_ing === ""
+        ? formData.append("category_ing", "전체")
+        : formData.append("category_ing", data.category_ing);
+      data.category_way === ""
+        ? formData.append("category_way", "전체")
+        : formData.append("category_way", data.category_way);
       formData.append("information_person", data.information_person);
       formData.append("information_level", data.information_level);
       formData.append("information_time", data.information_time);

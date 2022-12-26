@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState, useCallback, useEffect } from "react";
 import { ReactComponent as Camera } from "../../../assets/Camera.svg";
-import { SmallBtn } from "../../_common/buttons";
+
 import axios from "axios";
 import Dropzone from "react-dropzone";
 import { useSelector } from "react-redux";
@@ -293,7 +293,7 @@ const RecipeOrderDrag = ({
                 style={{
                   width: "100%",
                   // transform: "translateX(100%)",
-                  padding: "0.6vw",
+                  // padding: "0.6vw",
                   display: "inline-block",
                 }}
                 src={stepState[index].stepImg.preview}
@@ -533,6 +533,10 @@ export default RecipeOrderDrag;
 
 const TotalWrap = styled.div`
   margin: 0 auto;
+
+  & .removeFile {
+    transform: translateY(50%) translateX(-50%);
+  }
 `;
 
 const DraggableWrap = styled.div`

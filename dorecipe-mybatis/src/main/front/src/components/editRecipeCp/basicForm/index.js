@@ -106,6 +106,7 @@ const BasicForm = ({
     // console.log("recipeState", recipeState);
   }, [recipeState, totalInfoState]);
 
+  console.log(category_ing);
   useMemo(() => {
     if (totalInfoState !== undefined && totalInfoState.length > 0) {
       setRecipeTitle(totalInfoState[0].recipe_title);
@@ -164,6 +165,7 @@ const BasicForm = ({
     //   setRecipeUrl("");
     // }
     formData.append("recipe_url", data.recipe_url);
+
     // if (recipe_url.length > 0) {
     //   if (recipe_url.includes("/embed/")) {
     //     if (recipe_url.includes("youtube")) {
@@ -209,10 +211,24 @@ const BasicForm = ({
     }
     formData.append("recipe_rpath", data.recipe_rpath);
 
-    formData.append("category_kind", data.category_kind);
-    formData.append("category_theme", data.category_theme);
-    formData.append("category_way", data.category_way);
-    formData.append("category_ing", data.category_ing);
+    //기본값을 전체로 들어가게끔
+    data.category_kind === ""
+      ? formData.append("category_kind", "전체")
+      : formData.append("category_kind", data.category_kind);
+    data.category_theme === ""
+      ? formData.append("category_theme", "전체")
+      : formData.append("category_theme", data.category_theme);
+    data.category_ing === ""
+      ? formData.append("category_ing", "전체")
+      : formData.append("category_ing", data.category_ing);
+    data.category_way === ""
+      ? formData.append("category_way", "전체")
+      : formData.append("category_way", data.category_way);
+
+    // formData.append("category_kind", data.category_kind);
+    // formData.append("category_theme", data.category_theme);
+    // formData.append("category_way", data.category_way);
+    // formData.append("category_ing", data.category_ing);
     formData.append("information_person", data.information_person);
     formData.append("information_level", data.information_level);
     formData.append("information_time", data.information_time);
@@ -568,7 +584,7 @@ const BasicForm = ({
                     // style={{ width: "8vw" }}
                     style={{ width: "25%", margin: "0" }}
                   >
-                    <option>상황•테마별</option>
+                    <option value="">상황•테마별</option>
                     <option value="전체">전체</option>
                     <option value="일상">일상</option>
                     <option value="초스피드">초스피드</option>
@@ -592,7 +608,7 @@ const BasicForm = ({
                     style={{ width: "25%", margin: "0" }}
                     onChange={onChangeIngr}
                   >
-                    <option>재료별</option>
+                    <option value="">재료별</option>
                     <option value="전체">전체</option>
                     <option value="소고기">소고기</option>
                     <option value="돼지고기">돼지고기</option>
@@ -618,7 +634,7 @@ const BasicForm = ({
                     style={{ width: "25%", margin: "0" }}
                     onChange={onChangeWay}
                   >
-                    <option>방법별</option>
+                    <option value="">방법별</option>
                     <option value="전체">전체</option>
                     <option value="볶음">볶음</option>
                     <option value="끓이기">끓이기</option>

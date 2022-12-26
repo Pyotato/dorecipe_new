@@ -82,7 +82,6 @@ const CreateRecipeForm = () => {
           />
 
           <div>
-            {/* <div recipeId={params}> */}
             <div
               style={{
                 backgroundColor: "#CF702C",
@@ -116,7 +115,7 @@ const CreateRecipeForm = () => {
             />
           </div>
 
-          <div recipeId={params}>
+          <div>
             <div
               style={{
                 backgroundColor: "#CF702C",
@@ -216,6 +215,7 @@ const TotalWrap = styled.div`
 `;
 const BasicFormSection = styled.div`
   width: 85%;
+  min-width: 50em;
 
   height: fit-content;
   margin: 0 auto;

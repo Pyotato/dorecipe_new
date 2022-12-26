@@ -398,11 +398,12 @@ const CommentCp = () => {
                         }}
                         onClick={() => deleteComment(cmt.comment_num)}
                       >
-                        {windowWidth >= theme.deviceSizes.deviceSizes ? (
+                        <>| 삭제 |</>
+                        {/* {windowWidth >= theme.deviceSizes.deviceSizes ? (
                           <>| 삭제 |</>
                         ) : (
                           <>:(</>
-                        )}
+                        )} */}
                       </div>
                     )}
                     <div

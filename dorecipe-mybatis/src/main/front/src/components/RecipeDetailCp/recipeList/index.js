@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { colors } from "../../../theme/theme";
 import BasicSpinner from "../../_common/loading";
+
 const RecipeList = ({ recipeState }) => {
   const navigate = useNavigate();
 
@@ -49,6 +50,7 @@ const RecipeWrap = styled.div`
   font-size: 1vw;
   background-color: ${colors.color_white};
   height: 50vh;
+  min-height: 25em;
   margin: 1vw;
 `;
 const ItemWrap = styled.div`

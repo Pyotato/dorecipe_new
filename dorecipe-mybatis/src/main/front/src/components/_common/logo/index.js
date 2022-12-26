@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors, fontSizes } from "../../../theme/theme";
+import { borderRadii, imgSizes } from "../../../theme/theme";
 import { useNavigate } from "react-router-dom";
 
 export const LogoHeader = () => {
@@ -38,9 +38,12 @@ export const LogoOnLandingPage = () => {
 
 const MainLogoWrap = styled.div`
   & .logo {
-    border-radius: 1vw;
+    /* border-radius: 1vw;
     width: 13vw;
-    height: 13vw;
+    height: 13vw; */
+    border-radius: ${borderRadii.radius_medium};
+    width: ${imgSizes.img_size_ul};
+    height: ${imgSizes.img_size_ul};
   }
 
   & :hover {
@@ -51,9 +54,9 @@ const LogoWrap = styled.div`
   width: fit-content;
 
   & .logo {
-    border-radius: 1vw;
-    width: 20vh;
-    height: 20vh;
+    border-radius: ${borderRadii.radius_small};
+    width: ${imgSizes.img_size_ul};
+    height: ${imgSizes.img_size_ul};
   }
   & :hover {
     cursor: pointer;
@@ -64,6 +67,8 @@ const HeaderLogoWrap = styled.div`
   & .logo {
     width: 6.7vh;
     height: 6.7vh;
+    /* width: 6.7vh;
+    height: 6.7vh; */
   }
 
   & :hover {

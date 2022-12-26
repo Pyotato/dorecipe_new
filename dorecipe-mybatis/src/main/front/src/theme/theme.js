@@ -46,10 +46,10 @@ export const colors = {
 };
 
 export const borderRadii = {
-  radius_small: "0.5em",
-  radius_medium: "45vw",
-  radius_large: "60vw",
-  radius_xlarge: "90vw",
+  radius_small: calcRem(5),
+  radius_medium: calcRem(14),
+  radius_l: "60vw", //calcRem(30),
+  radius_xl: "90vw", //calcRem(50),
   radius_circle: "100%",
 };
 
@@ -130,11 +130,16 @@ export const verticalInterval = {
 };
 
 export const deviceSizes = {
-  deviceSize_mobileS: 320,
-  deviceSize_mobileM: 375,
-  deviceSize_mobileL: 450,
-  deviceSize_tablet: 768,
-  deviceSizes: 1024,
+  deviceSize_mobileS: "320px",
+  deviceSize_mobileM: "375px",
+  deviceSize_mobileL: "450px",
+  deviceSize_tablet: "768px",
+  deviceSizes: "1024px",
+  // deviceSize_mobileS: 320,
+  // deviceSize_mobileM: 375,
+  // deviceSize_mobileL: 450,
+  // deviceSize_tablet: 768,
+  // deviceSizes: 1024,
 };
 
 export const device = {
