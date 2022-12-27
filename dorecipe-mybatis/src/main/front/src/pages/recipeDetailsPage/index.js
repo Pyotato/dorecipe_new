@@ -1,7 +1,7 @@
-import MainLayout from "../../layout/mainLayOut";
-import RecipeDetailModal from "../../components/RecipeDetailCp/recipeDetail";
+import MainLayout from "@layout/mainLayOut";
+import RecipeDetailModal from "@RecipeDetailCp/recipeDetail";
 
-import CommentCp from "../../components/commentCp";
+// import CommentCp from "../../components/commentCp";
 
 const DetailRecipePage = () => {
   return (

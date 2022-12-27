@@ -4,12 +4,13 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useInput } from "../../../hooks/useInput";
+import { useInput } from "@hooks/useInput";
+
+import { colors } from "@theme/theme";
+import BasicSpinner from "@commonCp/loading";
+import NoticeList from "@noticeCp/noticeList";
 
 import { logout } from "../../../reduxRefresh/actions/auth";
-import { colors } from "../../../theme/theme";
-import BasicSpinner from "../../_common/loading";
-import NoticeList from "../noticeList";
 
 const UploadNoticeCp = ({ navState, setNavState }) => {
   let [notice_title, onChangeNoticeTitle, setNoticeTitle] = useInput("");
@@ -204,7 +205,7 @@ const UploadNoticeCp = ({ navState, setNavState }) => {
                             width: "100%",
                           }}
                         >
-                          <BasicSpinner />{" "}
+                          <BasicSpinner displayState={"block"} />
                         </div>
                       </Scrollable>
                     </>

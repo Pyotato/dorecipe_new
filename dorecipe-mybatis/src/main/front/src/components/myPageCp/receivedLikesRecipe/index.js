@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+// import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 import styled from "styled-components";
 import NullRecipe from "../nullRecipeList";
-import { useSelector } from "react-redux";
-import { useMemo } from "react";
-import BasicSpinner from "../../_common/loading";
-import { colors } from "../../../theme/theme";
+// import { useSelector } from "react-redux";
+// import { useMemo } from "react";
+import BasicSpinner from "@commonCp/loading";
+import { colors } from "@theme/theme";
 import { useCallback } from "react";
-import { CompleteRecipeState } from "../RecipeStates";
+// import { useCallback } from "react";
+// import { CompleteRecipeState } from "../RecipeStates";
 
 const ReceivedLikesRecipeList = ({
-  currentUser,
+  // currentUser,
   receivedLikesRecipes,
   setReceivedLikesRecipesLength,
 }) => {
@@ -37,14 +38,27 @@ const ReceivedLikesRecipeList = ({
       information_time: "로딩중",
     },
   ]);
-
+  const [loadingState, setLoadingState] = useState(true);
   useEffect(() => {
     if (receivedLikesRecipes.length > 0) {
       setReceivedLikesRecipesFront(receivedLikesRecipes);
-
       setReceivedLikesRecipesLength(receivedLikesRecipes.length);
+      setLoadingState(false);
+      return;
     } else {
+      receivedLikesRecipesFront[0].recipe_num === 0 &&
+        setReceivedLikesRecipesFront(receivedLikesRecipes);
+    }
+  }, [receivedLikesRecipes]);
+
+  useCallback(() => {
+    if (receivedLikesRecipes.length === 0) {
       setReceivedLikesRecipesFront("empty");
+      return;
+    } else {
+      setReceivedLikesRecipesFront(receivedLikesRecipes);
+      // setReceivedLikesRecipesLength(receivedLikesRecipes.length);
+      setLoadingState(false);
     }
   }, [receivedLikesRecipes]);
 
@@ -54,16 +68,17 @@ const ReceivedLikesRecipeList = ({
       <RecipeWrapItems>
         <Scrollable>
           <div>
-            {receivedLikesRecipesFront === "empty" ? (
+            {loadingState ? (
+              // && receivedLikesRecipesFront[0].recipe_title === "로딩중" ?
+              <div className="spinnerWrap">
+                <BasicSpinner displayState={"block"} />
+              </div>
+            ) : receivedLikesRecipesFront === "empty" ? (
               <>
                 <NullRecipe />
               </>
-            ) : receivedLikesRecipesFront[0].recipe_title === "로딩중" ? (
-              <>
-                <BasicSpinner />
-              </>
             ) : (
-              receivedLikesRecipes.length > 0 &&
+              // receivedLikesRecipesFront !== "empty" &&
               receivedLikesRecipes.map((e, index) => (
                 <RecipeWrap key={index}>
                   <div>
@@ -86,7 +101,7 @@ const ReceivedLikesRecipeList = ({
                         <div className="heart">
                           {likeFormat.format(e.likes_count)}
                         </div>
-                        {/* <div className="heart">{e.likes_count}</div> */}
+
                         <FontAwesomeIcon
                           icon={faHeart}
                           className="heart faHeart"
@@ -147,6 +162,12 @@ const Scrollable = styled.section`
       text-align: center;
       height: 20em;
     }
+  }
+  & .spinnerWrap {
+    width: fit-content;
+    height: 50%;
+    transform: translateY(75%);
+    margin: 0 auto;
   }
 `;
 

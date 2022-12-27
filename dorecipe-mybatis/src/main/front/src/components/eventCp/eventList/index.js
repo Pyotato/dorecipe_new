@@ -3,9 +3,9 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import EventListItems from "./eventList.js";
-import { colors } from "../../../theme/theme.js";
+import { colors } from "@theme/theme";
 import { useMemo } from "react";
-import BasicSpinner from "../../_common/loading/index.js";
+import BasicSpinner from "@commonCp/loading";
 
 const EventList = () => {
   const [state, setState] = useState([
@@ -29,12 +29,6 @@ const EventList = () => {
       setBtnState(user.auth.user.roles.includes("ROLE_ADMIN"));
     }
   }, []);
-
-  // useEffect(() => {
-  //   axios.get("http://localhost:9000/event/list").then((result) => {
-  //     setState(result.data);
-  //   });
-  // }, []);
 
   useMemo(() => {
     axios.get("http://localhost:9000/event/list").then((result) => {
@@ -82,17 +76,15 @@ const EventList = () => {
               </div>
               {state.length <= 1 ? (
                 <>
-                  <Scrollable>
-                    <div
-                      style={{
-                        padding: "25% 0 ",
-                        textAlign: "center",
-                        width: "100%",
-                      }}
-                    >
-                      <BasicSpinner />
-                    </div>
-                  </Scrollable>
+                  <div
+                    style={{
+                      padding: "25% 0 ",
+                      textAlign: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <BasicSpinner displayState={"block"} />
+                  </div>
                 </>
               ) : (
                 <>

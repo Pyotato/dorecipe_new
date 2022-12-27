@@ -1,5 +1,5 @@
-import MainLayout from "../../layout/mainLayOut";
-import SignUpTemplate from "../../components/joinMemberCp";
+import MainLayout from "@layout/mainLayOut";
+import SignUpTemplate from "@joinMemberCp";
 const JoinMemberPage = () => {
   return (
     <>

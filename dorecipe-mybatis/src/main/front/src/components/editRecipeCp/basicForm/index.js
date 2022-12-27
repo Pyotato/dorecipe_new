@@ -1,15 +1,15 @@
 import styled from "styled-components";
-import { useInput } from "../../../hooks/useInput";
-import { useState, useCallback, useEffect } from "react";
-import EditDropZone from "../../_common/dropzone";
+import { useInput } from "@hooks/useInput";
+import { useState, useEffect } from "react";
+import EditDropZone from "@commonCp/dropzone";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { colors } from "../../../theme/theme";
+import { colors } from "@theme/theme";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
-import { ReactComponent as Help } from "../../../assets/Help.svg";
+import { ReactComponent as Help } from "@assets/Help.svg";
 import { useMemo } from "react";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 
 const BasicForm = ({
   setRecipeState,

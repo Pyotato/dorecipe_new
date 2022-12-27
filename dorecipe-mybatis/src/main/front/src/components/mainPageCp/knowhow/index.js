@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import BannerLayout from "../../_common/bannerLayout";
+import BannerLayout from "@commonCp/bannerLayout";
 
 import { SwiperSlide } from "swiper/react";
-import { colors } from "../../../theme/theme";
+import { colors } from "@theme/theme";
 
 const KnowhowMain = () => {
   //axios로 노하우 받아와서 출력하기
@@ -49,28 +49,26 @@ const KnowhowMain = () => {
       <div>
         <TotalWrap>
           <BannerLayout>
-            {state.map((e) => {
+            {state.map((e, index) => {
               return (
-                <>
-                  <SwiperSlide key={e.know_num}>
-                    <KnowhowWrap
-                      onClick={() => {
-                        navigate(`knowhow/detail/${e.know_num}`);
-                      }}
-                    >
-                      <KnowhowImg>
-                        <KnowhowTitle>
-                          <div> {e.know_title}</div>
-                        </KnowhowTitle>
-                        <img
-                          className="bannerimg"
-                          src={e.know_path}
-                          alt="bannerimg"
-                        ></img>
-                      </KnowhowImg>
-                    </KnowhowWrap>
-                  </SwiperSlide>
-                </>
+                <SwiperSlide key={e.know_num}>
+                  <KnowhowWrap
+                    onClick={() => {
+                      navigate(`knowhow/detail/${e.know_num}`);
+                    }}
+                  >
+                    <KnowhowImg>
+                      <KnowhowTitle>
+                        <div> {e.know_title}</div>
+                      </KnowhowTitle>
+                      <img
+                        className="bannerimg"
+                        src={e.know_path}
+                        alt="bannerimg"
+                      ></img>
+                    </KnowhowImg>
+                  </KnowhowWrap>
+                </SwiperSlide>
               );
             })}
           </BannerLayout>

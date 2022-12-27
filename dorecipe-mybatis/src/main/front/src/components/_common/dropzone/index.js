@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import Dropzone from "react-dropzone";
-import { ReactComponent as Camera } from "../../../assets/Camera.svg";
+import { ReactComponent as Camera } from "@assets/Camera.svg";
 import {
   EditImgPreview,
   EditImgPreviewForm,

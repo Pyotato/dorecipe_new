@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { ReactComponent as Pin } from "../../../../assets/Pin.svg";
-import { colors } from "../../../../theme/theme";
+import { ReactComponent as Pin } from "@assets/Pin.svg";
+import { colors } from "@theme/theme";
 
 const RecipeIngredients = ({ ingredientState }) => {
   return (

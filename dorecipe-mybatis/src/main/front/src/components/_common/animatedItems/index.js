@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUtensils } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { colors, fontSizes } from "../../../theme/theme";
+import { colors, fontSizes } from "@theme/theme";
 
 const SpinningFork = () => {
   return (
@@ -18,7 +18,7 @@ const Wrap = styled.div`
   }
   & .userIcon:hover {
     animation-name: "fork-spin";
-    animation-duration: 360ms;
+    animation-duration: 700ms;
     animation-delay: 90ms;
     animation-timing-function: ease;
     animation-iteration-count: infinite;
@@ -26,12 +26,14 @@ const Wrap = styled.div`
   }
 
   @keyframes fork-spin {
-    from {
-      transform: rotate(180deg);
+    0% {
+      transform: rotate(0deg);
     }
-    to {
-      transform: rotate(360deg);
+    50% {
       color: ${colors.color_carrot_orange};
+    }
+    100% {
+      transform: rotate(360deg);
     }
   }
 `;

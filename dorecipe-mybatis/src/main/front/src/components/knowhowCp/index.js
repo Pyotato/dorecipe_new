@@ -74,7 +74,7 @@ const KnowhowUpdatePage = () => {
 
   const modHandler = useCallback(
     (e) => {
-      e.preventDefault(); // 정리~
+      e.preventDefault();
 
       know_title = document.getElementsByName("know_title")[0].value;
       know_content = document.getElementsByName("know_content")[0].value;
@@ -113,7 +113,7 @@ const KnowhowUpdatePage = () => {
           console.log(response.data);
           alert("수정되었습니다.");
           //노하우 리스트로 이동
-          window.location.href = "http://localhost:3000/admin";
+          // window.location.href = "http://localhost:3000/admin";
         });
       }
     },

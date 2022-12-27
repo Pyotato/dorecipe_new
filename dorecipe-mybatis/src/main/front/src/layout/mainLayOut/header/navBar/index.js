@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { colors } from "../../../../theme/theme";
+import { colors } from "@theme/theme";
 
 const NavBar = ({ tabState, onToggleTab }) => {
   const user = useSelector((auth) => auth);

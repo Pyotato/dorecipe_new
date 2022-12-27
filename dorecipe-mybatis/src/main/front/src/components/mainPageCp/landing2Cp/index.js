@@ -1,11 +1,11 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { colors } from "../../../theme/theme";
-import { ReactComponent as MusicNote } from "../../../assets/MusicNote.svg";
-import { ReactComponent as ArrowRight } from "../../../assets/ArrowRight.svg";
-import { ReactComponent as LandingImg4 } from "../../../assets/LandingImg4.svg";
-import { ReactComponent as Rectangle } from "../../../assets/Rectangle2.svg";
+import { colors } from "@theme/theme";
+import { ReactComponent as MusicNote } from "@assets/MusicNote.svg";
+import { ReactComponent as ArrowRight } from "@assets/ArrowRight.svg";
+import { ReactComponent as LandingImg4 } from "@assets/LandingImg4.svg";
+import { ReactComponent as Rectangle } from "@assets/Rectangle2.svg";
 const LandingCp2 = ({ userState }) => {
   const section2 = useRef();
   const navigate = useNavigate();

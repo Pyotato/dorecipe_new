@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import MainLayout from "../../../layout/mainLayOut";
+import MainLayout from "@layout/mainLayOut";
 import styled from "styled-components";
-import { colors } from "../../../theme/theme";
+import { colors } from "@theme/theme";
 import { useNavigate } from "react-router-dom";
 
 const NoticeDetailPage = () => {

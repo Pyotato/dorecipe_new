@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "baseUrl": "./src",
+    "removeComments": true,
+    "pretty": true,
+    "module": "commonjs"
+  },
+  "include": ["./"] //컴파일에 포함하는 파일들..일단 전체
+}

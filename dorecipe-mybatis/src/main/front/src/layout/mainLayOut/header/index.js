@@ -1,9 +1,9 @@
 import HeaderSearch from "./search";
 import NavBar from "./navBar";
 import styled from "styled-components";
-import { colors } from "../../../theme/theme";
-import { LogoHeader } from "../../../components/_common/logo/index.js";
-import LoginCreateRecipeLogo from "../../../components/_common/loginCreateRecipeCp";
+import { colors } from "@theme/theme";
+import { LogoHeader } from "@commonCp/logo/index.js";
+import LoginCreateRecipeLogo from "@commonCp/loginCreateRecipeCp";
 import { useState } from "react";
 const MainLayout = () => {
   const [tabState, setTabState] = useState(0);

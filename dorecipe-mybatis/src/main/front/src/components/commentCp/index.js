@@ -1,18 +1,17 @@
-// export default CommentCp;
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import axios from "axios";
-import { useInput } from "../../hooks/useInput";
+import { useInput } from "@hooks/useInput";
 import { useNavigate, useParams } from "react-router-dom";
 
 import styled from "styled-components";
-import { ReactComponent as Close } from "../../assets/Close.svg";
-import { ReactComponent as Camera } from "../../assets/Camera.svg";
-import { ReactComponent as Delete } from "../../assets/Delete.svg";
+// import { ReactComponent as Close } from "@assets/Close.svg";
+import { ReactComponent as Camera } from "@assets/Camera.svg";
+// import { ReactComponent as Delete } from "@assets/Delete.svg";
 
 import { useSelector } from "react-redux";
 import Dropzone from "react-dropzone";
-import { colors, theme } from "../../theme/theme";
+import { colors } from "@theme/theme";
 
 const CommentCp = () => {
   const [comment_content, onChangeContent, setContent] = useInput("");

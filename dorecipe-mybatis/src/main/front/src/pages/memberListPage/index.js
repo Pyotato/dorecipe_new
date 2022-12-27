@@ -1,5 +1,5 @@
-import MainLayout from "../../layout/mainLayOut";
-import List from "../../components/memberListCp";
+import MainLayout from "@layout/mainLayOut";
+import List from "@components/memberListCp";
 // import CommentService from "../../../services/CommentService";
 
 const MemberListPage = () => {

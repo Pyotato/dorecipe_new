@@ -327,4 +327,16 @@
   * 코드 정리 
     * css관리가 용이해지도록 themeprovider로 지정된 style로 교체 (진행 중)
   * 푸터 디자인 변경
+* `12/27`
+  * craco 사용 (eject없이 cra 바벨 웹팩 커스텀하기..)
+    * 😈상대경로의 지옥에서 탈출....하려고 하니 타입스크립트 사용에 관해서도  앞당겨질 듯싶다
+      * 참고 사이트들
+        * [tsconfig](https://stackoverflow.com/questions/36916989/how-can-i-generate-a-tsconfig-json-file)
+        * [craco설정 관련 1](https://spookyjelly.tistory.com/42)
+        * [craco설정 관련 2](https://freestrokes.tistory.com/167)
+        * [craco config 공식 api 사이트](https://craco.js.org/docs/category/configuration/)
+        * [ [ Error ] no inputs were found in config file tsconfig.json 해결](http://typescriptstudy.com/ts/article/20-TypeScript-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8) => 컴파일이 안됨..ts파일이 하나도 없기때문..임시로 하나 만들어줌
+  * 로더 만들고 bootstrap 제거하기
+    * 로딩바 돌다가 데이터 랜더링 직전에 잠깐 초기화시켜줬던 state값이 랜더링 되는 오류 해결 (loadingState 추가)
+      * 데이터 불러오는 모든 컴포넌트들 전부..
 

@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import styled from "styled-components";
-import { colors } from "../../../theme/theme";
-import { ReactComponent as ForkSpoonKnife } from "../../../assets/ForkSpoonKnife.svg";
-import { ReactComponent as MusicNote } from "../../../assets/MusicNote.svg";
-import { ReactComponent as ArrowRight } from "../../../assets/ArrowRight.svg";
+import { colors } from "@theme/theme";
+import { ReactComponent as ForkSpoonKnife } from "@assets/ForkSpoonKnife.svg";
+import { ReactComponent as MusicNote } from "@assets/MusicNote.svg";
+import { ReactComponent as ArrowRight } from "@assets/ArrowRight.svg";
 const LandingCp4 = () => {
   const section4 = useRef();
   return (

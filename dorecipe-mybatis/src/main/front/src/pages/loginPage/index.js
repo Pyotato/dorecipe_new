@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MainLayout from "../../layout/mainLayOut";
-import { ReactComponent as CloseButton } from "../../assets/Close.svg";
-import { connect, useDispatch } from "react-redux";
-import { login } from "../../reduxRefresh/actions/auth.js";
+import MainLayout from "@layout/mainLayOut";
+import { ReactComponent as CloseButton } from "@assets/Close.svg";
 import styled from "styled-components";
-import { borderRadii, colors, margins, paddings } from "../../theme/theme";
+import { borderRadii, colors, margins, paddings } from "@theme/theme";
+import { connect, useDispatch } from "react-redux";
+
+import { login } from "../../reduxRefresh/actions/auth.js";
 
 const LoginPage = () => {
   const [member_id, setMemberId] = useState();

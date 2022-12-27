@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useCallback, useState, useEffect } from "react";
-import { MediumBtn } from "../_common/buttons";
+import { MediumBtn } from "@commonCp/buttons";
 import RecipeList from "./recipeList";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";

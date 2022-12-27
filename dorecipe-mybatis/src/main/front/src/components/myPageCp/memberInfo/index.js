@@ -5,19 +5,19 @@ import axios from "axios";
 import styled from "styled-components";
 
 import { useSelector } from "react-redux";
-import { colors } from "../../../theme/theme";
+import { colors } from "@theme/theme";
 
-import { ReactComponent as BdayCake } from "../../../assets/BdayCake.svg";
-import { ReactComponent as Woman } from "../../../assets/Woman.svg";
-import { ReactComponent as Man } from "../../../assets/Man.svg";
-import { ReactComponent as NoSelectSex } from "../../../assets/NoSelectSex.svg";
-import { ReactComponent as Email } from "../../../assets/Email.svg";
-import { ReactComponent as CompletedRecipes } from "../../../assets/CompletedRecipes.svg";
-import { ReactComponent as GivenHearts } from "../../../assets/GivenHearts.svg";
-import { ReactComponent as ReceivedHearts } from "../../../assets/ReceivedHearts.svg";
-import { ReactComponent as IncompleteRecipes } from "../../../assets/IncompleteRecipes.svg";
-import { ReactComponent as ProfileCircle } from "../../../assets/ProfileCircle.svg";
-import { ReactComponent as Phone } from "../../../assets/Phone.svg";
+import { ReactComponent as BdayCake } from "@assets/BdayCake.svg";
+import { ReactComponent as Woman } from "@assets/Woman.svg";
+import { ReactComponent as Man } from "@assets/Man.svg";
+import { ReactComponent as NoSelectSex } from "@assets/NoSelectSex.svg";
+import { ReactComponent as Email } from "@assets/Email.svg";
+import { ReactComponent as CompletedRecipes } from "@assets/CompletedRecipes.svg";
+import { ReactComponent as GivenHearts } from "@assets/GivenHearts.svg";
+import { ReactComponent as ReceivedHearts } from "@assets/ReceivedHearts.svg";
+import { ReactComponent as IncompleteRecipes } from "@assets/IncompleteRecipes.svg";
+import { ReactComponent as ProfileCircle } from "@assets/ProfileCircle.svg";
+import { ReactComponent as Phone } from "@assets/Phone.svg";
 
 const MemberInfoForm = ({
   recipeLength,

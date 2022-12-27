@@ -1,14 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 // import "./style.css";
-import MainLayout from "../../../layout/mainLayOut";
-import { colors } from "../../../theme/theme";
+import MainLayout from "@layout/mainLayOut";
+import { colors } from "@theme/theme";
 
 const KnowhowDetailPage = () => {
   let { knowhowId } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [state, setState] = useState([
     {
       know_num: 0,

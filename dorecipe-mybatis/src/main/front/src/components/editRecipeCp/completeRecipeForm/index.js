@@ -1,16 +1,16 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFloppyDisk, faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { useState, useCallback, useEffect, useMemo } from "react";
-import EditDropZone from "../../_common/dropzone";
-import { useInput } from "../../../hooks/useInput";
+import { useState, useEffect, useMemo } from "react";
+import EditDropZone from "@commonCp/dropzone";
+import { useInput } from "@hooks/useInput";
 import axios from "axios";
 
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { colors } from "../../../theme/theme";
-import { ReactComponent as Toggle } from "../../../assets/Toggle.svg";
-import { ReactComponent as ToggleClose } from "../../../assets/ToggleClose.svg";
+import { colors } from "@theme/theme";
+import { ReactComponent as Toggle } from "@assets/Toggle.svg";
+import { ReactComponent as ToggleClose } from "@assets/ToggleClose.svg";
 
 const CompleteRecipe = ({
   recipeState,

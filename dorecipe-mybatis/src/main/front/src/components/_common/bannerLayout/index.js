@@ -6,7 +6,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { colors } from "../../../theme/theme";
+import { colors } from "@theme/theme";
 
 const BannerLayout = ({ children }) => {
   return (

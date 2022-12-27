@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import styled from "styled-components";
-import { colors } from "../../../theme/theme";
-import { ReactComponent as LandingShape3 } from "../../../assets/LandingShape3.svg";
-import { ReactComponent as LandingShape4 } from "../../../assets/LandingShape4.svg";
+import { colors } from "@theme/theme";
+import { ReactComponent as LandingShape3 } from "@assets/LandingShape3.svg";
+import { ReactComponent as LandingShape4 } from "@assets/LandingShape4.svg";
 import BestRecipe from "../bestRecipe";
 const LandingCp5 = () => {
   const section5 = useRef();

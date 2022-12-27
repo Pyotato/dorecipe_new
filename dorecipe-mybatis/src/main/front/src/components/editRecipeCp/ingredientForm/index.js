@@ -8,8 +8,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
-import { colors } from "../../../theme/theme";
-import { ReactComponent as Pin } from "../../../assets/Pin.svg";
+import { colors } from "@theme/theme";
+import { ReactComponent as Pin } from "@assets/Pin.svg";
 
 const IngredientForm = ({
   // btnState,

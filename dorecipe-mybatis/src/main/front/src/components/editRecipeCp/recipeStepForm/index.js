@@ -1,19 +1,18 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBlackboard,
   faCircleMinus,
   faCirclePlus,
   faFloppyDisk,
 } from "@fortawesome/free-solid-svg-icons";
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useState, useCallback } from "react";
 
 import "./style.css";
 import axios from "axios";
 import Dropzone from "react-dropzone";
 
-import { ReactComponent as Camera } from "../../../assets/Camera.svg";
-import { colors } from "../../../theme/theme";
+import { ReactComponent as Camera } from "@assets/Camera.svg";
+import { colors } from "@theme/theme";
 import { useMemo } from "react";
 const RecipeOrderDrag = ({
   recipeState,

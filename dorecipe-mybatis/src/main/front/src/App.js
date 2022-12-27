@@ -41,12 +41,12 @@ import "./App.css";
 import ModifyRecipePage from "./pages/modifyRecipePage";
 
 function App() {
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }, []);
+  // useEffect(() => {
+  //   window.scrollTo({
+  //     top: 0,
+  //     behavior: "smooth",
+  //   });
+  // }, []);
   const userMsg = useSelector((state) => state.message);
   const user = useSelector((auth) => auth);
   const dispatch = useDispatch();

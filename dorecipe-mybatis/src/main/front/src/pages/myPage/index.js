@@ -1,18 +1,17 @@
-import MainLayout from "../../layout/mainLayOut";
-import MemberInfoForm from "../../components/myPageCp/memberInfo/index";
-import CompleteRecipeList from "../../components/myPageCp/completeRecipe";
-import RecordingRecipeList from "../../components/myPageCp/recordingRecipe";
+import MainLayout from "@layout/mainLayOut";
+import MemberInfoForm from "@myPageCp/memberInfo";
+import CompleteRecipeList from "@myPageCp/completeRecipe";
+import RecordingRecipeList from "@myPageCp/recordingRecipe";
 import { connect, useSelector } from "react-redux";
-
-import LikeRecipeList from "../../components/myPageCp/likeRecipe";
-import ReceivedLikesRecipeList from "../../components/myPageCp/receivedLikesRecipe";
+import LikeRecipeList from "@myPageCp/likeRecipe";
+import ReceivedLikesRecipeList from "@myPageCp/receivedLikesRecipe";
 import styled from "styled-components";
-import { colors } from "../../theme/theme";
-import { ReactComponent as CompletedRecipes } from "../../assets/CompletedRecipes.svg";
-import { ReactComponent as GivenHearts } from "../../assets/GivenHearts.svg";
-import { ReactComponent as ReceivedHearts } from "../../assets/ReceivedHearts.svg";
-import { ReactComponent as IncompleteRecipes } from "../../assets/IncompleteRecipes.svg";
-import { ReactComponent as NavTab4 } from "../../assets/NavTab4.svg";
+import { colors } from "@theme/theme";
+import { ReactComponent as CompletedRecipes } from "@assets/CompletedRecipes.svg";
+import { ReactComponent as GivenHearts } from "@assets/GivenHearts.svg";
+import { ReactComponent as ReceivedHearts } from "@assets/ReceivedHearts.svg";
+import { ReactComponent as IncompleteRecipes } from "@assets/IncompleteRecipes.svg";
+import { ReactComponent as NavTab4 } from "@assets/NavTab4.svg";
 import { useState, useMemo } from "react";
 import { useEffect } from "react";
 import {
@@ -20,12 +19,9 @@ import {
   IncompleteRecipeState,
   MyFavouriteRecipeState,
   ReceivedLikesRecipes,
-} from "../../components/myPageCp/RecipeStates";
-import { useCallback } from "react";
+} from "@myPageCp/RecipeStates";
 
 const MyPage = (user) => {
-  // console.log("MyPage", user);
-
   const currentUser = useSelector((user) => user.auth.user.username);
 
   const [navTabState, setNavTabState] = useState(0);

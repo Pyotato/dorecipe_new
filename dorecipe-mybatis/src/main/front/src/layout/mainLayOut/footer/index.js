@@ -1,12 +1,19 @@
 import { Link } from "react-router-dom";
 import { LogoFooter } from "../../../components/_common/logo";
 import styled from "styled-components";
-import { colors, fontSizes } from "../../../theme/theme";
+import { colors, deviceSizes, fontSizes } from "../../../theme/theme";
 import { ReactComponent as AdminEmail } from "../../../assets/AdminEmail.svg";
 import { ReactComponent as AdminPhone } from "../../../assets/AdminPhone.svg";
 import { ReactComponent as Location } from "../../../assets/Location.svg";
+import { useMediaQuery } from "react-responsive";
 
 const LayOutFooter = () => {
+  const isDesktopOrLaptop = useMediaQuery({ query: "(min-width: 1824px)" });
+  const isBigScreen = useMediaQuery({ query: "(min-width: 1824px)" });
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
+  const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
+  // const isRetina = useMediaQuery({ query: "(min-resolution: 2dppx)" });
+
   return (
     <>
       <FooterWrapper>
@@ -17,7 +24,11 @@ const LayOutFooter = () => {
             | 도레시피 기업확인 | 사업자정보확인
           </div>
           <div>대표: 표혜민</div>
-
+          {isDesktopOrLaptop && <div>:)isDesktopOrLaptop</div>}
+          {isBigScreen && <div>:)isBigScreen</div>}
+          {isTabletOrMobile && <div>:)isTabletOrMobile</div>}
+          {isPortrait && <div>:isPortrait</div>}
+          {/* {isRetina && <div>:)isRetina</div>} */}
           <div>(주) 잡솨봐</div>
           <div>사업자등록번호: 865-75-92614 | 통신 판매 신고 8392-15-1234</div>
           <div>Copyright © 잡솨봐 Inc. All Rights Reserved. </div>
@@ -64,8 +75,20 @@ export const FooterWrapper = styled.footer`
   justify-content: center;
   overflow: hidden;
   gap: 2em;
-  /* font-size: 1vw; */
+  /* font-size: 1vw;
+   */
   font-size: ${fontSizes.fontSize_base};
+
+  /* font-size: ${({ theme }) =>
+    theme.theme === "device_mobileS"
+      ? theme.fontSize_xxTiny
+      : theme.theme === "device_mobileM"
+      ? theme.fontSize_xxTiny
+      : theme.theme === "device_mobileL"
+      ? theme.fontSize_xxTiny
+      : theme.theme === "device_tablet"
+      ? theme.fontSize_small
+      : theme.fontSize_base}; */
 
   background-color: ${colors.color_milktea_brown};
   color: ${colors.color_beige_white};

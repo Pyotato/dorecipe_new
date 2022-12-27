@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import axios from "axios";
+// import { Link, useParams } from "react-router-dom";
+// import axios from "axios";
 
 import RecordList from "./recipeList";
 
 import styled from "styled-components";
 import NullRecipe from "../nullRecipeList";
-import { useSelector } from "react-redux";
-import { editingRecipeState } from "../RecipeStates";
-import { colors } from "../../../theme/theme";
-import BasicSpinner from "../../../components/_common/loading";
-import { useMemo } from "react";
+// import { useSelector } from "react-redux";
+// import { editingRecipeState } from "../RecipeStates";
+import { colors } from "@theme/theme";
+import BasicSpinner from "@commonCp/loading";
+// import { useMemo } from "react";
 
 const RecordingRecipeList = ({
   currentUser,
@@ -32,29 +32,29 @@ const RecordingRecipeList = ({
       information_level: "로딩중",
       information_time: "로딩중",
     },
-  ]); //미완성레시피 삭제 감지
+  ]);
   const [loadingState, setLoadingState] = useState(true);
-  // const [incompleteRecipeLength, setIncompleteRecipeLength] = useState(0); //레시피 삭제 감지
 
   useEffect(() => {
     if (incompleteRecipeState.length > 0) {
       setEditingRecipeState(incompleteRecipeState);
       setIncompleteRecipeLength(incompleteRecipeState.length);
+      setLoadingState(false);
+      return;
     } else {
-      setEditingRecipeState("empty");
+      editingRecipeState[0].recipe_num === 0 &&
+        setEditingRecipeState(incompleteRecipeState);
     }
   }, [incompleteRecipeState]);
-  console.log("incompleteRecipeState", incompleteRecipeState);
-  console.log("editingRecipeState", editingRecipeState);
 
   useCallback(() => {
-    // useMemo(() => {
-    if (incompleteRecipeLength > 0) {
-      setIncompleteRecipeState(incompleteRecipeState);
-      setIncompleteRecipeLength(incompleteRecipeState.length);
+    if (incompleteRecipeLength === 0) {
+      setEditingRecipeState("empty");
+      return;
     } else {
       setEditingRecipeState(incompleteRecipeState);
-      setIncompleteRecipeLength(0);
+      setIncompleteRecipeLength(incompleteRecipeState.length);
+      setLoadingState(false);
     }
   }, [incompleteRecipeState, incompleteRecipeLength]);
 
@@ -67,18 +67,17 @@ const RecordingRecipeList = ({
             <RecipeWrapItems>
               <Scrollable>
                 <div>
-                  {editingRecipeState === "empty" ? (
+                  {loadingState ? (
+                    <div className="spinnerWrap">
+                      <BasicSpinner displayState={"block"} />
+                    </div>
+                  ) : editingRecipeState === "empty" ? (
                     <>
                       <NullRecipe />
-                    </>
-                  ) : editingRecipeState[0].recipe_title === "로딩중" ? (
-                    <>
-                      <BasicSpinner />
                     </>
                   ) : (
                     incompleteRecipeState.map((e) => (
                       <RecordList
-                        // loadingState={loadingState}
                         key={e.recipe_num}
                         incompleteRecipeState={incompleteRecipeState}
                         editingRecipeState={e}
@@ -129,6 +128,12 @@ const Scrollable = styled.section`
       text-align: center;
       height: 20em;
     }
+  }
+  & .spinnerWrap {
+    width: fit-content;
+    height: 50%;
+    transform: translateY(75%);
+    margin: 0 auto;
   }
 `;
 

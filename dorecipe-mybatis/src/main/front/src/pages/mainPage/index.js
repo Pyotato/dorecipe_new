@@ -1,43 +1,43 @@
-import MainLayout from "../../layout/mainLayOut";
+import MainLayout from "@layout/mainLayOut";
 
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import "./style.css";
-import LandingCp1 from "../../components/mainPageCp/landing1Cp";
-import LandingCp2 from "../../components/mainPageCp/landing2Cp";
-import LandingCp3 from "../../components/mainPageCp/landing3Cp";
-import LandingCp4 from "../../components/mainPageCp/landing4Cp";
-import LandingCp5 from "../../components/mainPageCp/landing5Cp";
-import LandingCp6 from "../../components/mainPageCp/landing6Cp";
+import LandingCp1 from "@mainPageCp/landing1Cp";
+import LandingCp2 from "@mainPageCp/landing2Cp";
+import LandingCp3 from "@mainPageCp/landing3Cp";
+import LandingCp4 from "@mainPageCp/landing4Cp";
+import LandingCp5 from "@mainPageCp/landing5Cp";
+import LandingCp6 from "@mainPageCp/landing6Cp";
 
 const MainPage = () => {
-  const [scrollState, setScrollState] = useState(0);
+  // const [scrollState, setScrollState] = useState(0);
   const user = useSelector((auth) => auth);
   const [userState, setUserState] = useState(user);
 
-  const section1 = useRef("");
-  const section2 = useRef("");
-  const section3 = useRef("");
-  const section4 = useRef("");
-  const section5 = useRef("");
-  const section6 = useRef("");
+  // const section1 = useRef("");
+  // const section2 = useRef("");
+  // const section3 = useRef("");
+  // const section4 = useRef("");
+  // const section5 = useRef("");
+  // const section6 = useRef("");
 
-  const [topTosection1Height, setTopTosection1Height] = useState(0);
-  const [topTosection2Height, setTopTosection2Height] = useState(0);
-  const [topTosection3Height, setTopTosection3Height] = useState(0);
-  const [topTosection4Height, setTopTosection4Height] = useState(0);
-  const [topTosection5Height, setTopTosection5Height] = useState(0);
-  const [topTosection6Height, setTopTosection6Height] = useState(0);
+  // const [topTosection1Height, setTopTosection1Height] = useState(0);
+  // const [topTosection2Height, setTopTosection2Height] = useState(0);
+  // const [topTosection3Height, setTopTosection3Height] = useState(0);
+  // const [topTosection4Height, setTopTosection4Height] = useState(0);
+  // const [topTosection5Height, setTopTosection5Height] = useState(0);
+  // const [topTosection6Height, setTopTosection6Height] = useState(0);
 
-  const [topDistance, setTopDistance] = useState(0);
+  // const [topDistance, setTopDistance] = useState(0);
 
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
+  // useEffect(() => {
+  //   window.scrollTo({
+  //     top: 0,
 
-      behavior: "smooth",
-    });
-  }, []);
+  //     behavior: "smooth",
+  //   });
+  // }, []);
   // useEffect(() => {
   // useMemo(() => {
   //   if (topTosection1Height > -topTosection2Height / 2) {

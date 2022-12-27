@@ -1,5 +1,5 @@
-import MainLayout from "../../layout/mainLayOut";
-import AdminMenuPage from "../../components/adminMenuCp";
+import MainLayout from "@layout/mainLayOut";
+import AdminMenuPage from "@components/adminMenuCp";
 
 const AdminPostMng = () => {
   return (

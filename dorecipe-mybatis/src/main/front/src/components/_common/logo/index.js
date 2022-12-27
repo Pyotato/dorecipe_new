@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { borderRadii, imgSizes } from "../../../theme/theme";
+import { borderRadii, imgSizes } from "@theme/theme";
 import { useNavigate } from "react-router-dom";
 
 export const LogoHeader = () => {

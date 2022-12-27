@@ -1,10 +1,12 @@
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { colors } from "@theme/theme";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useEffect, useState } from "react";
+
 import { logout } from "../../../../reduxRefresh/actions/auth";
-import { colors } from "../../../../theme/theme";
+
 const AccountIcon = () => {
   //페이지 이동
   const navigate = useNavigate();

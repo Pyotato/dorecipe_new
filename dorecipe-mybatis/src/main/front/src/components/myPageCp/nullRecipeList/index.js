@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { colors } from "../../../theme/theme";
-import SpinningFork from "../../_common/animatedItems";
+import { colors } from "@theme/theme";
+import SpinningFork from "@commonCp/animatedItems";
 
 const NullRecipe = () => {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors } from "../../theme/theme";
+import { colors, borderRadii } from "@theme/theme";
 export const TotalWrap = styled.div`
   width: 100%;
   font-family: "mainFont";
@@ -65,7 +65,8 @@ export const SelectedBtn = styled.button`
   padding: 0.5vw;
   border: transparent;
   font-size: 1vw;
-  border-radius: 0.7vw;
+  border-radius: ${borderRadii.radius_small};
+
   &:hover {
     cursor: pointer;
   }

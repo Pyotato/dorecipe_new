@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import BasicSpinner from "../../../components/_common/loading";
+import BasicSpinner from "@commonCp/loading";
 import CompleteList from "./recipeList";
 
 import styled from "styled-components";
 import NullRecipe from "../nullRecipeList";
-
-import { colors } from "../../../theme/theme";
-import { useMemo } from "react";
+import { colors } from "@theme/theme";
 import { useCallback } from "react";
 
 const CompleteRecipeList = ({
@@ -29,26 +27,27 @@ const CompleteRecipeList = ({
       information_time: "로딩중",
     },
   ]);
-
+  const [loadingState, setLoadingState] = useState(true);
   useEffect(() => {
     if (recipeLength > 0) {
       setCompletedRecipeState(recipeState);
+      setLoadingState(false);
+      return;
     } else {
-      setCompletedRecipeState("empty");
+      completedRecipeState[0].recipe_num === 0 &&
+        setCompletedRecipeState(recipeState);
     }
   }, [recipeState]);
 
   useCallback(() => {
-    // useMemo(() => {
     if (recipeLength === 0) {
       setCompletedRecipeState("empty");
     } else {
       setCompletedRecipeState(recipeState);
+      setLoadingState(false);
     }
-  }, [recipeState]);
+  }, [recipeState, recipeLength]);
 
-  const [loadingState, setLoadingState] = useState(true);
-  console.log("completedRecipeState", completedRecipeState);
   return (
     <>
       <BasicFormSection>
@@ -58,18 +57,19 @@ const CompleteRecipeList = ({
             <RecipeWrapItems>
               <Scrollable>
                 <div>
-                  {completedRecipeState === "empty" && recipeLength === 0 ? (
+                  {loadingState &&
+                  completedRecipeState[0].recipe_title === "로딩중" ? (
+                    <div className="spinnerWrap">
+                      <BasicSpinner displayState={"block"} />
+                    </div>
+                  ) : completedRecipeState === "empty" ? (
                     <>
                       <NullRecipe />
-                    </>
-                  ) : completedRecipeState[0].recipe_title === "로딩중" ? (
-                    <>
-                      <BasicSpinner />
                     </>
                   ) : (
                     recipeState.map((e) => (
                       <CompleteList
-                        loadingState={loadingState}
+                        // loadingState={loadingState}
                         setLoadingState={setLoadingState}
                         key={e.recipe_num}
                         setRecipeState={setRecipeState}
@@ -121,6 +121,12 @@ const Scrollable = styled.section`
       margin: 0 auto;
       text-align: center;
       height: 20em;
+    }
+    & .spinnerWrap {
+      width: fit-content;
+      height: 50%;
+      transform: translateY(75%);
+      margin: 0 auto;
     }
   }
 `;

@@ -1,7 +1,7 @@
-import { Spinner } from "react-bootstrap";
+// import { Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { colors } from "../../theme/theme";
+import { colors } from "@theme/theme";
 // import "./style.css";
 
 const SearchRecipe = ({ state, search }) => {

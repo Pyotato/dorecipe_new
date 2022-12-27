@@ -1,12 +1,10 @@
-import { Navigate } from "react-router-dom";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import BasicSpinner from "../../_common/loading";
 import { useState } from "react";
-import { ReactComponent as RubbishBin } from ".././../../assets/RubbishBin.svg";
-import { colors } from "../../../theme/theme";
+import { ReactComponent as RubbishBin } from "@assets/RubbishBin.svg";
+import { colors } from "@theme/theme";
 
 const RecordList = ({
   incompleteRecipeState,
@@ -96,14 +94,10 @@ const RecordList = ({
           <ItemWrap onClick={goToDraftRecipe}>
             <div>
               <div>
-                {loadingState ? (
-                  <BasicSpinner />
-                ) : (
-                  <img
-                    src={editingRecipeState.recipe_rpath}
-                    alt={editingRecipeState.recipe_rpath}
-                  />
-                )}
+                <img
+                  src={editingRecipeState.recipe_rpath}
+                  alt={editingRecipeState.recipe_rpath}
+                />
               </div>
             </div>
             <div className="titleWrap">

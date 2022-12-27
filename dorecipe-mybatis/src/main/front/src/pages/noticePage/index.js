@@ -1,12 +1,12 @@
 import { useState, useCallback, useEffect } from "react";
 import NoticeList from "./noticeList";
 import axios from "axios";
-import MainLayout from "../../../layout/mainLayOut";
+import MainLayout from "@layout/mainLayOut";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { colors } from "../../../theme/theme";
+import { colors } from "@theme/theme";
 import { useMemo } from "react";
-import BasicSpinner from "../../../components/_common/loading";
+import BasicSpinner from "@commonCp/loading";
 
 const NoticePage = () => {
   const [state, setState] = useState([
@@ -73,7 +73,7 @@ const NoticePage = () => {
                         width: "100%",
                       }}
                     >
-                      <BasicSpinner />
+                      <BasicSpinner displayState={"block"} />
                     </div>
                   </>
                 ) : (

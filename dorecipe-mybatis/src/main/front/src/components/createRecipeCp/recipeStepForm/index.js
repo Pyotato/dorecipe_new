@@ -6,12 +6,12 @@ import {
   faFloppyDisk,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState, useCallback, useEffect } from "react";
-import { ReactComponent as Camera } from "../../../assets/Camera.svg";
+import { ReactComponent as Camera } from "@assets/Camera.svg";
 
 import axios from "axios";
 import Dropzone from "react-dropzone";
 import { useSelector } from "react-redux";
-import { colors } from "../../../theme/theme";
+import { colors } from "@theme/theme";
 import { useMemo } from "react";
 
 const RecipeOrderDrag = ({

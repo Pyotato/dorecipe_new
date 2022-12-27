@@ -1,0 +1,50 @@
+{
+  "extends": "./tsconfig.paths.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@hooks/*": ["src/hooks/*"],
+      "@pages/*": ["src/pages/*"],
+      "@services/*": ["src/services/*"],
+      "@utils/*": ["src/utils/*"],
+      "@assets/*": ["src/assets/*"],
+      "@context/*": ["src/context/*"],
+      "@layout/*": ["src/layout/*"],
+      "@saga/*": ["src/saga/*"],
+      "@store/*": ["src/store/*"],
+      "@theme/*": ["src/theme/*"],
+      "@util/*": ["src/util/*"],
+      "@font/*": ["src/fonts/*"],
+
+      "@components/*": ["src/components/*"],
+
+      "@commonCp/*": ["src/components/_common/*"],
+      "@adminMenuCp/*": ["src/components/adminMenuCp/*"],
+      "@commentCp/*": ["src/components/commentCp/*"],
+      "@createRecipeCp/*": ["src/components/createRecipeCp/*"],
+      "@editRecipeCp/*": ["src/components/editRecipeCp/*"],
+      "@eventCp/*": ["src/components/eventCp/*"],
+      "@knowhowCp/*": ["src/components/knowhowCp/*"],
+      "@mainPageCp/*": ["src/components/mainPageCp/*"],
+      "@noticeCp/*": ["src/components/noticeCp/*"],
+      "@RecipeDetailCp/*": ["src/components/RecipeDetailCp/*"],
+      "@searchRecipeCp/*": ["src/components/searchRecipeCp/*"],
+      "@myPageCp/*": ["src/components/myPageCp/*"],
+      "@joinMemberCp/*": ["src/components/joinMemberCp/*"],
+
+      "@myPage/*": ["src/components/pages/myPage/*"],
+      "@createRecipePage/*": ["src/components/pages/createRecipePage/*"],
+      "@detailSearchPage/*": ["src/components/pages/detailSearchPage/*"],
+      "@errorPage/*": ["src/components/pages/errorPage/*"],
+      "@eventPage/*": ["src/components/pages/eventPage/*"],
+      "@joinMemberPage/*": ["src/components/pages/joinMemberPage/*"],
+      "@knowhowPage/*": ["src/components/pages/knowhowPage/*"],
+      "@loginPage/*": ["src/components/pages/loginPage/*"],
+      "@mainPage/*": ["src/components/pages/mainPage/*"],
+      "@memberListPage/*": ["src/components/pages/memberListPage/*"],
+      "@modifyRecipePage/*": ["src/components/pages/modifyRecipePage/*"],
+      "@recipeDetailsPage/*": ["src/components/pages/recipeDetailsPage/*"],
+      "@searchRecipePage/*": ["src/components/pages/searchRecipePage/*"]
+    }
+  }
+}

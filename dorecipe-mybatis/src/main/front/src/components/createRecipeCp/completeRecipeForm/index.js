@@ -1,14 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFloppyDisk, faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { useState, useCallback } from "react";
-import EditDropZone from "../../_common/dropzone";
-import { useInput } from "../../../hooks/useInput";
+import { useState } from "react";
+import EditDropZone from "@commonCp/dropzone";
+import { useInput } from "@hooks/useInput";
 import axios from "axios";
 
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { colors } from "../../../theme/theme";
+import { colors } from "@theme/theme";
 import { useMemo } from "react";
 
 const CompleteRecipe = ({

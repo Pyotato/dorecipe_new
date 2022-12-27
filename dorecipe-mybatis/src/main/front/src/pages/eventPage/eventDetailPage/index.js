@@ -2,10 +2,10 @@ import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import MainLayout from "../../../layout/mainLayOut";
-import { colors } from "../../../theme/theme";
+import MainLayout from "@layout/mainLayOut";
+import { colors } from "@theme/theme";
 import styled from "styled-components";
-import { Spinner } from "react-bootstrap";
+// import { Spinner } from "react-bootstrap";
 
 const EventDetailPage = () => {
   const params = useParams();

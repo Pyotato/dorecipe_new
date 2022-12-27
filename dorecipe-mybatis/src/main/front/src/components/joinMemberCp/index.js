@@ -1,15 +1,16 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
-import { useInput } from "../../hooks/useInput";
+import { useInput } from "@hooks/useInput";
 import axios from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Dropzone from "react-dropzone";
+import { ReactComponent as AddProfileImg } from "@assets/AddProfileImg.svg";
+import { ReactComponent as Close } from "@assets/Close.svg";
+import { TotalWrap, WarningMsg, SubmitBtn } from "./style.js";
+
 import { useDispatch, useSelector } from "react-redux";
 import { register, login } from "../../reduxRefresh/actions/auth";
-import Dropzone from "react-dropzone";
-import { ReactComponent as AddProfileImg } from "../../../src/assets/AddProfileImg.svg";
-import { ReactComponent as Close } from "../../../src/assets/Close.svg";
-import { TotalWrap, WarningMsg, SubmitBtn } from "./style.js";
 const SignUpTemplate = () => {
   /** input state설정해주기 */
   const dispatch = useDispatch();

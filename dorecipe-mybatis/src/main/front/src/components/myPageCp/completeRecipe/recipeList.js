@@ -1,22 +1,20 @@
 import axios from "axios";
-import { useEffect } from "react";
-import { useMemo } from "react";
-import { useCallback } from "react";
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { colors } from "../../../theme/theme";
-import BasicSpinner from "../../_common/loading";
-import { ReactComponent as RubbishBin } from ".././../../assets/RubbishBin.svg";
+import { colors } from "@theme/theme";
+
+import { ReactComponent as RubbishBin } from "@assets/RubbishBin.svg";
 
 const CompleteList = ({
   completedRecipeState,
   recipeLength,
   setRecipeLength,
-  loadingState,
+
   setRecipeState,
   recipeState,
-  setLoadingState,
+
   setIncompleteRecipeLength,
   incompleteRecipeLength,
 }) => {
@@ -27,7 +25,6 @@ const CompleteList = ({
   };
 
   const deleteRecipe = () => {
-    // const deleteRecipe = useCallback(() => {
     axios
       .get(
         "http://localhost:9000/recipe/delete/" + completedRecipeState.recipe_num
@@ -67,8 +64,6 @@ const CompleteList = ({
 
   return (
     <>
-      {/* 작성 완료한 레시피 */}
-
       <RecipeWrap>
         <div>
           <div>
@@ -116,14 +111,10 @@ const CompleteList = ({
           <ItemWrap onClick={() => onClickRecipeDetails()}>
             <div>
               <div>
-                {/* {loadingState ? (
-                  <BasicSpinner />
-                ) : ( */}
                 <img
                   src={completedRecipeState.recipe_rpath}
                   alt={completedRecipeState.recipe_rpath}
                 />
-                {/* )} */}
               </div>
             </div>
             <div className="titleWrap">
@@ -137,7 +128,7 @@ const CompleteList = ({
             </div>
             <div className="flexBox">
               <div className="infoWrap">
-                {" "}
+              
                 {completedRecipeState.information_level}
               </div>
               <div className="infoTimeWrap">
@@ -164,7 +155,7 @@ const RecipeWrap = styled.div`
 
   & .deleteRecipe {
     fill: ${colors.color_black_brown};
-    /* height: 24px; */
+
     margin-bottom: 0.6em;
   }
   & .binWrap {
@@ -173,7 +164,7 @@ const RecipeWrap = styled.div`
     text-align: right;
     justify-content: space-between;
     align-items: center;
-    /* transform: translateX(5%); */
+
     fill: ${colors.color_black_brown};
   }
   & .deleteRecipe:hover {

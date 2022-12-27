@@ -2,17 +2,17 @@ import styled from "styled-components";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
-import { colors } from "../../theme/theme";
+import { colors } from "@theme/theme";
 
 import BasicForm from "./basicForm";
 import IngredientForm from "./ingredientForm";
 import CompleteRecipe from "./completeRecipeForm";
 import RecipeOrderDrag from "./recipeStepForm";
-import axios from "axios";
-import { useState, useEffect, useCallback, useMemo } from "react";
+// import axios from "axios";
+import { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { historylocation } from "../../reduxRefresh/helpers/history";
+import { useParams } from "react-router-dom";
+// import { historylocation } from "../../reduxRefresh/helpers/history";
 // import { onUpdateRecipeIngredients } from "./dispatchAxios";
 import {
   TemporaryRecipeState,

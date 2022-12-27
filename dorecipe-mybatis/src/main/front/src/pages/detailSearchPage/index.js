@@ -1,5 +1,5 @@
-import MainLayout from "../../layout/mainLayOut";
-import SearchByCategory from "../../components/RecipeDetailCp";
+import MainLayout from "@layout/mainLayOut";
+import SearchByCategory from "@RecipeDetailCp";
 // import SearchByCategory from "../../components/searchByRecipeCategoryCp";
 
 const SearchByCategoryPage = () => {

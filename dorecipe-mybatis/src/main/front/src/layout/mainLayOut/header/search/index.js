@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { useInput } from "../../../../hooks/useInput";
+import { useInput } from "@hooks/useInput";
 import styled from "styled-components";
-import { MainLogoHeader } from "../../../../components/_common/logo";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { borderRadii, colors } from "../../../../theme/theme";
+// import { MainLogoHeader } from "@components/_common/logo";
+import { useNavigate } from "react-router-dom";
+import { borderRadii, colors } from "@theme/theme";
 const HeaderSearch = () => {
   const [search, onChangeSearch, setSearch] = useInput("");
   const navigate = useNavigate();

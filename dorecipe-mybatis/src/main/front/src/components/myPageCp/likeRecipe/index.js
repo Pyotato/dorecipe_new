@@ -1,24 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 import styled from "styled-components";
 import NullRecipe from "../nullRecipeList";
 
-import BasicSpinner from "../../_common/loading";
-import { colors } from "../../../theme/theme";
+import BasicSpinner from "@commonCp/loading";
+import { colors } from "@theme/theme";
+import { useCallback } from "react";
 
-const LikeRecipeList = ({ currentUser, likedRecipeState, setLikeState }) => {
-  // let { memberId } = useParams();
-
-  // 작성중 레시피
+const LikeRecipeList = ({ likedRecipeState }) => {
   const navigate = useNavigate();
   const [loadingState, setLoadingState] = useState(true);
-
-  const [recipeLength, setRecipeLength] = useState(0); //레시피 삭제 감지
 
   const [likeStateFront, setLikeStateFront] = useState([
     {
@@ -30,62 +22,40 @@ const LikeRecipeList = ({ currentUser, likedRecipeState, setLikeState }) => {
       information_time: "로딩중",
     },
   ]);
-  const [hoverBinState, setHoverBinState] = useState(0);
 
   useEffect(() => {
     if (likedRecipeState.length > 0) {
-      setLikeState(likedRecipeState);
       setLikeStateFront(likedRecipeState);
+      setLoadingState(false);
+      return;
     } else {
-      // setLikeState("empty");
-      setLikeStateFront("empty");
+      likeStateFront[0].recipe_num === 0 && setLikeStateFront(likedRecipeState);
     }
   }, [likedRecipeState]);
-  // const currentUser = useSelector((user) => user.auth.user.username);
-  // useMemo(() => {
-  //   axios
-  //     .get("http://localhost:9000/recipe/getLikedRecipes", {
-  //       params: { param1: currentUser.toString() },
-  //     })
-  //     .then((res) => {
-  //       console.log("getLikedRecipes", res.data);
-  //       setLikeState(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  //   // }
-  // }, [likeState]);
 
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:9000/recipe/getLikedRecipes", {
-  //       params: { param1: currentUser.toString() },
-  //     })
-  //     .then((res) => {
-  //       console.log("getLikedRecipes", res.data);
-  //       setLikeState(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
+  useCallback(() => {
+    if (likedRecipeState.length === 0) {
+      setLikeStateFront("empty");
+      return;
+    } else {
+      setLikeStateFront(likedRecipeState);
+      setLoadingState(false);
+    }
+  }, [likedRecipeState]);
 
   return (
     <>
-      {/* <BasicFormSection> */}
-      {/* <div> */}
       <SectionTitle>내가 좋아하는 레시피들</SectionTitle>
       <RecipeWrapItems>
         <Scrollable>
           <div>
-            {likeStateFront === "empty" ? (
+            {loadingState ? (
+              <div className="spinnerWrap">
+                <BasicSpinner />
+              </div>
+            ) : likeStateFront === "empty" ? (
               <>
                 <NullRecipe />
-              </>
-            ) : likeStateFront[0].recipe_title === "로딩중" ? (
-              <>
-                <BasicSpinner />
               </>
             ) : (
               likeStateFront.map((e, index) => (
@@ -124,73 +94,6 @@ const LikeRecipeList = ({ currentUser, likedRecipeState, setLikeState }) => {
           </div>
         </Scrollable>
       </RecipeWrapItems>
-      {/* </div> */}
-      {/* </BasicFormSection> */}
-      {/* <div>{currentUser}님이 좋아하는 레시피들</div>
-      {likeState[0] === "로딩중" ? (
-        <>
-          <BasicSpinner />
-        </>
-      ) : (
-        <>
-          {likeState.map((e) => (
-            <>
-              <div
-                key={e}
-                onClick={() => {
-                  navigate(`/recipe/search/details/${e.recipe_num}`);
-                }}
-              >
-                <div>{e.recipe_title}</div>
-                <div>{e.recipe_num}</div>
-                <div>{e.information_level}</div>
-                <div>{e.information_time}</div>
-                <div>
-                  <img
-                    style={{ width: "9em" }}
-                    src={e.recipe_rpath}
-                    alt={e.recipe_rpath}
-                  />
-                </div>
-              </div>
-            </>
-          ))}
-        </>
-      )} */}
-      {/* 좋아요한 레시피 */}
-      {/* <div className="container-sm myPage-box2 center">
-        <div>
-          <SectionTitle>
-            좋아요한 레시피
-            <span className="likeRecipeTotal"> */}
-      {/* <FontAwesomeIcon icon={faHeart} className="heart" />총{" "} */}
-      {/* {likeState.length}개
-            </span>
-          </SectionTitle>
-          <Scrollable>
-            <div>
-              {likeState.length > 1 ? (
-                likeState.map((e) => (
-                  <LikeRecipeList key={e.recipe_num} likeState={e} />
-                ))
-              ) : (
-                <NullRecipe />
-              )}
-            </div>
-          </Scrollable>
-          {
-                    likeState.length !== 0
-                    ?
-                    likeState.map((e) => (
-                        <LikeRecipeList
-                            likeState={e}
-                        />
-                    ))
-                    :
-                    <NullRecipe />
-                }
-        </div>
-      </div> */}
     </>
   );
 };
@@ -227,58 +130,26 @@ const Scrollable = styled.section`
       height: 20em;
     }
   }
+  & .spinnerWrap {
+    width: fit-content;
+    height: 50%;
+    transform: translateY(75%);
+    margin: 0 auto;
+  }
 `;
 
 const RecipeWrapItems = styled.div`
   width: 95%;
-  /* height: 30em; */
+
   margin: 0 auto;
   overflow-y: auto;
-`;
-
-const BasicFormSection = styled.div`
-  width: 85%;
-  margin-top: 12vh;
-  margin: 12vh auto;
-  border-radius: 2vw;
-  padding-bottom: 6vh;
-  min-height: 82vh;
-  height: fit-content;
-  margin-bottom: 15vh;
-  background-color: ${colors.color_beige_brown};
-
-  & .marginExtra {
-    margin-top: 21vh;
-  }
-
-  & .carrot {
-    color: ${colors.color_carrot_orange};
-  }
-  & .accented {
-    color: ${colors.color_black_brown};
-  }
-  & .svgStrokes {
-    stroke: ${colors.color_black_brown};
-  }
-
-  & .totalWrap {
-    height: 20em;
-  }
-  /* & .sectionInfo { */
-  /* margin-top: 12vh; */
-  /* margin-bottom: 3em; */
-  /* display: inline-block;
-    margin-left: 0.5em;
-    width: fit-content; */
-  /* font-size: 1.2vw; */
-  /* } */
 `;
 
 const SectionTitle = styled.div`
   background-color: ${colors.color_carrot_orange};
   color: ${colors.color_beige_tinted_white};
   float: left;
-  /* width: 8em; */
+
   width: 12em;
   text-align: center;
   padding: 1vw 1vh;

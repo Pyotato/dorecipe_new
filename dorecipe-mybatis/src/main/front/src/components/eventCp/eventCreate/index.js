@@ -1,10 +1,10 @@
 import axios from "axios";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
-import { useInput } from "../../../hooks/useInput";
-import { colors } from "../../../theme/theme";
+import { useInput } from "@hooks/useInput";
+import { colors } from "@theme/theme";
 import Dropzone from "react-dropzone";
-import { ReactComponent as UploadFile } from "../../../assets/UploadFile.svg";
+import { ReactComponent as UploadFile } from "@assets/UploadFile.svg";
 
 const CreateEventCp = () => {
   const [event_title, onChangeEventTitle, setTitle] = useInput("");

@@ -2,9 +2,9 @@ import { useCallback, useState, useEffect } from "react";
 import axios from "axios";
 import "./style.css";
 import { useParams } from "react-router-dom";
-import { useInput } from "../../../hooks/useInput";
+import { useInput } from "@hooks/useInput";
 import { Link } from "react-router-dom";
-import MainLayout from "../../../layout/mainLayOut";
+import MainLayout from "@layout/mainLayOut";
 
 const EventModify = () => {
   const params = useParams();

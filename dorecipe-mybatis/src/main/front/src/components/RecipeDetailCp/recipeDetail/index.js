@@ -1,18 +1,18 @@
-import { useCallback, useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import styled from "styled-components";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import StepRecipe from "./recipeSteps";
 import RecipeIngredients from "./recipeIngredients";
 import { useSelector } from "react-redux";
-import { ReactComponent as EmptyHeart } from "../../../assets/EmptyHeart.svg";
-import { ReactComponent as FilledHeart } from "../../../assets/FilledHeart.svg";
-import { ReactComponent as DefaultProfile } from "../../../assets/DefaultProfile.svg";
-import { ReactComponent as Ranking } from "../../../assets/Ranking.svg";
-import { ReactComponent as Timer } from "../../../assets/Timer.svg";
-import CommentCp from "../../commentCp";
-import NotFoundPage from "../../../pages/errorPage";
-import { colors } from "../../../theme/theme";
+import { ReactComponent as EmptyHeart } from "@assets/EmptyHeart.svg";
+import { ReactComponent as FilledHeart } from "@assets/FilledHeart.svg";
+import { ReactComponent as DefaultProfile } from "@assets/DefaultProfile.svg";
+import { ReactComponent as Ranking } from "@assets/Ranking.svg";
+import { ReactComponent as Timer } from "@assets/Timer.svg";
+import CommentCp from "@commentCp";
+import NotFoundPage from "@pages/errorPage";
+import { colors } from "@theme/theme";
 
 const RecipeDetailModal = () => {
   const search = "/";
@@ -21,7 +21,7 @@ const RecipeDetailModal = () => {
   const param = location.pathname.substring(lastIndex).replace("/", ""); //레시피 번호 가져오기
   const user = useSelector((auth) => auth);
   const params = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const recipeId = params.recipeId;
   console.log("user", user);
   console.log("recipeId", recipeId);

@@ -1,8 +1,8 @@
-import MainLayout from "../../layout/mainLayOut";
+import MainLayout from "@layout/mainLayOut";
 import styled from "styled-components";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ReactComponent as NotFoundIcon } from "../../assets/NotFound.svg";
+import { ReactComponent as NotFoundIcon } from "@assets/NotFound.svg";
 
 const NotFoundPage = () => {
   const navigate = useNavigate();

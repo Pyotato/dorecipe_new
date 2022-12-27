@@ -1,19 +1,19 @@
 import styled from "styled-components";
-import { ReactComponent as Knowhow } from "../../assets/Knowhow.svg";
-import { ReactComponent as EventBoard } from "../../assets/EventBoard.svg";
-import { ReactComponent as Notice } from "../../assets/Notice.svg";
-import { ReactComponent as Home } from "../../assets/Home.svg";
+import { ReactComponent as Knowhow } from "@assets/Knowhow.svg";
+import { ReactComponent as EventBoard } from "@assets/EventBoard.svg";
+import { ReactComponent as Notice } from "@assets/Notice.svg";
+import { ReactComponent as Home } from "@assets/Home.svg";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-import EventList from "../eventCp/eventList";
-import KnowhowListCp from "../knowhowCp/knowhowListCp";
-import UploadNoticeCp from "../noticeCp/uploadNoticeCp";
-import CreateEventCp from "../eventCp/eventCreate";
-import CreateKnowhowCp from "../knowhowCp/knowhowCreate";
-import NotFoundPage from "../../pages/errorPage";
+import EventList from "@eventCp/eventList";
+import KnowhowListCp from "@knowhowCp/knowhowListCp";
+import UploadNoticeCp from "@noticeCp/uploadNoticeCp";
+import CreateEventCp from "@eventCp/eventCreate";
+import CreateKnowhowCp from "@knowhowCp/knowhowCreate";
+import NotFoundPage from "@pages/errorPage";
 
-import { colors } from "../../theme/theme";
+import { colors } from "@theme/theme";
 
 const AdminMenuPage = () => {
   /** 관리자홈 == 0, 공지사항===1 ,이벤트===2, 노하우===3 에 따라 화면 바꾸기 */

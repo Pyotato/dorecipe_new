@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import HeaderSearch from "../../../layout/mainLayOut/header/search";
-import { LogoOnLandingPage } from "../../_common/logo";
+import HeaderSearch from "@layout/mainLayOut/header/search";
+import { LogoOnLandingPage } from "@commonCp/logo";
 import styled from "styled-components";
-import { colors } from "../../../theme/theme";
+import { colors } from "@theme/theme";
 
 const LandingCp1 = () => {
   const section1 = useRef();

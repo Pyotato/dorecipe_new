@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useInput } from "../../../hooks/useInput";
+import { useInput } from "@hooks/useInput";
 // import "./style.css";
-import MainLayout from "../../../layout/mainLayOut";
+import MainLayout from "@layout/mainLayOut";
 
 const KnowhowUpdatePage = () => {
   let { knowhowId } = useParams();

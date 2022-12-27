@@ -2,7 +2,7 @@
 import { useState, useCallback, useEffect } from "react";
 import MemberList from "./memberList.js";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import axios from "axios";
 import "./style.css";
 // import { Scrollable } from "../../style/common.js";

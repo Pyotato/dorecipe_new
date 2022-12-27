@@ -5,11 +5,11 @@ import {
   faPlusCircle,
   faFloppyDisk,
 } from "@fortawesome/free-solid-svg-icons";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { ReactComponent as Pin } from "../../../assets/Pin.svg";
-import { colors } from "../../../theme/theme";
+import { ReactComponent as Pin } from "@assets/Pin.svg";
+import { colors } from "@theme/theme";
 import { useMemo } from "react";
 import "./style.css";
 const IngredientForm = ({

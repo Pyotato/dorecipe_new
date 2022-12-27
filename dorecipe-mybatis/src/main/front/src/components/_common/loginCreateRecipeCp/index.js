@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import AccountIcon from "./loginIcon";
-import { ReactComponent as NavTab } from "../../../assets/NavTab.svg";
-import { useEffect, useState } from "react";
-import { colors } from "../../../theme/theme";
+import { ReactComponent as NavTab } from "@assets/NavTab.svg";
+// import { useEffect, useState } from "react";
+import { colors } from "@theme/theme";
 const LoginCreateRecipeLogo = ({ onToggleTab, tabState }) => {
   return (
     <>

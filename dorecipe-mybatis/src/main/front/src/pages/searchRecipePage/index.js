@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import MainLayout from "../../layout/mainLayOut";
+import MainLayout from "@layout/mainLayOut";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import SearchRecipe from "../../components/searchRecipeCp";
+import SearchRecipe from "@searchRecipeCp";
 
 import styled from "styled-components";
-import { colors } from "../../theme/theme";
+import { colors } from "@theme/theme";
 import { useMemo } from "react";
+
 const SearchRecipePage = () => {
   const params = useParams();
 
@@ -39,7 +40,7 @@ const SearchRecipePage = () => {
   useMemo(() => {
     testAxios();
   }, [search]);
-  
+
   useEffect(() => {
     window.scrollTo({
       top: 0,

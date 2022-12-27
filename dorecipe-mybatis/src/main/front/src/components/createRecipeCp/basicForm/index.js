@@ -1,13 +1,13 @@
 import styled from "styled-components";
-import { useInput } from "../../../hooks/useInput";
-import { useState, useCallback, useEffect, useMemo } from "react";
-import EditDropZone from "../../_common/dropzone";
+import { useInput } from "@hooks/useInput";
+import { useState, useCallback, useEffect } from "react";
+import EditDropZone from "@commonCp/dropzone";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
-import { colors } from "../../../theme/theme";
-import { ReactComponent as Help } from "../../../assets/Help.svg";
+import { colors } from "@theme/theme";
+import { ReactComponent as Help } from "@assets/Help.svg";
 
 const BasicForm = ({
   recipeState,

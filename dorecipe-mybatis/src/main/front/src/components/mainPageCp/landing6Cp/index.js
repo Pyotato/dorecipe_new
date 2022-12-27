@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import styled from "styled-components";
-import { colors } from "../../../theme/theme";
+import { colors } from "@theme/theme";
 import KnowhowMain from "../knowhow";
 const LandingCp6 = () => {
   const section6 = useRef();

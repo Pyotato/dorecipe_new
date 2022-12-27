@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { colors } from "../../../theme/theme";
-import BasicSpinner from "../../_common/loading";
+import { colors } from "@theme/theme";
 
 const RecipeList = ({ recipeState }) => {
   const navigate = useNavigate();

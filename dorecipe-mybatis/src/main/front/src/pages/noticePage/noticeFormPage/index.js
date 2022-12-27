@@ -2,8 +2,8 @@ import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./style.css";
-import { useInput } from "../../../hooks/useInput";
-import MainLayout from "../../../layout/mainLayOut";
+import { useInput } from "@hooks/useInput";
+import MainLayout from "@layout/mainLayOut";
 
 const NoticeUpdatePage = () => {
   let { noticeId } = useParams();

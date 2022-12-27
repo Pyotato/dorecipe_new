@@ -1,7 +1,7 @@
 import { useCallback, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { useInput } from "../../../hooks/useInput";
+import { useInput } from "@hooks/useInput";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 

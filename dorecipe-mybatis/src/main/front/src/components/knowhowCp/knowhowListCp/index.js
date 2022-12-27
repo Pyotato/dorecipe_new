@@ -93,7 +93,7 @@ const KnowhowListCp = () => {
                         width: "100%",
                       }}
                     >
-                      <BasicSpinner />
+                      <BasicSpinner displayState={"block"}/>
                     </div>
                   </Scrollable>
                 </>
