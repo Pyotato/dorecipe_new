@@ -2,13 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-// import "./style.css";
 import MainLayout from "@layout/mainLayOut";
 import { colors } from "@theme/theme";
 
 const KnowhowDetailPage = () => {
   let { knowhowId } = useParams();
-  // const navigate = useNavigate();
+
   const [state, setState] = useState([
     {
       know_num: 0,
@@ -42,12 +41,6 @@ const KnowhowDetailPage = () => {
   useEffect(() => {
     testAxios();
   }, []);
-
-  // console.log(knowhowId);
-  // console.log(state.know_title);
-  // console.log(state.know_creDate);
-  // console.log(state.know_content);
-  // console.log(state.know_path);
 
   return (
     <>

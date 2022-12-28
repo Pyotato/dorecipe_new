@@ -6,7 +6,6 @@ import NoticeDetailPage from "./pages/noticePage/noticeDetailPage";
 import NoticeUpdatePage from "./pages/noticePage/noticeFormPage";
 
 import KnowhowDetailPage from "./pages/knowhowPage/knowhowDetailPage";
-import KnowhowUpdatePage from "./pages/knowhowPage/knowhowFormPage";
 
 import EventPage from "./pages/eventPage";
 import EventDetailPage from "./pages/eventPage/eventDetailPage";
@@ -120,10 +119,7 @@ function App() {
           path={"/knowhow/detail/:knowhowId"}
           element={<KnowhowDetailPage />}
         />
-        <Route
-          path={"/knowhow/update/:knowhowId"}
-          element={<KnowhowUpdatePage />}
-        />
+
         <Route path={"/event/list"} element={<EventPage />} auth={user} />
         <Route path={"/event/detail/:detailId"} element={<EventDetailPage />} />
         <Route path={"/event/update/:detailId"} element={<EventModify />} />

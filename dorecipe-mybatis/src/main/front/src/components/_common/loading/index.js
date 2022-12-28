@@ -19,7 +19,9 @@ const SpinnerWrap = styled.div`
   align-items: center;
   flex-direction: column;
   column-gap: 1em;
+
   & .alt {
+    z-index: 700;
     width: 100%;
     padding-top: ${paddings.padding_base};
     text-align: center;
@@ -28,6 +30,7 @@ const SpinnerWrap = styled.div`
 
 const Spinner = styled.div`
   & {
+    z-index: 700;
     border: 8px solid ${colors.color_milky_white};
     border-top: 8px solid ${colors.color_carrot_orange};
     border-radius: 50%;

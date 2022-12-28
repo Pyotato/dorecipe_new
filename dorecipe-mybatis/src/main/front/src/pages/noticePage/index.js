@@ -19,6 +19,7 @@ const NoticePage = () => {
   ]);
   const user = useSelector((auth) => auth);
   const [BtnState, setBtnState] = useState(user.auth.user);
+
   useEffect(() => {
     if (!user.auth.user) {
       setBtnState(false);

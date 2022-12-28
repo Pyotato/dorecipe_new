@@ -27,14 +27,28 @@ const AdminMenuPage = () => {
     colors.color_beige_brown
   );
 
+  //노하우 업데이트면 업데이트 화면 보이고, 아니면 등록화면 보이도록
+  const [updateOrCreate, setUpdateOrCreateState] = useState([]);
+
+  //로딩 중이면 대기하고, 명시적으로 로딩 중임 보이기
+  const [isLoadingKnowhow, setKnowhowLoadingState] = useState(true);
+
   const user = useSelector((auth) => auth);
-  console.log("auth", user);
+
+  //마운트 시 1번만
   useEffect(() => {
     setNavState(0);
     setNavDisplayState("none");
     setToggleNavState(0);
-    console.log("navState", navState);
-    console.log("auth", user);
+
+    //언마운트 시
+    return () => {
+      //초기화
+      setNavState(0);
+      setNavDisplayState("none");
+      setToggleNavState(0);
+      setUpdateOrCreateState([]);
+    };
   }, []);
 
   return (
@@ -184,10 +198,29 @@ const AdminMenuPage = () => {
                   }}
                 >
                   <div style={{ width: "50%" }}>
-                    <div>
-                      <h2>등록</h2>
-                    </div>
-                    <CreateKnowhowCp />
+                    {updateOrCreate.length === 0 ? (
+                      <>
+                        <div>
+                          <h2>등록</h2>
+                        </div>
+                        <CreateKnowhowCp
+                          isLoadingKnowhow={isLoadingKnowhow}
+                          setKnowhowLoadingState={setKnowhowLoadingState}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <div>
+                          <h2>수정</h2>
+                        </div>
+                        <CreateKnowhowCp
+                          isLoadingKnowhow={isLoadingKnowhow}
+                          setKnowhowLoadingState={setKnowhowLoadingState}
+                          updateOrCreate={updateOrCreate}
+                          setUpdateOrCreateState={setUpdateOrCreateState}
+                        />
+                      </>
+                    )}
                   </div>
                   <div style={{ width: "50%" }}>
                     {" "}
@@ -197,9 +230,13 @@ const AdminMenuPage = () => {
                     <KnowhowListCp
                       navState={navState}
                       setNavState={setNavState}
+                      updateOrCreate={updateOrCreate}
+                      setUpdateOrCreateState={setUpdateOrCreateState}
+                      isLoadingKnowhow={isLoadingKnowhow}
+                      setKnowhowLoadingState={setKnowhowLoadingState}
                     />
                   </div>
-                </div>{" "}
+                </div>
               </div>
             </>
           )}

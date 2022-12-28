@@ -288,27 +288,27 @@
 * `12/19 ~12/21`
 
   * 코드 정리
-  
+
   * css 밀린 거 고치기
-  
+
   * best recipe 가져올때 느린 거 해결 (레시피 번호 가져온 뒤 레시피 정보 가져오기 => join해서 한번에 가져오도록 매퍼 수정)
-  
+
   * 임시수정 버튼 안누르고도 페이지 나갈때 저장할 수 있도록하기
-  
+
   * 레시피 테이블 alter 길이 ++ (더 많이 작성할 수 있도록)
-  
+
     `ALTER TABLE recipe MODIFY COLUMN completion_tip varchar(500) NULL;`
-  
+
   * 레시피 상세 페이지 줄바꿈 반영
-  
+
     * `white-space:pre-line`
-  
+
   * [ ] 리코일 +리액트 쿼리로 변환해보기
-  
+
   * [ ] 타입스크립트 적용해보기 
-  
+
   * [ ] 바벨 설정 공부
-  
+
   * [ ] react-responsive 반응형으로 만들어주자 [깃허브](https://github.com/yocontra/react-responsive)
 
 * 12/23~12/24 (사랑니 발치로 휴식)
@@ -324,10 +324,12 @@
     * dropzone이미지 사이즈 조정
   * 수저 회전 애니메이션 수정
 * `12/26`
+
   * 코드 정리 
     * css관리가 용이해지도록 themeprovider로 지정된 style로 교체 (진행 중)
   * 푸터 디자인 변경
 * `12/27`
+
   * craco 사용 (eject없이 cra 바벨 웹팩 커스텀하기..)
     * 😈상대경로의 지옥에서 탈출....하려고 하니 타입스크립트 사용에 관해서도  앞당겨질 듯싶다
       * 참고 사이트들
@@ -339,4 +341,22 @@
   * 로더 만들고 bootstrap 제거하기
     * 로딩바 돌다가 데이터 랜더링 직전에 잠깐 초기화시켜줬던 state값이 랜더링 되는 오류 해결 (loadingState 추가)
       * 데이터 불러오는 모든 컴포넌트들 전부..
+
+* `12/28`
+
+  * 관리자페이지 
+    * 노하우 페이지
+      * 노하우 등록 컴포넌트 수정
+        * 수정 & 등록 화면 
+
+      * 백엔드 : update controller 수정 (파람 추가 + setter함수로 파람 vo 넘겨주기)
+      * 이미지 수정없이 보낼때 undefined으로 삽입되는 문제 해결
+      * 노하우 수정 후 리스트 리랜더링하도록
+      * 노하우 페이지 css 수정
+        * 모달창(로딩시)
+        * 코드 정리
+
+    * `Warning: A component is changing an uncontrolled input of type undefined to be controlled. Input elements should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled input element for the lifetime of the component.` 경고
+      * [해결](https://mik-a.com/62)
+
 

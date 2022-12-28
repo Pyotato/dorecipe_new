@@ -1,7 +1,16 @@
-import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { colors } from "@theme/theme";
 
-const KnowhowList = ({ removePost, state, BtnState }) => {
+const KnowhowList = ({
+  removePost,
+  state,
+  BtnState,
+  updateOrCreate,
+  setUpdateOrCreateState,
+}) => {
   const navigate = useNavigate();
   const removePostOnclick = () => {
     removePost(state.know_num);
@@ -11,15 +20,24 @@ const KnowhowList = ({ removePost, state, BtnState }) => {
     navigate(`/knowhow/detail/${state.know_num}`);
   };
 
+  const onEditKnowhow = useCallback(() => {
+    axios
+      .get(`http://localhost:9000/knowhow/detail/${state.know_num}`)
+      .then(function (response) {
+        setUpdateOrCreateState(response.data);
+      })
+      .catch((err) => console.log(err));
+  }, [state.know_num]);
+
   return (
     <>
-      <li>
+      <ListWrap>
         <div style={{ width: "5%" }} className="noticeNo">
           {state.know_num}
         </div>
 
         <span
-          className="noticeTitle"
+          className="noticeTitle cursorWhenHover"
           style={{ width: "50%" }}
           onClick={onClickKnowhowList}
         >
@@ -36,25 +54,32 @@ const KnowhowList = ({ removePost, state, BtnState }) => {
         {BtnState && (
           <div className="updateOrDelete" style={{ width: "20%" }}>
             <span
-              className="updateList listItem"
-              onClick={() => navigate(`/event/update/${state.event_num}`)}
+              className="updateList listItem hoverEffect"
+              onClick={onEditKnowhow}
             >
               수정
             </span>
-            <span className="deleteList listItem" onClick={removePostOnclick}>
+            <span
+              className="deleteList listItem hoverEffect"
+              onClick={removePostOnclick}
+            >
               삭제
             </span>
           </div>
         )}
-      </li>
+      </ListWrap>
     </>
   );
 };
 
 export default KnowhowList;
 
-const KnowHowListWrap = styled.li`
-  & .knowTitle:hover {
+const ListWrap = styled.li`
+  & .hoverEffect:hover {
+    background-color: ${colors.color_carrot_orange};
+    cursor: pointer;
+  }
+  & .cursorWhenHover:hover {
     cursor: pointer;
   }
 `;

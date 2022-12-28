@@ -4,11 +4,16 @@ import KnowhowList from "./knowhowList";
 import axios from "axios";
 import styled from "styled-components";
 import { useMemo } from "react";
-import { colors } from "../../../theme/theme";
-import BasicSpinner from "../../_common/loading";
+import { colors } from "@theme/theme";
+import BasicSpinner from "@commonCp/loading";
 import { useSelector } from "react-redux";
 
-const KnowhowListCp = () => {
+const KnowhowListCp = ({
+  updateOrCreate,
+  setUpdateOrCreateState,
+  isLoadingKnowhow,
+  setKnowhowLoadingState,
+}) => {
   const [state, setState] = useState([
     {
       know_num: 0,
@@ -18,31 +23,44 @@ const KnowhowListCp = () => {
       know_path: "",
     },
   ]);
+
   const user = useSelector((auth) => auth);
+
+  //관리자가 아니라면 버튼이 보이지 않도록
   const [BtnState, setBtnState] = useState(user.auth.user);
+
   useEffect(() => {
     if (!user.auth.user) {
       setBtnState(false);
       return;
-    } else {
-      console.log("BtnState", user.auth.user.roles.includes("ROLE_ADMIN"));
-      setBtnState(user.auth.user.roles.includes("ROLE_ADMIN"));
     }
   }, []);
+
+  //언마운트 시 수정에서 등록으로 초기화
+  useEffect(() => {
+    setKnowhowLoadingState(false);
+    return () => {
+      setUpdateOrCreateState([]);
+    };
+  }, []);
+
   useEffect(() => {
     axios
-      .get({
-        baseURL: "http://localhost:9000/knowhow/list",
-      })
+      .get("http://localhost:9000/knowhow/list")
       .then(function (response) {
         setState(response.data);
-      });
+      })
+      .catch((err) => console.log("useEffect", err));
   }, []);
 
   useMemo(() => {
     axios
       .get("http://localhost:9000/knowhow/list")
-      .then((res) => setState(res.data));
+      .then((res) => {
+        setState(res.data);
+      })
+      // .then(() => setKnowhowLoadingState(false))
+      .catch((err) => console.log("useMemo", err));
   }, [state]);
 
   const removePost = useCallback(
@@ -93,7 +111,7 @@ const KnowhowListCp = () => {
                         width: "100%",
                       }}
                     >
-                      <BasicSpinner displayState={"block"}/>
+                      <BasicSpinner displayState={"block"} />
                     </div>
                   </Scrollable>
                 </>
@@ -107,6 +125,9 @@ const KnowhowListCp = () => {
                           removePost={removePost}
                           state={e}
                           BtnState={BtnState}
+                          setState={setState}
+                          updateOrCreate={updateOrCreate}
+                          setUpdateOrCreateState={setUpdateOrCreateState}
                         />
                       ))}
                     </div>

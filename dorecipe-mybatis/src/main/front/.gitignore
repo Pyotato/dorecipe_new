@@ -22,3 +22,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# 이미지 파일
+/img/recipe/thumbnail
+/img/recipe/steps
+/img/recipe/completed

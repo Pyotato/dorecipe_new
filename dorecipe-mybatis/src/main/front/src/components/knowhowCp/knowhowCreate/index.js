@@ -1,12 +1,18 @@
 import axios from "axios";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
-import { useInput } from "../../../hooks/useInput";
-import { colors } from "../../../theme/theme";
+import { useInput } from "@hooks/useInput";
+import { colors } from "@theme/theme";
 import Dropzone from "react-dropzone";
-import { ReactComponent as UploadFile } from "../../../assets/UploadFile.svg";
+import { ReactComponent as UploadFile } from "@assets/UploadFile.svg";
+import BasicSpinner from "@commonCp/loading";
 
-const CreateKnowhowCp = () => {
+const CreateKnowhowCp = ({
+  updateOrCreate,
+  setUpdateOrCreateState,
+  isLoadingKnowhow,
+  setKnowhowLoadingState,
+}) => {
   const [error, setError] = useState(null);
 
   const knowHowData1 = useRef();
@@ -19,66 +25,40 @@ const CreateKnowhowCp = () => {
   const [KnowFiles, setKnowFiles] = useState("");
   const [toggleState, setToggleState] = useState(0);
   const [previewstate, setPreviewState] = useState("");
+  const [know_num, setKnowNum] = useState();
 
-  const insertKnowhowPost = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (know_title === "") {
-        knowHowData1.current.focus();
-      } else if (know_content === "") {
-        knowHowData2.current.focus();
-      } else {
-        const KnowData = {
-          know_title: `${know_title}`,
-          know_content: `${know_content}`,
-          know_path: KnowFiles.name,
-        };
+  useMemo(() => {
+    if (updateOrCreate !== undefined) {
+      setKnowhowTitle(updateOrCreate.know_title);
+      setKnowhowContent(updateOrCreate.know_content);
+      setKnowhowPath(updateOrCreate.know_path);
+      setKnowFiles("");
+      setKnowNum(updateOrCreate.know_num);
+      return;
+    }
+  }, [updateOrCreate]);
 
-        const KnowBlob = new Blob([JSON.stringify(KnowData)], {
-          type: "application/json",
-        });
-
-        const KnowFormData = new FormData();
-        KnowFormData.append("data", KnowBlob);
-        KnowFormData.append("know_title", KnowData.know_title);
-        KnowFormData.append("know_content", KnowData.know_content);
-        KnowFormData.append("know_path", KnowData.know_path);
-
-        KnowFormData.append("know_image", KnowFiles); //이미지 파일
-
-        axios({
-          method: "post",
-          baseURL: "http://localhost:9000",
-          url: "/knowhow/insert",
-          // url: process.env.REACT_APP_HOST + "/knowhow/insert",
-          headers: { "Content-Type": "multipart/form-data" },
-          data: KnowFormData,
-        }).then(() => {
-          knowHowData1.current.value = "";
-          knowHowData2.current.value = "";
-          setKnowFiles("");
-          setKnowhowPath("");
-          alert("노하우가 등록되었습니다.");
-        });
-      }
-    },
-    [know_path, know_content, know_title, KnowFiles]
-  );
+  useCallback(() => {
+    setKnowhowTitle("");
+    setKnowhowContent("");
+    setKnowFiles("");
+    setKnowhowPath("");
+  }, [updateOrCreate]);
 
   const onPreviewDelete = useCallback(() => {
     setPreviewState("");
     setKnowFiles("");
     setKnowhowPath("");
+    setToggleState(0);
   }, [KnowFiles]);
 
   const onDropHandler = useCallback(
     (files) => {
       files.forEach((file) => {
         const reader = new FileReader();
-        reader.onabort = () => console.log("파일 읽기 취소");
-        reader.onerror = () => console.log("파일 읽기 실패");
         reader.readAsDataURL(file);
         setKnowFiles(file);
+        setKnowhowPath(file.name);
       });
 
       setPreviewState(
@@ -95,64 +75,215 @@ const CreateKnowhowCp = () => {
   const onLoadImgFile = (e) => {
     onChangeKnowhowPath(e);
   };
+
+  const insertKnowhowPost = useCallback(
+    (e) => {
+      e.preventDefault();
+
+      setKnowhowLoadingState(true);
+      if (know_title === "") {
+        knowHowData1.current.focus();
+        return;
+      } else if (know_content === "") {
+        knowHowData2.current.focus();
+        return;
+      } else {
+        const KnowData = {
+          know_title: `${know_title}`,
+          know_content: `${know_content}`,
+          know_path: KnowFiles.name,
+        };
+
+        const KnowBlob = new Blob([JSON.stringify(KnowData)], {
+          type: "application/json",
+        });
+
+        const KnowFormData = new FormData();
+        KnowFormData.append("data", KnowBlob);
+        KnowFormData.append("know_title", KnowData.know_title);
+        KnowFormData.append("know_content", KnowData.know_content);
+        KnowFormData.append("know_path", KnowData.know_path);
+        KnowFormData.append("know_image", KnowFiles); //이미지 파일
+
+        axios({
+          method: "post",
+          baseURL: "http://localhost:9000",
+          url: "/knowhow/insert",
+          // url: process.env.REACT_APP_HOST + "/knowhow/insert",
+          headers: { "Content-Type": "multipart/form-data" },
+          data: KnowFormData,
+        })
+          .then(() => {
+            alert("노하우가 등록되었습니다.");
+          })
+          .catch((err) => console.log("노하우등록실패", err));
+      }
+    },
+    [know_path, know_content, know_title, KnowFiles]
+  );
+
+  const onUpdateKnowhowPost = useCallback(
+    (e) => {
+      e.preventDefault();
+
+      if (know_title === "") {
+        knowHowData1.current.focus();
+        return;
+      } else if (know_content === "") {
+        knowHowData2.current.focus();
+        return;
+      } else {
+        const KnowData = {
+          know_num: `${know_num}`,
+          know_title: `${know_title}`,
+          know_content: `${know_content}`,
+          know_path:
+            know_path !== updateOrCreate.know_path
+              ? KnowFiles.name
+              : `${know_path}`,
+        };
+
+        const KnowBlob = new Blob([JSON.stringify(KnowData)], {
+          type: "application/json",
+        });
+
+        const KnowFormData = new FormData();
+        KnowFormData.append("data", KnowBlob);
+        KnowFormData.append("know_num", KnowData.know_num);
+        KnowFormData.append("know_title", KnowData.know_title);
+        KnowFormData.append("know_content", KnowData.know_content);
+        KnowFormData.append("know_path", KnowData.know_path);
+        // //만약 새로운 이미지 등록한다면
+        if (KnowData.know_path !== updateOrCreate.know_path) {
+          KnowFormData.append("know_image", KnowFiles);
+        }
+
+        setKnowhowLoadingState(true);
+
+        axios({
+          method: "post",
+          url: "http://localhost:9000/knowhow/update",
+          headers: { "Content-Type": "multipart/form-data" },
+          data: KnowFormData,
+        })
+          .then((res) => {
+            console.log("onUpdateKnowhowPost", res.data);
+            setKnowhowContent("");
+            setKnowhowTitle("");
+            setKnowFiles("");
+            setKnowhowPath("");
+            setKnowhowLoadingState(true);
+            setUpdateOrCreateState([]);
+
+            //alert 닫고나서 로딩모달 닫아주기
+            if (!alert("노하우가 수정되었습니다.")) {
+              setKnowhowLoadingState(false);
+            }
+          })
+
+          .catch((err) => console.log("노하우 수정 실패", err));
+      }
+    },
+    [know_num, know_path, know_content, know_title, KnowFiles, updateOrCreate]
+  );
+
+  // console.log("isLoadingKnowhow", isLoadingKnowhow);
   return (
     <>
       {previewstate.length > 0 && toggleState === 1 && (
-        <div
-          style={{
-            width: "100%",
-            backgroundColor: "black",
-            height: "100vh",
-            position: "absolute",
-            top: "0",
-            left: "0",
-            opacity: "0.4",
-            zIndex: "600",
-          }}
-        >
-          {" "}
-        </div>
+        <ModalBackground></ModalBackground>
       )}
+
+      {isLoadingKnowhow && (
+        <>
+          <ModalItem>
+            <BasicSpinner />
+          </ModalItem>
+          <ModalBackground></ModalBackground>
+        </>
+      )}
+      {updateOrCreate !== undefined &&
+        know_path !== "" &&
+        toggleState === 1 && <ModalBackground></ModalBackground>}
       <Wrap>
+        {updateOrCreate !== undefined && (
+          <div className="flexWrap" style={{ alignItems: "flex-start" }}>
+            <div className="infoName">글 번호</div>
+            <div className="inputItem">{know_num}</div>
+          </div>
+        )}
         <div>
           <div className="flexWrap" style={{ alignItems: "flex-start" }}>
-            <div className="title" style={{ margin: 0 }}>
-              제목 {know_title.length === 0 && <WarningMsg>필수</WarningMsg>}
+            <div className="infoName">
+              제목 {know_title === "" && <WarningMsg>필수</WarningMsg>}
             </div>
+
             <div className="inputItem">
-              <input
-                style={{ margin: 0 }}
-                className="text"
-                name="know_title"
-                ref={knowHowData1}
-                required
-                type="text"
-                placeholder=" 제목을 입력해주세요"
-                onChange={onChangeKnowhowTitle}
-              />
+              {updateOrCreate !== undefined ? (
+                <input
+                  style={{ margin: 0 }}
+                  className="text"
+                  name="know_title"
+                  ref={knowHowData1}
+                  value={know_title || ""}
+                  required
+                  type="text"
+                  placeholder=" 제목을 입력해주세요"
+                  onChange={onChangeKnowhowTitle}
+                />
+              ) : (
+                <input
+                  style={{ margin: 0 }}
+                  className="text"
+                  name="know_title"
+                  ref={knowHowData1}
+                  value={know_title || ""}
+                  required
+                  type="text"
+                  placeholder=" 제목을 입력해주세요"
+                  onChange={onChangeKnowhowTitle}
+                />
+              )}
             </div>
           </div>
         </div>
         <div className="flexWrap">
-          <div className="title">
-            내용 {know_content.length === 0 && <WarningMsg>필수</WarningMsg>}
+          <div className="infoName">
+            내용 {know_content === "" && <WarningMsg>필수</WarningMsg>}
           </div>
-          <textarea
-            className="content"
-            placeholder=" 내용을 입력해주세요"
-            required
-            name="know_content"
-            ref={knowHowData2}
-            onChange={onChangeKnowhowContent}
-          ></textarea>
+
+          {updateOrCreate !== undefined ? (
+            <textarea
+              className="content"
+              placeholder=" 내용을 입력해주세요"
+              required
+              name="know_content"
+              ref={knowHowData2}
+              value={know_content || ""}
+              onChange={onChangeKnowhowContent}
+            ></textarea>
+          ) : (
+            <textarea
+              className="content"
+              placeholder=" 내용을 입력해주세요"
+              required
+              name="know_content"
+              ref={knowHowData2}
+              value={know_content || ""}
+              onChange={onChangeKnowhowContent}
+            ></textarea>
+          )}
         </div>{" "}
         <div className="flexWrap">
-          <div className="title">파일 첨부</div>
+          <div className="infoName">파일 첨부</div>
           <div className="inputItem fileDropZonWrap">
             <Dropzone onDrop={onDropHandler}>
               {({ getRootProps, getInputProps }) => (
                 <>
-                  {previewstate.length > 0 ? (
+                  {previewstate.length > 0 ||
+                  (updateOrCreate !== undefined &&
+                    know_path !== "" &&
+                    know_path !== "undefined") ? (
                     <>
                       {toggleState === 0 ? (
                         <div
@@ -164,27 +295,8 @@ const CreateKnowhowCp = () => {
                       ) : (
                         <>
                           <div style={{ overflow: "hidden" }}>
-                            <div
-                              style={{
-                                padding: "2vw",
-                                zIndex: "600",
-                                position: "absolute",
-                                top: "50vh",
-                                left: "50vw",
-                                transform: "translate(-50%,-50%)",
-                                backgroundColor: "white",
-                                borderRadius: "1vw",
-                              }}
-                            >
-                              {" "}
-                              <div
-                                className="removeFile hoverCursor"
-                                style={{
-                                  color: "red",
-                                  fontSize: "1em",
-                                  zIndex: "650",
-                                }}
-                              >
+                            <div className="imgModalWrap">
+                              <div className="removeFile hoverCursor">
                                 <span onClick={() => onPreviewDelete()}>
                                   [ 파일 삭제 ]
                                 </span>
@@ -202,16 +314,45 @@ const CreateKnowhowCp = () => {
                                   [ 닫기 ]
                                 </span>
                               </div>
+                              {/* <div className="removeFile hoverCursor">
+                                <span onClick={() => onPreviewDelete()}>
+                                  [ 파일 삭제 ]
+                                </span>
+                              </div> */}
                               <div>
-                                <img
-                                  className="hoverCursor imgDeleteOpacity"
-                                  onClick={() => onPreviewDelete()}
-                                  src={previewstate[0].preview}
-                                  style={{
-                                    maxWidth: "30em",
-                                  }}
-                                  alt="프로필 이미지"
-                                />{" "}
+                                {updateOrCreate !== undefined ? (
+                                  know_path === updateOrCreate.know_path ? (
+                                    <img
+                                      className="hoverCursor imgDeleteOpacity"
+                                      onClick={() => onPreviewDelete()}
+                                      src={know_path}
+                                      style={{
+                                        maxWidth: "30em",
+                                      }}
+                                      alt={know_path}
+                                    />
+                                  ) : (
+                                    <img
+                                      className="hoverCursor imgDeleteOpacity"
+                                      onClick={() => onPreviewDelete()}
+                                      src={previewstate[0].preview}
+                                      style={{
+                                        maxWidth: "30em",
+                                      }}
+                                      alt={previewstate[0].preview}
+                                    />
+                                  )
+                                ) : (
+                                  <img
+                                    className="hoverCursor imgDeleteOpacity"
+                                    onClick={() => onPreviewDelete()}
+                                    src={previewstate[0].preview}
+                                    style={{
+                                      maxWidth: "30em",
+                                    }}
+                                    alt="프로필 이미지"
+                                  />
+                                )}
                               </div>
                             </div>
                           </div>
@@ -235,20 +376,47 @@ const CreateKnowhowCp = () => {
             </Dropzone>
           </div>
         </div>
-        <button
-          type="button"
-          disabled={error}
-          className="submitBtn"
-          onClick={insertKnowhowPost}
-          style={{ marginBottom: "9vh" }}
-        >
-          등록
-        </button>
+        {updateOrCreate !== undefined ? (
+          <button
+            type="button"
+            disabled={error}
+            className="submitBtn hoverEffect"
+            onClick={onUpdateKnowhowPost}
+          >
+            수정
+          </button>
+        ) : (
+          <button
+            type="button"
+            disabled={error}
+            className="submitBtn hoverEffect"
+            onClick={insertKnowhowPost}
+          >
+            등록
+          </button>
+        )}
       </Wrap>
     </>
   );
 };
 export default CreateKnowhowCp;
+
+const ModalBackground = styled.div`
+  width: 100%;
+  background-color: ${colors.color_black};
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.4;
+  z-index: 600;
+`;
+const ModalItem = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+`;
+
 const WarningMsg = styled.span`
   color: ${colors.color_carrot_orange};
   margin-left: 1vw;
@@ -258,7 +426,7 @@ const Wrap = styled.div`
   width: 100%;
 
   & h1 {
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid ${colors.color_greyish_beige_brown};
     padding-bottom: 1vh;
   }
 
@@ -270,7 +438,7 @@ const Wrap = styled.div`
     align-items: center;
   }
 
-  & .title {
+  & .infoName {
     width: 20%;
   }
   & .inputItem {
@@ -296,22 +464,24 @@ const Wrap = styled.div`
     width: 80%;
     background-color: ${colors.color_beige_white};
     padding: 1vw;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
   }
   & button {
     background-color: ${colors.color_milktea_brown};
     color: ${colors.color_beige_white};
     float: right;
-    margin-right: 4.5vw;
-    margin-top: 1vh;
+    margin: 1vh 4.5vw 9vh;
     padding: 0.5vw;
     border-radius: 0.5vw;
     border: 1px solid transparent;
-    &:hover {
-      background-color: ${colors.color_carrot_orange};
-      cursor: pointer;
-    }
   }
-
+  & .hoverEffect:hover {
+    background-color: ${colors.color_carrot_orange};
+    cursor: pointer;
+  }
   & .hoverCursor:hover {
     cursor: pointer;
   }
@@ -328,5 +498,27 @@ const Wrap = styled.div`
 
   & .imgDeleteOpacity:hover {
     opacity: 0.4;
+  }
+
+  & .imgModalWrap {
+    padding: 2vw;
+    z-index: 600;
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    background-color: ${colors.color_white};
+    border-radius: 1vw;
+  }
+
+  & .removeFile {
+    padding: 13% 0;
+    color: red;
+    font-size: 1em;
+    z-index: 650;
+    height: 39%;
+    -webkit-transform: translate(-50%, 50%);
+    -ms-transform: translate(-50%, 50%);
+    clear: both;
   }
 `;
