@@ -9,7 +9,7 @@ import KnowhowDetailPage from "./pages/knowhowPage/knowhowDetailPage";
 
 import EventPage from "./pages/eventPage";
 import EventDetailPage from "./pages/eventPage/eventDetailPage";
-import EventModify from "./pages/eventPage/eventModPage";
+// import EventModify from "./pages/eventPage/eventModPage";
 
 import MyPage from "./pages/myPage";
 import AdminPostMng from "./pages/adminPage";
@@ -122,7 +122,7 @@ function App() {
 
         <Route path={"/event/list"} element={<EventPage />} auth={user} />
         <Route path={"/event/detail/:detailId"} element={<EventDetailPage />} />
-        <Route path={"/event/update/:detailId"} element={<EventModify />} />
+        {/* <Route path={"/event/update/:detailId"} element={<EventModify />} /> */}
 
         <Route path={"/join"} element={<JoinMemberPage />} />
 

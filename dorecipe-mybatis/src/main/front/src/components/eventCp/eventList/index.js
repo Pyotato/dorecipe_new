@@ -7,7 +7,12 @@ import { colors } from "@theme/theme";
 import { useMemo } from "react";
 import BasicSpinner from "@commonCp/loading";
 
-const EventList = () => {
+const EventList = ({
+  isLoadingEvent,
+  setEventLoadingState,
+  updateOrCreate,
+  setUpdateOrCreateState,
+}) => {
   const [state, setState] = useState([
     {
       event_num: 0,
@@ -93,6 +98,10 @@ const EventList = () => {
                       {state.map((e) => (
                         <EventListItems
                           key={e.event_num}
+                          isLoadingEvent={isLoadingEvent}
+                          setEventLoadingState={setEventLoadingState}
+                          updateOrCreate={updateOrCreate}
+                          setUpdateOrCreateState={setUpdateOrCreateState}
                           removePost={removePost}
                           BtnState={BtnState}
                           state={e}

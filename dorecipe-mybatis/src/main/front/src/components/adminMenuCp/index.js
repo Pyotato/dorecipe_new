@@ -3,7 +3,7 @@ import { ReactComponent as Knowhow } from "@assets/Knowhow.svg";
 import { ReactComponent as EventBoard } from "@assets/EventBoard.svg";
 import { ReactComponent as Notice } from "@assets/Notice.svg";
 import { ReactComponent as Home } from "@assets/Home.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 
 import EventList from "@eventCp/eventList";
@@ -32,6 +32,8 @@ const AdminMenuPage = () => {
 
   //로딩 중이면 대기하고, 명시적으로 로딩 중임 보이기
   const [isLoadingKnowhow, setKnowhowLoadingState] = useState(true);
+  const [isLoadingEvent, setEventLoadingState] = useState(false);
+  // const [isLoadingEvent, setEventLoadingState] = useState(true);
 
   const user = useSelector((auth) => auth);
 
@@ -50,6 +52,11 @@ const AdminMenuPage = () => {
       setUpdateOrCreateState([]);
     };
   }, []);
+
+  //관리하려는 항목 달라질때 수정 업데이트 초기화
+  useMemo(() => {
+    setUpdateOrCreateState([]);
+  }, [navState]);
 
   return (
     <>
@@ -169,18 +176,48 @@ const AdminMenuPage = () => {
                     width: "100%",
                   }}
                 >
-                  <div style={{ width: "50%" }}>
+                  {/* <div style={{ width: "50%" }}>
                     <div>
                       <h2>등록</h2>
                     </div>
                     <CreateEventCp />
+                  </div> */}
+                  <div style={{ width: "50%" }}>
+                    {updateOrCreate.length === 0 ? (
+                      <>
+                        <div>
+                          <h2>등록</h2>
+                        </div>
+                        <CreateEventCp
+                          isLoadingEvent={isLoadingEvent}
+                          setEventLoadingState={setEventLoadingState}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <div>
+                          <h2>수정</h2>
+                        </div>
+                        <CreateEventCp
+                          isLoadingEvent={isLoadingEvent}
+                          setEventLoadingState={setEventLoadingState}
+                          updateOrCreate={updateOrCreate}
+                          setUpdateOrCreateState={setUpdateOrCreateState}
+                        />
+                      </>
+                    )}
                   </div>
                   <div style={{ width: "50%" }}>
                     {" "}
                     <div>
                       <h2>목록</h2>
                     </div>
-                    <EventList />
+                    <EventList
+                      updateOrCreate={updateOrCreate}
+                      setUpdateOrCreateState={setUpdateOrCreateState}
+                      isLoadingEvent={isLoadingEvent}
+                      setEventLoadingState={setEventLoadingState}
+                    />
                   </div>
                 </div>{" "}
               </div>

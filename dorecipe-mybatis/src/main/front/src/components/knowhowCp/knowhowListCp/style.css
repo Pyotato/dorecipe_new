@@ -56,7 +56,6 @@ h2 {
 .updateList,
 .deleteList {
   width: 3em;
-  /* width: 15%; */
   height: 2em;
   text-decoration: none;
   border: 1px solid #ad939156;

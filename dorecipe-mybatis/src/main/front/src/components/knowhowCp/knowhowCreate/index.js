@@ -4,6 +4,11 @@ import styled from "styled-components";
 import { useInput } from "@hooks/useInput";
 import { colors } from "@theme/theme";
 import Dropzone from "react-dropzone";
+
+// Warning: </static/media/UploadFile.18ffe785eb682d6b9db69f32136ffd34.svg /> is using incorrect casing. Use PascalCase for React components, or lowercase for HTML elements.
+//     at /static/media/UploadFile.18ffe785eb682d6b9db69f32136ffd34.svg 에러뜸..
+// import UploadFile from "@assets/UploadFile.svg";
+
 import { ReactComponent as UploadFile } from "@assets/UploadFile.svg";
 import BasicSpinner from "@commonCp/loading";
 
@@ -13,8 +18,6 @@ const CreateKnowhowCp = ({
   isLoadingKnowhow,
   setKnowhowLoadingState,
 }) => {
-  const [error, setError] = useState(null);
-
   const knowHowData1 = useRef();
   const knowHowData2 = useRef();
 
@@ -34,6 +37,7 @@ const CreateKnowhowCp = ({
       setKnowhowPath(updateOrCreate.know_path);
       setKnowFiles("");
       setKnowNum(updateOrCreate.know_num);
+
       return;
     }
   }, [updateOrCreate]);
@@ -296,11 +300,11 @@ const CreateKnowhowCp = ({
                         <>
                           <div style={{ overflow: "hidden" }}>
                             <div className="imgModalWrap">
-                              <div className="removeFile hoverCursor">
+                              {/* <div className="removeFile hoverCursor">
                                 <span onClick={() => onPreviewDelete()}>
                                   [ 파일 삭제 ]
                                 </span>
-                              </div>
+                              </div> */}
                               <div
                                 style={{
                                   float: "right",
@@ -314,44 +318,55 @@ const CreateKnowhowCp = ({
                                   [ 닫기 ]
                                 </span>
                               </div>
-                              {/* <div className="removeFile hoverCursor">
-                                <span onClick={() => onPreviewDelete()}>
-                                  [ 파일 삭제 ]
-                                </span>
-                              </div> */}
+
                               <div>
                                 {updateOrCreate !== undefined ? (
                                   know_path === updateOrCreate.know_path ? (
-                                    <img
-                                      className="hoverCursor imgDeleteOpacity"
-                                      onClick={() => onPreviewDelete()}
-                                      src={know_path}
-                                      style={{
-                                        maxWidth: "30em",
-                                      }}
-                                      alt={know_path}
-                                    />
+                                    <>
+                                      <div
+                                        onClick={() => onPreviewDelete()}
+                                        className="removeFile hoverCursor"
+                                      >
+                                        [ 파일 삭제 ]
+                                      </div>
+                                      <img
+                                        className="hoverCursor imgDeleteOpacity previewImg"
+                                        onClick={() => onPreviewDelete()}
+                                        src={know_path}
+                                        alt={know_path}
+                                      />
+                                    </>
                                   ) : (
-                                    <img
-                                      className="hoverCursor imgDeleteOpacity"
-                                      onClick={() => onPreviewDelete()}
-                                      src={previewstate[0].preview}
-                                      style={{
-                                        maxWidth: "30em",
-                                      }}
-                                      alt={previewstate[0].preview}
-                                    />
+                                    <>
+                                      <div
+                                        onClick={() => onPreviewDelete()}
+                                        className="removeFile hoverCursor"
+                                      >
+                                        [ 파일 삭제 ]
+                                      </div>
+                                      <img
+                                        className="hoverCursor imgDeleteOpacity previewImg"
+                                        onClick={() => onPreviewDelete()}
+                                        src={previewstate[0].preview}
+                                        alt={previewstate[0].preview}
+                                      />
+                                    </>
                                   )
                                 ) : (
-                                  <img
-                                    className="hoverCursor imgDeleteOpacity"
-                                    onClick={() => onPreviewDelete()}
-                                    src={previewstate[0].preview}
-                                    style={{
-                                      maxWidth: "30em",
-                                    }}
-                                    alt="프로필 이미지"
-                                  />
+                                  <>
+                                    <div
+                                      onClick={() => onPreviewDelete()}
+                                      className="removeFile hoverCursor"
+                                    >
+                                      [ 파일 삭제 ]
+                                    </div>
+                                    <img
+                                      className="hoverCursor imgDeleteOpacity previewImg"
+                                      onClick={() => onPreviewDelete()}
+                                      src={previewstate[0].preview}
+                                      alt="프로필 이미지"
+                                    />
+                                  </>
                                 )}
                               </div>
                             </div>
@@ -379,7 +394,7 @@ const CreateKnowhowCp = ({
         {updateOrCreate !== undefined ? (
           <button
             type="button"
-            disabled={error}
+            disabled={isLoadingKnowhow}
             className="submitBtn hoverEffect"
             onClick={onUpdateKnowhowPost}
           >
@@ -388,7 +403,7 @@ const CreateKnowhowCp = ({
         ) : (
           <button
             type="button"
-            disabled={error}
+            disabled={isLoadingKnowhow}
             className="submitBtn hoverEffect"
             onClick={insertKnowhowPost}
           >
@@ -500,6 +515,11 @@ const Wrap = styled.div`
     opacity: 0.4;
   }
 
+  & .previewImg {
+    max-width: 30em;
+    max-height: 20em;
+  }
+
   & .imgModalWrap {
     padding: 2vw;
     z-index: 600;
@@ -512,13 +532,10 @@ const Wrap = styled.div`
   }
 
   & .removeFile {
-    padding: 13% 0;
     color: red;
     font-size: 1em;
     z-index: 650;
-    height: 39%;
-    -webkit-transform: translate(-50%, 50%);
-    -ms-transform: translate(-50%, 50%);
+    position: absolute;
     clear: both;
   }
 `;
