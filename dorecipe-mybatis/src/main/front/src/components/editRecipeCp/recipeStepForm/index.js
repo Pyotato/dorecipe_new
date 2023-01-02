@@ -616,7 +616,7 @@ const RecipeOrderDrag = ({
             width: "100%",
           }}
         >
-          <DraggableWrap>
+          <div>
             <DroppableDiv droppable="true">
               {stepState.map((item, index, e) => {
                 return (
@@ -750,7 +750,7 @@ const RecipeOrderDrag = ({
                 );
               })}
             </DroppableDiv>
-          </DraggableWrap>
+          </div>
           <BtnWrap>
             {/* <BtnWrap style={{ transform: "translateY(200%)" }}> */}
             <Btn onClick={handleAddedSteps}>
@@ -771,7 +771,6 @@ export default RecipeOrderDrag;
 
 const TotalWrap = styled.div`
   margin: 0 auto;
-  font-family: "mainFont";
 
   & .previousImgHover:hover {
     opacity: 0.2;
@@ -784,9 +783,7 @@ const TotalWrap = styled.div`
   }
 `;
 
-const DraggableWrap = styled.div`
-  font-family: "mainFont";
-`;
+const DraggableWrap = styled.div``;
 
 const DroppableDiv = styled.div`
   height: 100%;
@@ -803,7 +800,6 @@ const DroppableDiv = styled.div`
   }
 
   & .textArea {
-    font-family: "mainFont";
     border-radius: 0.5vw;
     height: 18vh;
     width: 30vw;

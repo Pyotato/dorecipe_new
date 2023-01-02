@@ -1,12 +1,16 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import axios from "axios";
 import { colors } from "@theme/theme";
 import BasicSpinner from "@commonCp/loading";
 
+import { useQuery } from "react-query";
+import api from "../../../services/api";
+
 const BestRecipe = () => {
+  const navigate = useNavigate();
+
   const [state, setState] = useState([
     {
       recipe_rank: 1,
@@ -89,51 +93,38 @@ const BestRecipe = () => {
       information_time: "",
     },
   ]);
-  const navigate = useNavigate();
-  const [recipeArrayState, setRecipeArrayState] = useState([]);
-  const [loadingState, setLoadingState] = useState(1);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:9000/recipe/getBestRecipes")
-      .then((result) => {
-        for (let i = 0; i < result.data.length; i++) {
-          recipeArrayState.push(result.data[i].recipe_num);
-        }
-        setRecipeArrayState(recipeArrayState);
-        setState(result.data);
-        console.log("getBestRecipes", result.data);
-      })
-      .then(() => {
-        setLoadingState(0);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, []);
+  const { status, data, error } = useQuery(["bestRecipes"], () =>
+    api.get("/recipe/getBestRecipes").then((data) => setState(data.data), {
+      refetchOnWindowFocus: true,
+      retry: 0,
+    })
+  );
 
   return (
     <>
       <BestRecipeWrap>
-        <TotalWrap className="top">
-          {state.map((e, index) => {
-            return (
-              index < 5 && (
-                <div className="itemWrap" key={index}>
-                  <div
-                    className="flexItem "
-                    onClick={() => {
-                      navigate(`/recipe/search/details/${e.recipe_num}`);
-                    }}
-                  >
-                    {" "}
-                    <RecipeRank>{index + 1}</RecipeRank>{" "}
-                    {loadingState === 1 ? (
-                      <div className="loaderWrap">
-                        <BasicSpinner displayState={"block"} />
-                      </div>
-                    ) : (
-                      <>
+        {status === "loading" ? (
+          <div className="loaderTotalWrap">
+            <div className="loaderWrap">
+              <BasicSpinner displayState={"block"} />
+            </div>
+          </div>
+        ) : (
+          <>
+            <TotalWrap className="top">
+              {state.map((e, index) => {
+                return (
+                  index < 5 && (
+                    <div className="itemWrap" key={index}>
+                      <div
+                        className="flexItem "
+                        onClick={() => {
+                          navigate(`/recipe/search/details/${e.recipe_num}`);
+                        }}
+                      >
+                        {" "}
+                        <RecipeRank>{index + 1}</RecipeRank>{" "}
                         <RecipeImg>
                           <img
                             className="bannerimg"
@@ -151,34 +142,25 @@ const BestRecipe = () => {
                             {e.information_time}
                           </span>
                         </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              )
-            );
-          })}
-        </TotalWrap>
-
-        <TotalWrap className="top">
-          {state.map((e, index) => {
-            return (
-              index > 4 && (
-                <div className="itemWrap" key={index}>
-                  <div
-                    className="flexItem "
-                    onClick={() => {
-                      navigate(`/recipe/search/details/${e.recipe_num}`);
-                    }}
-                  >
-                    {" "}
-                    <RecipeRank>{index + 1}</RecipeRank>{" "}
-                    {loadingState === 1 ? (
-                      <div className="loaderWrap">
-                        <BasicSpinner displayState={"block"} />
                       </div>
-                    ) : (
-                      <>
+                    </div>
+                  )
+                );
+              })}
+            </TotalWrap>
+            <TotalWrap className="top">
+              {state.map((e, index) => {
+                return (
+                  index > 4 && (
+                    <div className="itemWrap" key={index}>
+                      <div
+                        className="flexItem "
+                        onClick={() => {
+                          navigate(`/recipe/search/details/${e.recipe_num}`);
+                        }}
+                      >
+                        {" "}
+                        <RecipeRank>{index + 1}</RecipeRank>{" "}
                         <RecipeImg>
                           <img
                             className="bannerimg"
@@ -196,14 +178,14 @@ const BestRecipe = () => {
                             {e.information_time}
                           </span>
                         </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              )
-            );
-          })}
-        </TotalWrap>
+                      </div>
+                    </div>
+                  )
+                );
+              })}
+            </TotalWrap>
+          </>
+        )}
       </BestRecipeWrap>
     </>
   );
@@ -212,6 +194,18 @@ export default BestRecipe;
 
 const BestRecipeWrap = styled.div`
   margin-top: 3em;
+  & .loaderTotalWrap {
+    width: 100%;
+    height: 100vh;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  & .loaderWrap {
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+  }
 `;
 
 const TotalWrap = styled.div`
@@ -221,11 +215,6 @@ const TotalWrap = styled.div`
   justify-content: space-evenly;
   margin-top: 3em;
 
-  & .loaderWrap {
-    padding: 65% 0;
-    text-align: center;
-    width: 100%;
-  }
   & > .itemWrap {
     width: 13vw;
     height: 40vh;

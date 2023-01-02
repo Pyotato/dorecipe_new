@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { colors, borderRadii } from "@theme/theme";
 export const TotalWrap = styled.div`
   width: 100%;
-  font-family: "mainFont";
+
   background-color: ${colors.color_beige_white};
   font-size: 1vw;
   padding-bottom: 9vh;

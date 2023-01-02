@@ -66,10 +66,11 @@ const KnowhowListCp = ({
   const removePost = useCallback(
     (know_num) => {
       const removeState = state.filter((item) => item.know_num !== know_num);
-      setState(removeState);
+
       axios
         .get(`http://localhost:9000/knowhow/delete/${know_num}`)
         .then((data) => {
+          setState(removeState);
           console.log(data);
         });
     },

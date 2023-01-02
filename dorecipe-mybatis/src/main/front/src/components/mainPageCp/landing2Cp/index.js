@@ -6,8 +6,11 @@ import { ReactComponent as MusicNote } from "@assets/MusicNote.svg";
 import { ReactComponent as ArrowRight } from "@assets/ArrowRight.svg";
 import { ReactComponent as LandingImg4 } from "@assets/LandingImg4.svg";
 import { ReactComponent as Rectangle } from "@assets/Rectangle2.svg";
+import { useMediaQuery } from "react-responsive";
+import { imgSizes } from "../../../theme/theme";
 const LandingCp2 = ({ userState }) => {
   const section2 = useRef();
+  const isMobile = useMediaQuery({ query: "(max-width:767px)" });
   const navigate = useNavigate();
   return (
     <>
@@ -15,7 +18,11 @@ const LandingCp2 = ({ userState }) => {
         {" "}
         <div className="goCreateRecipeWrap">
           {" "}
-          <Rectangle className="rectangleShape" />
+          {isMobile ? (
+            <Rectangle className="rectangleShape rectangleShapeMobile" />
+          ) : (
+            <Rectangle className="rectangleShape" />
+          )}
           <div className="textWrap">
             {" "}
             <div>나만 알고 있는</div>
@@ -41,15 +48,29 @@ const LandingCp2 = ({ userState }) => {
               </div>
             </div>
           </div>{" "}
-          <LandingImg4
-            style={{
-              zIndex: "600",
-              width: "50vw",
-              float: "right",
-              height: "32em",
-              transform: " translateY(-60%)",
-            }}
-          />
+          {isMobile ? (
+            <LandingImg4
+              className="landingImg4"
+              style={{
+                zIndex: "600",
+                width: imgSizes.img_size_uuul,
+                float: "right",
+                height: "32em",
+                transform: " translateY(-50%)",
+              }}
+            />
+          ) : (
+            <LandingImg4
+              className="landingImg4"
+              style={{
+                zIndex: "600",
+                width: "50vw",
+                float: "right",
+                height: "32em",
+                transform: " translateY(-60%)",
+              }}
+            />
+          )}
         </div>
       </TotalWrap>
     </>
@@ -74,7 +95,7 @@ const TotalWrap = styled.div`
     transform: translateY(-50%);
     left: 0;
     right: 0;
-    z-index: 300;
+    z-index: 600;
     height: 30vh;
   }
 
@@ -99,5 +120,9 @@ const TotalWrap = styled.div`
 
   & .rectangleShape {
     transform: translateY(-100%);
+  }
+  & .rectangleShapeMobile {
+    transform: translate(-40%, -100%);
+    height: ${imgSizes.img_size_base};
   }
 `;

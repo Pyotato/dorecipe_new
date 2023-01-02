@@ -9,10 +9,10 @@ import "../fonts/EF_Diary.ttf";
 const calcRem = (size) => `${size / 16}rem`;
 
 export const colors = {
-  color_bg_dark: "#000",
+  // color_bg_dark: "#000",
   color_bg_white: "#F0EDE9",
-  color_ft_black: "#222",
-  color_invisible: "#00000000",
+  // color_ft_black: "#222",
+  // color_invisible: "#00000000",
   color_black: "#000000",
   color_white: "#FFFFFF",
   color_greyish_white: "#F5F5F5",
@@ -21,12 +21,8 @@ export const colors = {
   color_beige_white: "#ECE5D3",
   color_carrot_orange: "#CF702C",
   color_pinkish_beige: "#FFF9F3",
+  color_hr_beige: "#AD939156",
 
-  color_gray_1: "#111111",
-  color_gray_2: "#151515",
-  color_gray_3: "#525252",
-  color_gray_4: "#c7c7c7",
-  color_gray_5: "#D9D9D9",
   color_brown: "#554543",
   color_beige_brown: "#FAF3E7",
   color_milktea_brown: "#C2B196",
@@ -34,12 +30,8 @@ export const colors = {
   color_greyish_beige_brown: "#ECE2D6",
 
   color_gray_red: "#796763",
-  color_gray_red2: "#A07667",
+
   color_gray_red3: "#B79686",
-  color_gray_red4: "#F5DDD4",
-  color_green_1: "#badcb47f",
-  color_green_2: "#779a71",
-  color_pink_1: "#f0e0dac4",
 
   color_yellow_brown: "#af875c",
   color_yellow_beige_shadow: "#fce5b0",
@@ -54,6 +46,7 @@ export const borderRadii = {
 };
 
 export const fontSizes = {
+  fontSize_xxxTiny: calcRem(3),
   fontSize_xxTiny: calcRem(5),
   fontSize_xTiny: calcRem(8),
   fontSize_tiny: calcRem(11),
@@ -85,6 +78,22 @@ export const inputSizes = {
   inputSize_xxlTitleSize: calcRem(420),
 };
 
+export const inputHeights = {
+  inputSize_xxTiny: calcRem(10),
+  inputSize_xTiny: calcRem(30),
+  inputSize_tiny: calcRem(50),
+  inputSize_small: calcRem(70),
+  inputSize_base: calcRem(100),
+  inputSize_lg: calcRem(120),
+  inputSize_xl: calcRem(160),
+  inputSize_xxl: calcRem(200),
+  inputSize_xxxl: calcRem(240),
+  inputSize_ul: calcRem(280),
+  inputSize_titleSize: calcRem(320),
+  inputSize_xlTitleSize: calcRem(360),
+  inputSize_xxlTitleSize: calcRem(420),
+};
+
 export const fontWeights = {
   fontWeight_regular: "400",
   fontWeight_bold: "700",
@@ -92,6 +101,7 @@ export const fontWeights = {
 };
 
 export const paddings = {
+  padding_inputs: calcRem(4),
   padding_small: calcRem(8),
   padding_base: calcRem(10),
   padding_lg: calcRem(12),
@@ -155,8 +165,9 @@ export const fontStyles = {
 };
 
 export const imgSizes = {
-  img_size_base: calcRem(10),
+  img_size_xs: calcRem(4),
   img_size_small: calcRem(8),
+  img_size_base: calcRem(24),
   img_size_lg: calcRem(100),
   img_size_xl: calcRem(120),
   img_size_xxl: calcRem(140),
@@ -180,5 +191,6 @@ export const theme = {
   verticalInterval,
   fontWeights,
   inputSizes,
+  inputHeights,
   imgSizes,
 };

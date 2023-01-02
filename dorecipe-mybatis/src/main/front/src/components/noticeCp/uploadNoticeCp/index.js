@@ -7,10 +7,10 @@ import styled from "styled-components";
 import { useInput } from "@hooks/useInput";
 
 import { colors } from "@theme/theme";
-import BasicSpinner from "@commonCp/loading";
-import NoticeList from "@noticeCp/noticeList";
 
 import { logout } from "../../../reduxRefresh/actions/auth";
+import NoticeListSection from "../noticeListCp";
+import { useMemo } from "react";
 
 const UploadNoticeCp = ({ navState, setNavState }) => {
   let [notice_title, onChangeNoticeTitle, setNoticeTitle] = useInput("");
@@ -29,23 +29,6 @@ const UploadNoticeCp = ({ navState, setNavState }) => {
       notice_creDate: "",
     },
   ]);
-  const testAxios = () => {
-    axios({
-      url: "/notice/list",
-      method: "get",
-      data: {
-        notice_num: "test1",
-        notice_title: "test1",
-        notice_content: "test입닌당",
-        notice_creDate: "2022/08/17",
-      },
-      baseURL: "http://localhost:9000",
-      // baseURL: process.env.REACT_APP_HOST,
-    }).then(function (response) {
-      // console.log(response.data);
-      setState(response.data);
-    });
-  };
 
   const insertNotice = useCallback(
     (e) => {
@@ -82,7 +65,6 @@ const UploadNoticeCp = ({ navState, setNavState }) => {
             data: formData,
           }).then((response) => {
             console.log(response.data);
-            console.log("줄바꿈 적용됐나..? ", notice_content);
             noticeTitle.current.value = "";
             noticeContent.current.value = "";
             alert("공지사항이 등록되었습니다.");
@@ -107,20 +89,50 @@ const UploadNoticeCp = ({ navState, setNavState }) => {
     }
   }, []);
 
-  const removePost = useCallback(
-    (notice_num) => {
-      const removeState = state.filter(
-        (item) => item.notice_num !== notice_num
-      );
-      setState(removeState);
-      axios
-        .get(`http://localhost:9000/notice/delete/${notice_num}`)
-        .then((data) => {
-          console.log(data);
-        });
-    },
-    [state]
-  );
+  useMemo(() => {
+    // useCallback(() => {
+    if (state.notice_num !== undefined) {
+      setNoticeTitle(state.notice_title);
+      setNoticeContent(state.notice_content);
+    }
+  }, [state.notice_num, state.notice_title, state.notice_content]);
+  useEffect(() => {
+    // useCallback(() => {
+    if (state.notice_num !== undefined) {
+      setNoticeTitle(state.notice_title);
+      setNoticeContent(state.notice_content);
+    }
+  }, [state.notice_num, state.notice_title, state.notice_content]);
+  // console.log("useCallback", state);
+
+  const updateNotice = useCallback(() => {
+    const noticeData = {
+      notice_num: `${state.notice_num}`,
+      notice_title: `${notice_title}`,
+      notice_content: `${notice_content}`,
+    };
+
+    const formData = new FormData();
+    formData.append("notice_num", noticeData.notice_num);
+    formData.append("notice_title", noticeData.notice_title);
+    formData.append("notice_content", noticeData.notice_content);
+
+    axios({
+      method: "POST",
+      // url: process.env.REACT_APP_HOST + "/notice/update",
+      url: "http://localhost:9000/notice/update",
+      headers: { "Content-Type": "multipart/form-data" },
+      data: formData,
+    })
+      .then((response) => {
+        console.log(response.data);
+        setNoticeTitle("");
+        setNoticeContent("");
+        setState([{}]);
+        alert("공지사항이 수정되었습니다.");
+      })
+      .catch((err) => console.log("공지사항 업데이트 실패", err));
+  }, [state.notice_num, notice_content, notice_title]);
 
   return (
     <>
@@ -129,8 +141,16 @@ const UploadNoticeCp = ({ navState, setNavState }) => {
         <TotalWrap>
           <div style={{ width: "50%" }}>
             <div>
-              <h2>등록</h2>
+              {state.notice_num !== undefined ? <h2>수정</h2> : <h2>등록</h2>}
               <div>
+                {state.notice_num !== undefined && (
+                  <div>
+                    <div className="flexWrap">
+                      <div style={{ width: "10%" }}>번호</div>
+                      <div style={{ width: "80%" }}>{state.notice_num}</div>
+                    </div>
+                  </div>
+                )}
                 <div>
                   <div className="flexWrap">
                     <div style={{ width: "10%" }}>제목</div>
@@ -139,6 +159,8 @@ const UploadNoticeCp = ({ navState, setNavState }) => {
                         ref={noticeTitle}
                         name="notice_title"
                         type="text"
+                        value={notice_title || ""}
+                        // value={state.notice_title || ""}
                         placeholder=" 제목을 입력해주세요"
                         onChange={onChangeNoticeTitle}
                       />
@@ -168,19 +190,32 @@ const UploadNoticeCp = ({ navState, setNavState }) => {
                       wrap="hard"
                       required
                       resize="none"
+                      // value={state.notice_content || ""}
+                      value={notice_content || ""}
                       onChange={onChangeNoticeContent}
                     ></textarea>
                   </div>
                 </div>
               </div>
-              <button type="button" onClick={insertNotice}>
-                등록
-              </button>
+              {state.notice_num !== undefined ? (
+                <button type="button" onClick={updateNotice}>
+                  수정
+                </button>
+              ) : (
+                <button type="button" onClick={insertNotice}>
+                  등록
+                </button>
+              )}
             </div>
           </div>
-
           {/* 공지사항 목록section */}
-          <div className="noticeWrap" style={{ width: "50%" }}>
+          <NoticeListSection
+            navState={navState}
+            setNavState={setNavState}
+            state={state}
+            setState={setState}
+          />
+          {/* <div className="noticeWrap" style={{ width: "50%" }}>
             <h2>목록</h2>
             {navState === 1 && testAxios()}
             <div className="noticeTableWrap">
@@ -228,7 +263,7 @@ const UploadNoticeCp = ({ navState, setNavState }) => {
                 )}
               </ul>
             </div>
-          </div>
+          </div> */}
         </TotalWrap>
       </Wrap>
     </>
@@ -268,6 +303,10 @@ const TotalWrap = styled.div`
     resize: none;
     background-color: ${colors.color_beige_white};
     padding: 1vw;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
   }
   & .noticeNo {
     width: 5%;
@@ -298,52 +337,52 @@ const TotalWrap = styled.div`
   }
 `;
 
-const Scrollable = styled.section`
-  width: 100%;
-  margin: 0 auto;
+// const Scrollable = styled.section`
+//   width: 100%;
+//   margin: 0 auto;
 
-  & > div {
-    padding: 0 0.6rem;
-    height: 450px;
-    overflow-y: auto;
-    margin: 0 auto;
+//   & > div {
+//     padding: 0 0.6rem;
+//     height: 450px;
+//     overflow-y: auto;
+//     margin: 0 auto;
 
-    transform: translateX(-1%);
-    ::-webkit-scrollbar {
-      width: 0.5rem;
-    }
-    ::-webkit-scrollbar-thumb {
-      height: 30%;
-      background-color: ${colors.color_beige_brown};
-    }
-    ::-webkit-scrollbar-track {
-      background-color: ${colors.color_beige_white};
-    }
-  }
-  & > div > li {
-    list-style: none;
-    display: inline-flex;
+//     transform: translateX(-1%);
+//     ::-webkit-scrollbar {
+//       width: 0.5rem;
+//     }
+//     ::-webkit-scrollbar-thumb {
+//       height: 30%;
+//       background-color: ${colors.color_beige_brown};
+//     }
+//     ::-webkit-scrollbar-track {
+//       background-color: ${colors.color_beige_white};
+//     }
+//   }
+//   & > div > li {
+//     list-style: none;
+//     display: inline-flex;
 
-    width: 100%;
-    align-items: center;
-    padding: 1em 1vw;
-    justify-content: space-between;
-    border-bottom: 1px solid #ad939156;
+//     width: 100%;
+//     align-items: center;
+//     padding: 1em 1vw;
+//     justify-content: space-between;
+//     border-bottom: 1px solid #ad939156;
 
-    &:hover {
-      color: ${colors.color_carrot_orange};
-    }
-  }
+//     &:hover {
+//       color: ${colors.color_carrot_orange};
+//     }
+//   }
 
-  & .listItem {
-    border-radius: 0.5vw;
-    padding: 0.5vw;
-    background-color: ${colors.color_beige_brown};
-    border: 1px solid transparent;
+//   & .listItem {
+//     border-radius: 0.5vw;
+//     padding: 0.5vw;
+//     background-color: ${colors.color_beige_brown};
+//     border: 1px solid transparent;
 
-    &:hover {
-      background-color: ${colors.color_carrot_orange};
-      color: ${colors.color_beige_white};
-    }
-  }
-`;
+//     &:hover {
+//       background-color: ${colors.color_carrot_orange};
+//       color: ${colors.color_beige_white};
+//     }
+//   }
+// `;

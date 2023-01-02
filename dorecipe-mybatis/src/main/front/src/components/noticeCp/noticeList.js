@@ -1,17 +1,17 @@
 import { useNavigate } from "react-router-dom";
 
 const NoticeList = ({ removePost, state, BtnState }) => {
-  const removePostOnclick = () => {
-    removePost(state.notice_num);
-  };
+  // const removePostOnclick = () => {
+  //   removePost(state.notice_num);
+  // };
   const navigate = useNavigate();
 
   const onNoticeDetailClick = () => {
     navigate(`/notice/detail/${state.notice_num}`);
   };
-  const onNoticeUpdateClick = () => {
-    navigate(`/notice/update/${state.notice_num}`);
-  };
+  // const onNoticeUpdateClick = () => {
+  //   navigate(`/notice/update/${state.notice_num}`);
+  // };
 
   return (
     <>
@@ -22,21 +22,21 @@ const NoticeList = ({ removePost, state, BtnState }) => {
           {state.notice_title}
         </div>
         <div className="noticeDate">{state.notice_creDate}</div>
-        {BtnState && (
+        {/* {BtnState && (
           <div className="updateOrDelete">
-            <span
+             <span
               className="updateList listItem"
               onClick={() => {
                 onNoticeUpdateClick();
               }}
             >
               수정
-            </span>
-            <span className="deleteList listItem" onClick={removePostOnclick}>
+            </span> 
+             <span className="deleteList listItem" onClick={removePostOnclick}>
               삭제
-            </span>
+            </span> *
           </div>
-        )}
+        )} */}
       </li>
     </>
   );

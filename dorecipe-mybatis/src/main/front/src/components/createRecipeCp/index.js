@@ -225,24 +225,3 @@ const BasicFormSection = styled.div`
   z-index: saveState==0 && 700;
   background-color: ${colors.color_beige_brown};
 `;
-
-const ContentTextarea = styled.textarea`
-  font-family: "mainFont";
-  resize: none;
-  width: 80%;
-  margin: auto 8.3vw;
-  height: 24vh;
-  margin-bottom: 1vh;
-  line-height: 1.5;
-  padding: 10px;
-  background-color: ${colors.color_white};
-  border: 1px solid transparent;
-  border-radius: 0.5em;
-  ::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const BtnWrap = styled.div`
-  display: flex;
-`;

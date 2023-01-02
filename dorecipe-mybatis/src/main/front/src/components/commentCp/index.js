@@ -489,14 +489,13 @@ const CommentCp = () => {
 };
 
 const CommentWrap = styled.div`
-  font-family: "mainFont";
   margin: 0 auto;
   max-width: 40em;
 
   & textarea {
     width: 30vw;
     font-size: 1vw;
-    font-family: "mainFont";
+
     padding: 1vw;
     resize: none;
     border-radius: 1vw;

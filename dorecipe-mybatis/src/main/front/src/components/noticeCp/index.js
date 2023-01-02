@@ -59,7 +59,7 @@ const NoticePageCp = () => {
                 <div className="noticeNo">No.</div>
                 <div className="noticeTitle">제목</div>
                 <div className="noticeDate">작성일자</div>
-                {BtnState && <div className="updateOrDelete">수정 • 삭제</div>}
+                {/* {BtnState && <div className="updateOrDelete">수정 • 삭제</div>} */}
               </div>
             </div>
             <div className="noticeTableWrap">

@@ -44,9 +44,12 @@ const EventList = ({
   const removePost = useCallback(
     (event_num) => {
       const removeState = state.filter((item) => item.event_num !== event_num);
-      setState(removeState);
+
       axios
         .get(`http://localhost:9000/event/delete/${event_num}`)
+        .then(() => {
+          setState(removeState);
+        })
         .catch((err) => {
           // console.log(err);
         });

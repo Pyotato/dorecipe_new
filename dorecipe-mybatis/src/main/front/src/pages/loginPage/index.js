@@ -133,7 +133,6 @@ const TotalWrap = styled.div`
   background-size: cover;
   text-align: center;
   padding: ${paddings.padding_uuuul} 0;
-  font-family: "mainFont";
 
   & h1 {
     text-align: center;

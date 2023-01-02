@@ -361,7 +361,7 @@ export default CompleteRecipe;
 
 const TotalWrap = styled.div`
   width: 95%;
-  font-family: "mainFont";
+
   height: fit-content;
   margin: 0 auto;
   font-size: 14px;
@@ -404,7 +404,6 @@ const SubmitBtn = styled.button`
   }
 `;
 const ContentTextarea = styled.textarea`
-  font-family: "mainFont";
   resize: none;
   width: 80%;
   margin: auto 8.3vw;

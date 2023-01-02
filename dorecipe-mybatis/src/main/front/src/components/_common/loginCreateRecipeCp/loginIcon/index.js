@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useEffect, useState } from "react";
 
 import { logout } from "../../../../reduxRefresh/actions/auth";
+import { useMediaQuery } from "react-responsive";
+import { fontSizes, margins } from "../../../../theme/theme";
 
 const AccountIcon = () => {
   //페이지 이동
@@ -19,7 +21,7 @@ const AccountIcon = () => {
   const onClickAdmin = () => {
     navigate("/admin");
   };
-
+  const isMobile = useMediaQuery({ query: "(max-width:767px)" });
   const onClickLogOut = useCallback(() => {
     //로그아웃 시키고 메인페이지로
     dispatch(logout());
@@ -27,10 +29,12 @@ const AccountIcon = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (userState.auth.isLoggedIn) {
-      if (userState.auth.user.roles.includes("ROLE_ADMIN")) {
-        setUserState(userState.auth.user);
-        console.log("ROLE_ADMIN");
+    if (userState.auth) {
+      if (userState.auth.isLoggedIn) {
+        if (userState.auth.user.roles.includes("ROLE_ADMIN")) {
+          setUserState(userState.auth.user);
+          console.log("ROLE_ADMIN");
+        }
       }
     }
   }, []);
@@ -50,56 +54,71 @@ const AccountIcon = () => {
       {!user.auth.isLoggedIn ? (
         <>
           {" "}
-          <AuthTotalWrap>
-            {" "}
-            |{" "}
-            <span onClick={onClickJoinMember} className="onHoverItems">
-              회원가입
-            </span>{" "}
-            |{" "}
-            <span onClick={onClickLogin} className="onHoverItems">
-              로그인
-            </span>{" "}
-            |
-          </AuthTotalWrap>{" "}
+          {isMobile ? (
+            <></>
+          ) : (
+            <>
+              {" "}
+              <AuthTotalWrap>
+                {" "}
+                |{" "}
+                <span onClick={onClickJoinMember} className="onHoverItems">
+                  회원가입
+                </span>{" "}
+                |{" "}
+                <span onClick={onClickLogin} className="onHoverItems">
+                  로그인
+                </span>{" "}
+                |
+              </AuthTotalWrap>{" "}
+            </>
+          )}
         </>
       ) : user.auth.user.roles.includes("ROLE_ADMIN") ? (
         <>
-          <AuthTotalWrap>
-            {" "}
-            |{" "}
-            <span className="onHoverItems" onClick={onClickAdmin}>
-              관리자 홈{" "}
-            </span>
-            |{" "}
-            <span onClick={onClickMyPage} className="onHoverItems">
-              마이 페이지
-            </span>{" "}
-            |{" "}
-            <span onClick={onClickLogOut} className="onHoverItems">
-              로그아웃{" "}
-            </span>{" "}
-            |{" "}
-          </AuthTotalWrap>
+          {isMobile ? (
+            <></>
+          ) : (
+            <AuthTotalWrap>
+              {" "}
+              |{" "}
+              <span className="onHoverItems" onClick={onClickAdmin}>
+                관리자 홈{" "}
+              </span>
+              |{" "}
+              <span onClick={onClickMyPage} className="onHoverItems">
+                마이 페이지
+              </span>{" "}
+              |{" "}
+              <span onClick={onClickLogOut} className="onHoverItems">
+                로그아웃{" "}
+              </span>{" "}
+              |{" "}
+            </AuthTotalWrap>
+          )}
         </>
       ) : (
         <>
-          <AuthTotalWrap>
-            {" "}
-            |{" "}
-            <span className="onHoverItems" onClick={onClickRecipe}>
-              레시피 작성{" "}
-            </span>
-            |{" "}
-            <span onClick={onClickMyPage} className="onHoverItems">
-              마이 페이지
-            </span>{" "}
-            |{" "}
-            <span onClick={onClickLogOut} className="onHoverItems">
-              로그아웃
-            </span>{" "}
-            |
-          </AuthTotalWrap>
+          {isMobile ? (
+            <></>
+          ) : (
+            <AuthTotalWrap>
+              {" "}
+              |{" "}
+              <span className="onHoverItems" onClick={onClickRecipe}>
+                레시피 작성{" "}
+              </span>
+              |{" "}
+              <span onClick={onClickMyPage} className="onHoverItems">
+                마이 페이지
+              </span>{" "}
+              |{" "}
+              <span onClick={onClickLogOut} className="onHoverItems">
+                로그아웃
+              </span>{" "}
+              |
+            </AuthTotalWrap>
+          )}
         </>
       )}
     </>
@@ -108,9 +127,14 @@ const AccountIcon = () => {
 export default AccountIcon;
 const AuthTotalWrap = styled.div`
   width: max-content;
-  padding-right: 1vw;
+  margin: 0 ${margins.margin_base};
   color: ${colors.color_milky_white};
+
   & .onHoverItems:hover {
     cursor: pointer;
+  }
+
+  & .isMobile {
+    font-size: ${fontSizes.fontSize_xxTiny};
   }
 `;

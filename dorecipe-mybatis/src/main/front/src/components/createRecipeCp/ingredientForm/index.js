@@ -393,13 +393,12 @@ export default IngredientForm;
 const BasicFormWrap = styled.div`
   margin: 0 auto;
   list-style: none;
-  font-family: "mainFont";
+
   font-size: 1vw;
   height: fit-content;
   padding: 2vw;
 
   & input {
-    font-family: "mainFont";
     background-color: ${colors.color_greyish_white};
     border: 1px solid transparent;
   }
@@ -447,7 +446,6 @@ const Scrollable = styled.section`
   }
 `;
 const Btn = styled.button`
-  font-family: "mainFont";
   border: 1px solid transparent;
   border-radius: 0.5vw;
   background-color: ${colors.color_brown};

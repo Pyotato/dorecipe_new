@@ -816,7 +816,7 @@ const BasicFormWrap = styled.div`
   height: fit-content;
   align-items: center;
   flex-wrap: wrap;
-  font-family: "mainFont";
+
   gap: 3em;
   width: 80vw;
   justify-content: center;
@@ -839,7 +839,7 @@ const BasicFormWrap = styled.div`
 
   & select {
     border: 1px solid transparent;
-    font-family: "mainFont";
+
     width: 5.7vw;
     border-radius: 0.5vw;
     padding: 0.3vw 0;
@@ -873,13 +873,13 @@ const ContentInput = styled.input`
   padding: 15px;
   border: 1px solid transparent;
   border-radius: 0.5em;
-  font-family: "mainFont";
+
   font-size: 1vw;
 `;
 const ContentTextarea = styled.textarea`
   resize: none;
   width: 30vw;
-  font-family: "mainFont";
+
   height: 12vh;
   border: 1px solid transparent;
   margin-bottom: 1em;

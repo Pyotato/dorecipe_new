@@ -5,34 +5,58 @@ import styled from "styled-components";
 // import { MainLogoHeader } from "@components/_common/logo";
 import { useNavigate } from "react-router-dom";
 import { borderRadii, colors } from "@theme/theme";
+
+import { useMediaQuery } from "react-responsive";
+import {
+  fontSizes,
+  inputHeights,
+  inputSizes,
+  paddings,
+} from "../../../../theme/theme";
+
 const HeaderSearch = () => {
   const [search, onChangeSearch, setSearch] = useInput("");
   const navigate = useNavigate();
 
-  const onEnterPress = (event) => {
+  const onPressEnter = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
       navigate(`/recipe/search/${search}`);
     }
   };
+  const onClickSearchIcon = (event) => {
+    event.preventDefault();
+    navigate(`/recipe/search/${search}`);
+  };
+  const isMobile = useMediaQuery({ query: "(max-width:767px)" });
 
   return (
     <>
       <SearchWrap>
         <div>
-          {" "}
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
-            className="magnifyingGlass"
+            onClick={onClickSearchIcon}
+            className="magnifyingGlass hoverEffect"
           />
-          <input
-            type="search"
-            name=""
-            value={search}
-            onChange={onChangeSearch}
-            onKeyPress={onEnterPress}
-            placeholder="레시피 검색"
-          />
+          {isMobile ? (
+            <input
+              type="search"
+              className="mobileInput"
+              value={search}
+              onChange={onChangeSearch}
+              onKeyDown={onPressEnter}
+              placeholder="레시피 검색"
+            />
+          ) : (
+            <input
+              type="search"
+              value={search}
+              onChange={onChangeSearch}
+              onKeyDown={onPressEnter}
+              placeholder="레시피 검색"
+            />
+          )}
         </div>
       </SearchWrap>
     </>
@@ -40,27 +64,30 @@ const HeaderSearch = () => {
 };
 export default HeaderSearch;
 const SearchWrap = styled.div`
-  height: 5vh;
   width: 100%;
-  padding-left: 1vw;
+  padding: 0 ${paddings.padding_base};
   display: inline-flex;
   align-items: center;
 
   & .magnifyingGlass {
-    padding: 0.5vw;
+    padding-right: ${paddings.padding_base};
   }
   & div {
-    width: 27vw;
-    height: 4vh;
+    padding: ${paddings.padding_inputs};
     display: inline-flex;
     align-items: center;
+    height: ${inputHeights.inputSize_xTiny};
     background-color: ${colors.color_white};
     border-radius: ${borderRadii.radius_small};
   }
   & input {
-    font-size: 1vh;
-    width: 21vw;
-    height: 4vh;
+    padding: ${paddings.padding_inputs};
+    width: ${inputSizes.inputSize_xxlTitleSize};
     border: none;
+  }
+
+  & .mobileInput {
+    font-size: ${fontSizes.fontSize_xTiny};
+    width: ${inputSizes.inputSize_xxl};
   }
 `;

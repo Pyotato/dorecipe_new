@@ -312,6 +312,7 @@
   * [ ] react-responsive 반응형으로 만들어주자 [깃허브](https://github.com/yocontra/react-responsive)
 
 * 12/23~12/24 (사랑니 발치로 휴식)
+
 * `12/25`
   * 코드 정리 
   * 레시피 조건 검색 시 필터 기능 보완
@@ -323,11 +324,13 @@
   * 레시피 등록페이지
     * dropzone이미지 사이즈 조정
   * 수저 회전 애니메이션 수정
+
 * `12/26`
 
   * 코드 정리 
     * css관리가 용이해지도록 themeprovider로 지정된 style로 교체 (진행 중)
   * 푸터 디자인 변경
+
 * `12/27`
 
   * craco 사용 (eject없이 cra 바벨 웹팩 커스텀하기..)
@@ -359,4 +362,29 @@
     * `Warning: A component is changing an uncontrolled input of type undefined to be controlled. Input elements should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled input element for the lifetime of the component.` 경고
       * [해결](https://mik-a.com/62)
 
+  * `import { ReactComponent as UploadFile } from "@assets/UploadFile.svg";` 형태 대신 일반 컴포넌트 불러오듯이 svg사용하기
 
+* `12/29`
+
+  * 관리자페이지 
+    * 이벤트 페이지
+      * 백엔드 :update controller 수정 (파람 추가 + setter함수로 파람 vo 넘겨주기)
+      * 이미지 ..크롤링했던 원본 이미지 주소를 잃어서 alt가 대신
+      * 모달창 크기 조정
+        * 길이가 너무 길면 scroll하도록
+
+
+* `12/30`
+  * 관리자 페이지
+    * 공지사항페이지
+      * 공지사항 수정기능 
+    * eslint 설정
+* `1/02`
+
+  * react-query 도입 시작!
+
+    * react-query 공부하면서 적용해보자![링크]()
+  * react mediaquery도입 시작!(반응형으로 진행중~~)
+
+    * 화면이 모바일일떄, 네비바 토글해서 로그인/로그아웃 등등 보이도록
+    * input 사이즈 조절

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { ReactComponent as Knowhow } from "@assets/Knowhow.svg";
+// import Knowhow from "@assets/Knowhow.svg";
 import { ReactComponent as EventBoard } from "@assets/EventBoard.svg";
 import { ReactComponent as Notice } from "@assets/Notice.svg";
 import { ReactComponent as Home } from "@assets/Home.svg";

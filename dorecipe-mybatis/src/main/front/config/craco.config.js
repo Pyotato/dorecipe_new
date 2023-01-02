@@ -12,4 +12,14 @@ module.exports = {
       },
     },
   ],
+  // webpack: {
+  //   configure: (config, { env, paths }) => {
+  //     config.module.rules.unshift({
+  //       test: /\.svg$/,
+  //       use: ["@svgr/webpack"],
+  //       // include: "/src/assets",
+  //     });
+  //     return config;
+  //   },
+  // },
 };

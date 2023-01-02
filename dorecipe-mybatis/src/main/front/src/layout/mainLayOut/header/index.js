@@ -5,6 +5,7 @@ import { colors } from "@theme/theme";
 import { LogoHeader } from "@commonCp/logo/index.js";
 import LoginCreateRecipeLogo from "@commonCp/loginCreateRecipeCp";
 import { useState } from "react";
+import { paddings } from "@theme/theme";
 const MainLayout = () => {
   const [tabState, setTabState] = useState(0);
   const onToggleTab = () => {
@@ -37,18 +38,16 @@ export default MainLayout;
 
 const HeaderWrapper = styled.header`
   background-color: ${colors.color_milktea_brown};
-  height: 6.7vh;
-  font-family: "mainFont";
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-
   overflow-y: hidden;
   overflow-x: hidden;
-  z-index: 700;
+  z-index: 900;
   width: 100%;
   display: inline-flex;
   justify-content: space-between;
   align-items: center;
+  padding-right: ${paddings.padding_base};
 `;

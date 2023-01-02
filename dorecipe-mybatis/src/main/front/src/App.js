@@ -3,13 +3,11 @@ import { Routes, Route } from "react-router-dom";
 
 import NoticePage from "./pages/noticePage/noticeListPage";
 import NoticeDetailPage from "./pages/noticePage/noticeDetailPage";
-import NoticeUpdatePage from "./pages/noticePage/noticeFormPage";
 
 import KnowhowDetailPage from "./pages/knowhowPage/knowhowDetailPage";
 
 import EventPage from "./pages/eventPage";
 import EventDetailPage from "./pages/eventPage/eventDetailPage";
-// import EventModify from "./pages/eventPage/eventModPage";
 
 import MyPage from "./pages/myPage";
 import AdminPostMng from "./pages/adminPage";
@@ -40,18 +38,12 @@ import "./App.css";
 import ModifyRecipePage from "./pages/modifyRecipePage";
 
 function App() {
-  // useEffect(() => {
-  //   window.scrollTo({
-  //     top: 0,
-  //     behavior: "smooth",
-  //   });
-  // }, []);
-  const userMsg = useSelector((state) => state.message);
+  // const userMsg = useSelector((state) => state.message);
   const user = useSelector((auth) => auth);
   const dispatch = useDispatch();
 
-  console.log("user", user);
-  console.log("userMsg", userMsg);
+  // console.log("user", user);
+  // console.log("userMsg", userMsg);
   const [userState, setCurrentUser] = useState(user);
 
   useEffect(() => {
@@ -74,7 +66,7 @@ function App() {
         showAdminBoard: currentUser.roles.includes("ROLE_ADMIN"),
       });
       user.state = userState;
-      console.log("currentUser", currentUser);
+      // console.log("currentUser", currentUser);
     } else {
       setCurrentUser({
         showModeratorBoard: false,
@@ -104,16 +96,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Routes history={history}>
-        {/* <Routes> */}
         <Route path={"/notice/list"} element={<NoticePage />} user={user} />
         <Route
           path={"/notice/detail/:noticeId"}
           element={<NoticeDetailPage />}
           user={user}
-        />
-        <Route
-          path={"/notice/update/:noticeId"}
-          element={<NoticeUpdatePage />}
         />
         <Route
           path={"/knowhow/detail/:knowhowId"}
@@ -122,8 +109,6 @@ function App() {
 
         <Route path={"/event/list"} element={<EventPage />} auth={user} />
         <Route path={"/event/detail/:detailId"} element={<EventDetailPage />} />
-        {/* <Route path={"/event/update/:detailId"} element={<EventModify />} /> */}
-
         <Route path={"/join"} element={<JoinMemberPage />} />
 
         <Route path={"/member/info/:memberId"} element={<MyPage />} />

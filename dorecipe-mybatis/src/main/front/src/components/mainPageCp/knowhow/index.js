@@ -88,7 +88,6 @@ const KnowhowWrap = styled.div`
   flex-wrap: wrap;
   margin: 2em 4em;
 
-  font-family: "mainFont";
   text-align: center;
   margin: 0 3vw 6vh;
   & :hover {

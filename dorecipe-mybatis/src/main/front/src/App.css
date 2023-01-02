@@ -11,3 +11,7 @@
   font-family: "mainFont";
   src: url("./fonts/EF_Diary.ttf");
 }
+.hoverEffect:hover {
+  cursor: pointer;
+  color: #cf702c;
+}

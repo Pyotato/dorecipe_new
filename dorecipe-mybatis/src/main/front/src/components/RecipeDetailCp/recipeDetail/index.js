@@ -23,7 +23,7 @@ const RecipeDetailModal = () => {
   const params = useParams();
   // const navigate = useNavigate();
   const recipeId = params.recipeId;
-  console.log("user", user);
+  // console.log("user", user);
   console.log("recipeId", recipeId);
   // const [loginState, setLoginState] = useState("admin");
   const [loginState, setLoginState] = useState(user.auth.isLoggedIn);
