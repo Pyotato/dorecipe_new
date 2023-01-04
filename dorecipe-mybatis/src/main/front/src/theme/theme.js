@@ -153,12 +153,19 @@ export const deviceSizes = {
 };
 
 export const device = {
-  device_mobileS: `only screen and (max-width: ${deviceSizes.mobileS})`,
-  device_mobileM: `only screen and (max-width: ${deviceSizes.mobileM})`,
-  device_mobileL: `only screen and (max-width: ${deviceSizes.mobileL})`,
-  device_tablet: `only screen and (max-width: ${deviceSizes.tablet})`,
-  device_tabletL: `only screen and (max-width: ${deviceSizes.tabletL})`,
+  device_mobileS: `only screen and (max-width: ${deviceSizes.deviceSize_mobileS})`,
+  device_mobileM: `only screen and (max-width: ${deviceSizes.deviceSize_mobileM})`,
+  device_mobileL: `only screen and (max-width: ${deviceSizes.deviceSize_mobileL})`,
+  device_tablet: `only screen and (max-width: ${deviceSizes.deviceSize_tablet})`,
+  device_tabletL: `only screen and (max-width: ${deviceSizes.deviceSizes})`,
 };
+// export const device = {
+//   device_mobileS: `only screen and (max-width: ${deviceSizes.mobileS})`,
+//   device_mobileM: `only screen and (max-width: ${deviceSizes.mobileM})`,
+//   device_mobileL: `only screen and (max-width: ${deviceSizes.mobileL})`,
+//   device_tablet: `only screen and (max-width: ${deviceSizes.tablet})`,
+//   device_tabletL: `only screen and (max-width: ${deviceSizes.tabletL})`,
+// };
 
 export const fontStyles = {
   default_font: "mainFont",

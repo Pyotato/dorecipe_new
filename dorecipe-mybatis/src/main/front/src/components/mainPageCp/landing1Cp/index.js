@@ -4,7 +4,7 @@ import HeaderSearch from "@layout/mainLayOut/header/search";
 import { LogoOnLandingPage } from "@commonCp/logo";
 import styled from "styled-components";
 import { colors, fontSizes } from "@theme/theme";
-
+import { ReactComponent as MainImg1 } from "@assets/MainImg1.svg";
 import { useMediaQuery } from "react-responsive";
 
 const LandingCp1 = () => {
@@ -86,8 +86,12 @@ const LandingCp1 = () => {
         </div>
         {!isMobile && (
           <div className="imgWrap">
-            <img src="/img/landingImg1.png" alt="음식이미지1" />
+            <MainImg1 />
+            {/* <img src="/img/landingImg1.png" alt="음식이미지1" /> */}
           </div>
+          // <div className="imgWrap">
+          //   <img src="/img/landingImg1.png" alt="음식이미지1" />
+          // </div>
         )}
       </TotalWrap>
     </>
