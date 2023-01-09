@@ -1,105 +1,26 @@
 import styled from "styled-components";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { colors } from "@theme/theme";
 import BasicSpinner from "@commonCp/loading";
 
-import { useQuery } from "react-query";
-import api from "../../../services/api";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 const BestRecipe = () => {
   const navigate = useNavigate();
-
-  const [state, setState] = useState([
-    {
-      recipe_rank: 1,
-      recipe_num: 0,
-      recipe_rpath: "",
-      recipe_title: "",
-      information_level: "",
-      information_time: "",
-    },
-    {
-      recipe_rank: 2,
-      recipe_num: 0,
-      recipe_rpath: "",
-      recipe_title: "",
-      information_level: "",
-      information_time: "",
-    },
-    {
-      recipe_rank: 3,
-      recipe_num: 0,
-      recipe_rpath: "",
-      recipe_title: "",
-      information_level: "",
-      information_time: "",
-    },
-    {
-      recipe_rank: 4,
-      recipe_num: 0,
-      recipe_rpath: "",
-      recipe_title: "",
-      information_level: "",
-      information_time: "",
-    },
-    {
-      recipe_rank: 5,
-      recipe_num: 0,
-      recipe_rpath: "",
-      recipe_title: "",
-      information_level: "",
-      information_time: "",
-    },
-    {
-      recipe_rank: 6,
-      recipe_num: 0,
-      recipe_rpath: "",
-      recipe_title: "",
-      information_level: "",
-      information_time: "",
-    },
-    {
-      recipe_rank: 7,
-      recipe_num: 0,
-      recipe_rpath: "",
-      recipe_title: "",
-      information_level: "",
-      information_time: "",
-    },
-    {
-      recipe_rank: 8,
-      recipe_num: 0,
-      recipe_rpath: "",
-      recipe_title: "",
-      information_level: "",
-      information_time: "",
-    },
-    {
-      recipe_rank: 9,
-      recipe_num: 0,
-      recipe_rpath: "",
-      recipe_title: "",
-      information_level: "",
-      information_time: "",
-    },
-    {
-      recipe_rank: 10,
-      recipe_num: 0,
-      recipe_rpath: "",
-      recipe_title: "",
-      information_level: "",
-      information_time: "",
-    },
-  ]);
-
-  const { status, data, error } = useQuery(["bestRecipes"], () =>
-    api.get("/recipe/getBestRecipes").then((data) => setState(data.data), {
-      refetchOnWindowFocus: true,
-      retry: 0,
-    })
-  );
+  function useBestRecipes() {
+    return useQuery({
+      queryKey: ["bestRecipes"],
+      queryFn: async () => {
+        const { data } = await axios.get(
+          "http://localhost:9000/recipe/getBestRecipes"
+        );
+        return data;
+      },
+    });
+  }
+  const { status, data, error, isFetching } = useBestRecipes();
 
   return (
     <>
@@ -113,7 +34,7 @@ const BestRecipe = () => {
         ) : (
           <>
             <TotalWrap className="top">
-              {state.map((e, index) => {
+              {data.map((e, index) => {
                 return (
                   index < 5 && (
                     <div className="itemWrap" key={index}>
@@ -149,7 +70,7 @@ const BestRecipe = () => {
               })}
             </TotalWrap>
             <TotalWrap className="top">
-              {state.map((e, index) => {
+              {data.map((e, index) => {
                 return (
                   index > 4 && (
                     <div className="itemWrap" key={index}>

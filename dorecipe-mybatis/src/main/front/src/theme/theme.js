@@ -142,7 +142,8 @@ export const verticalInterval = {
 export const deviceSizes = {
   deviceSize_mobileS: "320px",
   deviceSize_mobileM: "375px",
-  deviceSize_mobileL: "450px",
+  deviceSize_mobileL: "430px",
+  // deviceSize_mobileL: "450px",
   deviceSize_tablet: "768px",
   deviceSizes: "1024px",
   // deviceSize_mobileS: 320,

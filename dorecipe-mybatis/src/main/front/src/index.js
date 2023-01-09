@@ -11,8 +11,8 @@ import { ThemeProvider } from "./context/themeProvider";
 import axios from "axios";
 
 //리액트 쿼리 도입!
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,7 +30,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <QueryClientProvider client={queryClient}>
     {/* ReactQueryDevtools: don't wrap all other components or else won't render */}
-    <ReactQueryDevtools initialIsOpen={false} />
+    <ReactQueryDevtools initialIsOpen />
     <Provider store={store()}>
       <BrowserRouter>
         <ThemeProvider>
